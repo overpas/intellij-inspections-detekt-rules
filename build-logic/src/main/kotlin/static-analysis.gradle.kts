@@ -16,17 +16,17 @@ detekt {
 }
 
 dependencies {
-    detektPlugins(project(":rules:code-migration"))
-    detektPlugins(project(":rules:coroutines"))
-    detektPlugins(project(":rules:java-interop"))
-    detektPlugins(project(":rules:logging"))
-    detektPlugins(project(":rules:migration"))
-    detektPlugins(project(":rules:naming-conventions"))
-    detektPlugins(project(":rules:numeric-issues"))
-    detektPlugins(project(":rules:other-problems"))
-    detektPlugins(project(":rules:probable-bugs"))
-    detektPlugins(project(":rules:redundant-constructs"))
-    detektPlugins(project(":rules:style-issues"))
+    detektPlugins(project(":rules:kotlin:code-migration"))
+    detektPlugins(project(":rules:kotlin:coroutines"))
+    detektPlugins(project(":rules:kotlin:java-interop"))
+    detektPlugins(project(":rules:kotlin:logging"))
+    detektPlugins(project(":rules:kotlin:migration"))
+    detektPlugins(project(":rules:kotlin:naming-conventions"))
+    detektPlugins(project(":rules:kotlin:numeric-issues"))
+    detektPlugins(project(":rules:kotlin:other-problems"))
+    detektPlugins(project(":rules:kotlin:probable-bugs"))
+    detektPlugins(project(":rules:kotlin:redundant-constructs"))
+    detektPlugins(project(":rules:kotlin:style-issues"))
 
     detektPlugins(
         fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") },

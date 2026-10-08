@@ -9,17 +9,17 @@ Each module is one inspection group of the IDE settings (Editor | Inspections | 
 
 | Module | Rule set id | Jar |
 |---|---|---|
-| `rules:code-migration` | `intellij-code-migration` | `intellij-inspections-code-migration-<version>.jar` |
-| `rules:coroutines` | `intellij-coroutines` | `intellij-inspections-coroutines-<version>.jar` |
-| `rules:java-interop` | `intellij-java-interop` | `intellij-inspections-java-interop-<version>.jar` |
-| `rules:logging` | `intellij-logging` | `intellij-inspections-logging-<version>.jar` |
-| `rules:migration` | `intellij-migration` | `intellij-inspections-migration-<version>.jar` |
-| `rules:naming-conventions` | `intellij-naming-conventions` | `intellij-inspections-naming-conventions-<version>.jar` |
-| `rules:numeric-issues` | `intellij-numeric-issues` | `intellij-inspections-numeric-issues-<version>.jar` |
-| `rules:other-problems` | `intellij-other-problems` | `intellij-inspections-other-problems-<version>.jar` |
-| `rules:probable-bugs` | `intellij-probable-bugs` | `intellij-inspections-probable-bugs-<version>.jar` |
-| `rules:redundant-constructs` | `intellij-redundant-constructs` | `intellij-inspections-redundant-constructs-<version>.jar` |
-| `rules:style-issues` | `intellij-style-issues` | `intellij-inspections-style-issues-<version>.jar` |
+| `rules:kotlin:code-migration` | `intellij-kotlin-code-migration` | `intellij-inspections-kotlin-code-migration-<version>.jar` |
+| `rules:kotlin:coroutines` | `intellij-kotlin-coroutines` | `intellij-inspections-kotlin-coroutines-<version>.jar` |
+| `rules:kotlin:java-interop` | `intellij-kotlin-java-interop` | `intellij-inspections-kotlin-java-interop-<version>.jar` |
+| `rules:kotlin:logging` | `intellij-kotlin-logging` | `intellij-inspections-kotlin-logging-<version>.jar` |
+| `rules:kotlin:migration` | `intellij-kotlin-migration` | `intellij-inspections-kotlin-migration-<version>.jar` |
+| `rules:kotlin:naming-conventions` | `intellij-kotlin-naming-conventions` | `intellij-inspections-kotlin-naming-conventions-<version>.jar` |
+| `rules:kotlin:numeric-issues` | `intellij-kotlin-numeric-issues` | `intellij-inspections-kotlin-numeric-issues-<version>.jar` |
+| `rules:kotlin:other-problems` | `intellij-kotlin-other-problems` | `intellij-inspections-kotlin-other-problems-<version>.jar` |
+| `rules:kotlin:probable-bugs` | `intellij-kotlin-probable-bugs` | `intellij-inspections-kotlin-probable-bugs-<version>.jar` |
+| `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs-<version>.jar` |
+| `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues-<version>.jar` |
 
 ## Build
 

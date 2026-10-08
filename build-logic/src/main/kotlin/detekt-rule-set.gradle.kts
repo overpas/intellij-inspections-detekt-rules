@@ -18,7 +18,7 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveBaseName = "intellij-inspections-${project.name}"
+    archiveBaseName = "intellij-inspections-${project.path.removePrefix(":rules:").replace(':', '-')}"
     archiveClassifier = ""
     archiveVersion = project.version.toString()
     isPreserveFileTimestamps = false

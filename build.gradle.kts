@@ -5,17 +5,17 @@ plugins {
 }
 
 val ruleSets = listOf(
-    "code-migration",
-    "coroutines",
-    "java-interop",
-    "logging",
-    "migration",
-    "naming-conventions",
-    "numeric-issues",
-    "other-problems",
-    "probable-bugs",
-    "redundant-constructs",
-    "style-issues",
+    "kotlin:code-migration",
+    "kotlin:coroutines",
+    "kotlin:java-interop",
+    "kotlin:logging",
+    "kotlin:migration",
+    "kotlin:naming-conventions",
+    "kotlin:numeric-issues",
+    "kotlin:other-problems",
+    "kotlin:probable-bugs",
+    "kotlin:redundant-constructs",
+    "kotlin:style-issues",
 )
 
 val ruleSetJars by configurations.creating {
