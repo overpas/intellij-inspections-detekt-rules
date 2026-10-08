@@ -1,28 +1,43 @@
-shortName,verdict,reason
-CanBeParameter,types,searches references inside the class
-ClassName,psi,checks names with regular expressions
-ConstantConditionIf,types,evaluates constant conditions
-ConstPropertyName,psi,checks names with regular expressions
-EnumEntryName,psi,checks names with regular expressions
-FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes
-KDocMissingDocumentation,psi,skips tests through detekt excludes
-KDocUnresolvedReference,types,resolves KDoc references
-KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure
-KotlinThrowableNotThrown,types,searches references of a local property only
-KotlinUnusedImport,types,resolves the references of the file
-LocalVariableName,psi,checks names with regular expressions
-MoveLambdaOutsideParentheses,types,resolves the call to check overloads
-ObjectPrivatePropertyName,psi,checks names with regular expressions
-ObjectPropertyName,psi,checks names with regular expressions
-PackageName,psi,checks names with regular expressions
-PrivatePropertyName,psi,checks names with regular expressions
-PropertyName,psi,checks names with regular expressions
-RedundantSetter,types,reads the overridden property
-RedundantUnitExpression,types,reads the expected type of the expression
-ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only
-ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables
-ReplaceToStringWithStringTemplate,types,resolves the toString call
-ScriptShebangExecPermission,not-portable,reads file system permissions
-SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types
-SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics
-TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes
+shortName,verdict,reason,status
+CanBeParameter,types,searches references inside the class,
+ClassName,psi,checks names with regular expressions,
+ConstPropertyName,psi,checks names with regular expressions,
+ConstantConditionIf,types,evaluates constant conditions,
+EnumEntryName,psi,checks names with regular expressions,
+FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,
+KDocMissingDocumentation,psi,skips tests through detekt excludes,
+KDocUnresolvedReference,types,resolves KDoc references,
+KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
+KotlinThrowableNotThrown,types,searches references of a local property only,
+KotlinUnusedImport,types,resolves the references of the file,
+LocalVariableName,psi,checks names with regular expressions,
+MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
+ObjectPrivatePropertyName,psi,checks names with regular expressions,
+ObjectPropertyName,psi,checks names with regular expressions,
+PackageName,psi,checks names with regular expressions,
+PrivatePropertyName,psi,checks names with regular expressions,
+PropertyName,psi,checks names with regular expressions,
+RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
+RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
+RedundantGetter,,,ported: `RedundantGetter`
+RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
+RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
+RedundantSemicolon,,,covered: ktlint `NoSemicolons`
+RedundantSetter,types,reads the overridden property,
+RedundantUnitExpression,types,reads the expected type of the expression,
+RemoveCurlyBracesFromTemplate,,,covered: ktlint `StringTemplate`
+RemoveEmptyClassBody,,,"covered: detekt `empty-blocks:EmptyClassBlock`, ktlint `NoEmptyClassBody`"
+RemoveEmptyParenthesesFromLambdaCall,,,covered: ktlint `UnnecessaryParenthesesBeforeTrailingLambda`
+RemoveEmptyPrimaryConstructor,,,covered: detekt `empty-blocks:EmptyDefaultConstructor`
+RemoveEmptySecondaryConstructorBody,,,covered: detekt `empty-blocks:EmptySecondaryConstructor`
+RemoveRedundantBackticks,,,covered: detekt `style:UnnecessaryBackticks`
+RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
+ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,
+ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
+ReplaceToStringWithStringTemplate,types,resolves the toString call,
+ScriptShebangExecPermission,not-portable,reads file system permissions,
+SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
+SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
+SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,
+WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`

@@ -1,3 +1,17 @@
+intellij-kotlin-redundant-constructs:
+  RedundantGetter:
+    active: true
+  RedundantLabeledReturnOnLastExpressionInLambda:
+    active: true
+  RedundantLambdaOrAnonymousFunction:
+    active: true
+  RemoveSetterParameterType:
+    active: true
+  SimplifyWhenWithBooleanConstantCondition:
+    active: true
+  WhenWithOnlyElse:
+    active: true
+
 overpas-architecture:
   NonInjectedDependency:
     active: true

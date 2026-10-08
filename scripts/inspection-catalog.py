@@ -375,30 +375,35 @@ def write_markdown(path, rows, commit):
         "- `types`: the rule needs type resolution, i.e. `RequiresAnalysisApi` and the Kotlin Analysis API.",
         "- `not-portable`: the inspection needs the project, a module, a build file, an index or IDE state.",
         "",
+        "Status: `ported` names the rule of this project, `covered` names the detekt or ktlint rule that",
+        "already finds the same problem.",
+        "",
         "## Summary",
         "",
-        "| Module | " + " | ".join(f"`{verdict}`" for verdict in verdicts) + " | Total |",
-        "|---|" + "---:|" * (len(verdicts) + 1),
+        "| Module | " + " | ".join(f"`{verdict}`" for verdict in verdicts) + " | Total | Ported | Covered |",
+        "|---|" + "---:|" * (len(verdicts) + 3),
     ]
     for module in modules + [""]:
         group = [row for row in rows if row["module"] == module]
         counts = [sum(row["verdict"] == verdict for row in group) for verdict in verdicts]
         label = f"`{module}`" if module else "Out of scope"
-        lines.append(f"| {label} | " + " | ".join(map(str, counts)) + f" | {len(group)} |")
+        done = [sum(row["status"].startswith(state) for row in group) for state in ("ported", "covered")]
+        lines.append(f"| {label} | " + " | ".join(map(str, counts + [len(group)] + done)) + " |")
     totals = [sum(row["verdict"] == verdict for row in rows) for verdict in verdicts]
-    lines.append("| **All** | " + " | ".join(map(str, totals)) + f" | {len(rows)} |")
+    done = [sum(row["status"].startswith(state) for row in rows) for state in ("ported", "covered")]
+    lines.append("| **All** | " + " | ".join(map(str, totals + [len(rows)] + done)) + " |")
     for module in modules + [""]:
         group = sorted((row for row in rows if row["module"] == module), key=lambda row: row["shortName"])
         lines += ["", f"## `{module}`" if module else "## Out of scope", ""]
-        lines.append("| Inspection | Level | Verdict | Reason | Implementation | Test data |")
-        lines.append("|---|---|---|---|---|---|")
+        lines.append("| Inspection | Level | Verdict | Reason | Status | Implementation | Test data |")
+        lines.append("|---|---|---|---|---|---|---|")
         for row in group:
             source = link(commit, row["implementationPath"], Path(row["implementationPath"]).name)
             tests = "<br>".join(link(commit, path, path.removeprefix(KOTLIN + "/")) for path in row["testData"].split(";") if path)
             title = row["displayName"].replace("|", "\\|")
             reason = row["reason"] if row["scope"] == "in" else f"{row['scope']}; {row['reason']}"
             lines.append(
-                f"| `{row['shortName']}`<br>{title} | {row['level']} | `{row['verdict']}` | {reason} | {source} | {tests} |"
+                f"| `{row['shortName']}`<br>{title} | {row['level']} | `{row['verdict']}` | {reason} | {row['status']} | {source} | {tests} |"
             )
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -430,13 +435,14 @@ def main():
         row["verdict"], row["reason"] = classify(source, row["module"], row["language"], helpers)
         if row["scope"] != "in":
             row["verdict"] = "not-portable"
-        override = overrides.get(row["shortName"])
-        if override:
-            row["verdict"], row["reason"] = override["verdict"], override["reason"]
+        override = overrides.get(row["shortName"], {})
+        row["verdict"] = override.get("verdict") or row["verdict"]
+        row["reason"] = override.get("reason") or row["reason"]
+        row["status"] = override.get("status") or ""
         row["testData"] = ";".join(tests.get(row["implementationClass"], []))
     rows.sort(key=lambda row: (row["module"] or "~", row["shortName"]))
     columns = [
-        "shortName", "displayName", "group", "module", "scope", "level", "enabledByDefault", "verdict", "reason",
+        "shortName", "displayName", "group", "module", "scope", "level", "enabledByDefault", "verdict", "reason", "status",
         "implementationClass", "implementationPath", "testData", "language", "registration",
     ]
     args.docs.mkdir(parents=True, exist_ok=True)
