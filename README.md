@@ -32,6 +32,22 @@ python3 scripts/inspection-catalog.py <intellij-community checkout>
 
 The script makes a sparse clone at the given path if it does not exist.
 
+## Rules
+
+Every rule takes the standard detekt options (`active`, `excludes`, `includes`, ...). The rule
+names are the short names of the IntelliJ inspections.
+
+### `intellij-kotlin-redundant-constructs`
+
+| Rule | Finds |
+|---|---|
+| `RedundantGetter` | A getter that only returns the backing field. |
+| `RedundantLabeledReturnOnLastExpressionInLambda` | A `return@label` on the last expression of the lambda with that label. |
+| `RedundantLambdaOrAnonymousFunction` | A lambda or an anonymous function that is called at once. |
+| `RemoveSetterParameterType` | An explicit type on a setter parameter. |
+| `SimplifyWhenWithBooleanConstantCondition` | A subjectless `when` with a `true` or `false` branch condition. |
+| `WhenWithOnlyElse` | A `when` with only an `else` branch. |
+
 ## Build
 
 ```shell

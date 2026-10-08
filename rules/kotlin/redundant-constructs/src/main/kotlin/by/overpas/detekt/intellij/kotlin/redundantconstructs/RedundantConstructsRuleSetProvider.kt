@@ -9,5 +9,15 @@ class RedundantConstructsRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-redundant-constructs")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::RedundantGetter,
+                ::RedundantLabeledReturnOnLastExpressionInLambda,
+                ::RedundantLambdaOrAnonymousFunction,
+                ::RemoveSetterParameterType,
+                ::SimplifyWhenWithBooleanConstantCondition,
+                ::WhenWithOnlyElse,
+            ),
+        )
 }
