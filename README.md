@@ -21,6 +21,17 @@ Each module is one inspection group of the IDE settings (Editor | Inspections | 
 | `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs-<version>.jar` |
 | `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues-<version>.jar` |
 
+## Backlog
+
+[docs/inspections.md](docs/inspections.md) lists every Kotlin inspection of IntelliJ IDEA with its
+target module and a verdict on how to port it. Refresh it with:
+
+```shell
+python3 scripts/inspection-catalog.py <intellij-community checkout>
+```
+
+The script makes a sparse clone at the given path if it does not exist.
+
 ## Build
 
 ```shell
