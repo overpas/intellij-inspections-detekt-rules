@@ -1,0 +1,49 @@
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
+plugins {
+    id("code-coverage")
+}
+
+val ruleSets = listOf(
+    "code-migration",
+    "coroutines",
+    "java-interop",
+    "logging",
+    "migration",
+    "naming-conventions",
+    "numeric-issues",
+    "other-problems",
+    "probable-bugs",
+    "redundant-constructs",
+    "style-issues",
+)
+
+val ruleSetJars by configurations.creating {
+    isCanBeConsumed = false
+    isTransitive = false
+}
+
+dependencies {
+    ruleSets.forEach { kover(project(":rules:$it")) }
+
+    ruleSets.forEach { ruleSetJars(project(":rules:$it", "shadowRuntimeElements")) }
+}
+
+kover {
+    reports {
+        total {
+            verify {
+                rule {
+                    minBound(80, CoverageUnit.LINE)
+                }
+            }
+        }
+    }
+}
+
+tasks.register<Sync>("ruleJars") {
+    group = "build"
+    description = "Collects the versioned rule set jars into build/releases/<version>."
+    from(ruleSetJars)
+    into(layout.buildDirectory.dir("releases/$version"))
+}
