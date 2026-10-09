@@ -298,6 +298,20 @@ intellij-kotlin-redundant-constructs:
     active: true
 
 intellij-kotlin-style-issues:
+  BooleanLiteralArgument:
+    active: true
+  CascadeIf:
+    active: true
+  IfThenToElvis:
+    active: true
+  IfThenToSafeAccess:
+    active: true
+  IntroduceWhenSubject:
+    active: true
+  JavaMapForEach:
+    active: true
+  JoinDeclarationAndAssignment:
+    active: true
   ReplaceAssertBooleanWithAssertEquality:
     active: true
   ReplaceAssociateFunction:
@@ -305,6 +319,12 @@ intellij-kotlin-style-issues:
   ReplaceCallWithBinaryOperator:
     active: true
   ReplaceCollectionCountWithSize:
+    active: true
+  ReplaceIfExpressionWithFirstOrNull:
+    active: true
+  ReplaceJavaStaticMethodWithKotlinAnalog:
+    active: true
+  ReplaceManualRangeWithIndicesCalls:
     active: true
   ReplaceToWithInfixForm:
     active: true
