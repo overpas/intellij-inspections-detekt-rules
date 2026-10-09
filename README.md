@@ -46,6 +46,14 @@ names are the short names of the IntelliJ inspections.
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
 | `InfixCallToOrdinary` | An infix call that can be an ordinary call. |
 
+### `intellij-kotlin-java-interop`
+
+| Rule | Finds |
+|---|---|
+| `JavaCollectionWithNullableTypeArgument` | A Java concurrent collection or `PriorityQueue` with a nullable type argument, which does not support `null`. |
+| `JavaCollectionsStaticMethodOnImmutableList` | A `java.util.Collections` mutator call (`reverse`, `sort`, `shuffle`, `fill`) on a read-only Kotlin list. |
+| `JavaDefaultMethodsNotOverriddenByDelegation` | Interface delegation that does not forward the overrides of Java default methods of the delegate. |
+
 ### `intellij-kotlin-logging`
 
 | Rule | Finds |
@@ -75,12 +83,28 @@ names are the short names of the IntelliJ inspections.
 
 | Rule | Finds |
 |---|---|
+| `ConvertArgumentToSet` | A collection argument of `minus`, `intersect`, `subtract`, `removeAll` or `retainAll` that should be a `Set`. |
+| `DeprecatedCallableAddReplaceWith` | A `@Deprecated` callable with a simple body but no `replaceWith` argument. |
 | `EnumValuesSoftDeprecate` | A `values()` call of an enum class that `entries` can replace. |
 | `EnumValuesTopLevelFunctionSoftDeprecate` | An `enumValues<T>()` call that `enumEntries<T>()` can replace. |
 | `FloatingPointLiteralPrecision` | A floating-point literal with more digits than its type can hold. |
 | `MigrateDiagnosticSuppression` | An old diagnostic name in `@Suppress` that has a new name. |
 | `ReplaceWithEnumMap` | A `HashMap` with enum keys that an `EnumMap` can replace. |
 | `ReplaceWithStringBuilderAppendRange` | An `append(CharArray, Int, Int)` call that `appendRange` can replace. |
+
+### `intellij-kotlin-probable-bugs`
+
+| Rule | Finds |
+|---|---|
+| `AmbiguousNonLocalJump` | An unlabeled `break` or `continue` in an inline lambda inside a loop. |
+| `ArrayInDataClass` | An array property in a data or value class that does not override `equals()` and `hashCode()`. |
+| `AssignedValueIsNeverRead` | An assignment to a local variable whose value is never read. |
+| `CanSealedSubClassBeObject` | A subclass of a sealed class that has no state and no `equals()` and can be an object. |
+| `ConflictingExtensionProperty` | An extension property that a synthetic Java property of the receiver shadows. |
+| `ConvertNaNEquality` | An equality check with `Double.NaN` or `Float.NaN` that should use `isNaN()`. |
+| `DataClassPrivateConstructor` | A private primary constructor of a data class that the generated `copy()` exposes. |
+| `DelegationToVarProperty` | Class delegation to a `var` constructor property that the class never reassigns. |
+| `DuplicateArgumentsInSetOfAndMapOfFunctions` | A duplicate constant element in a `setOf` call or a duplicate constant key in a `mapOf` call. |
 
 ### `intellij-kotlin-redundant-constructs`
 

@@ -12,6 +12,8 @@ class OtherProblemsRuleSetProvider : RuleSetProvider {
         RuleSet(
             ruleSetId,
             listOf(
+                ::ConvertArgumentToSet,
+                ::DeprecatedCallableAddReplaceWith,
                 ::EnumValuesSoftDeprecate,
                 ::EnumValuesTopLevelFunctionSoftDeprecate,
                 ::FloatingPointLiteralPrecision,

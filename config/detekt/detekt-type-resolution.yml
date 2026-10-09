@@ -67,6 +67,14 @@ intellij-kotlin-code-migration:
   ConvertLongToDuration:
     active: true
 
+intellij-kotlin-java-interop:
+  JavaCollectionWithNullableTypeArgument:
+    active: true
+  JavaCollectionsStaticMethodOnImmutableList:
+    active: true
+  JavaDefaultMethodsNotOverriddenByDelegation:
+    active: true
+
 intellij-kotlin-logging:
   KotlinLoggerInitializedWithForeignClass:
     active: true
@@ -86,6 +94,10 @@ intellij-kotlin-numeric-issues:
     active: true
 
 intellij-kotlin-other-problems:
+  ConvertArgumentToSet:
+    active: true
+  DeprecatedCallableAddReplaceWith:
+    active: true
   EnumValuesSoftDeprecate:
     active: true
   EnumValuesTopLevelFunctionSoftDeprecate:
@@ -97,6 +109,26 @@ intellij-kotlin-other-problems:
   ReplaceWithEnumMap:
     active: true
   ReplaceWithStringBuilderAppendRange:
+    active: true
+
+intellij-kotlin-probable-bugs:
+  AmbiguousNonLocalJump:
+    active: true
+  ArrayInDataClass:
+    active: true
+  AssignedValueIsNeverRead:
+    active: true
+  CanSealedSubClassBeObject:
+    active: true
+  ConflictingExtensionProperty:
+    active: true
+  ConvertNaNEquality:
+    active: true
+  DataClassPrivateConstructor:
+    active: true
+  DelegationToVarProperty:
+    active: true
+  DuplicateArgumentsInSetOfAndMapOfFunctions:
     active: true
 
 intellij-kotlin-redundant-constructs:
