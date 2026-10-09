@@ -31,6 +31,17 @@ ConvertFromMultiDollarToRegularString,,,ported: `ConvertFromMultiDollarToRegular
 ConvertLongToDuration,,,ported: `ConvertLongToDuration`
 ConvertNaNEquality,,,ported: `ConvertNaNEquality`
 ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
+ConvertPairConstructorToToFunction,,,ported: `ConvertPairConstructorToToFunction`
+ConvertRangeCheckToTwoComparisons,,,ported: `ConvertRangeCheckToTwoComparisons`
+ConvertReferenceToLambda,,,ported: `ConvertReferenceToLambda`
+ConvertSealedClassToSealedInterface,,,ported: `ConvertSealedClassToSealedInterface`
+ConvertSealedInterfaceToSealedClass,,,ported: `ConvertSealedInterfaceToSealedClass`
+ConvertSecondaryConstructorToPrimary,,,ported: `ConvertSecondaryConstructorToPrimary`
+ConvertToCollectionLiterals,not-portable,needs the experimental language feature CollectionLiterals,
+ConvertToExplicitBackingFields,,,ported: `ConvertToExplicitBackingFields`
+ConvertToStringTemplate,,,ported: `ConvertToStringTemplate`
+ConvertTryFinallyToUseCall,,,ported: `ConvertTryFinallyToUseCall`
+ConvertTwoComparisonsToRangeCheck,,,ported: `ConvertTwoComparisonsToRangeCheck`
 ConvertTypeOfToCollectionLiteral,not-portable,needs the experimental language feature CollectionLiterals,
 CopyWithoutNamedArguments,,,ported: `CopyWithoutNamedArguments`
 CoroutineContextWithJob,,,ported: `CoroutineContextWithJob`
@@ -180,7 +191,11 @@ ReplaceIfExpressionWithFirstOrNull,,,ported: `ReplaceIfExpressionWithFirstOrNull
 ReplaceIsEmptyWithIfEmpty,,,covered: detekt `style:UseIfEmptyOrIfBlank`
 ReplaceJavaStaticMethodWithKotlinAnalog,,,ported: `ReplaceJavaStaticMethodWithKotlinAnalog`
 ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,ported: `ReplaceManualRangeWithIndicesCalls`
-ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
+ReplaceMapGetOrDefault,,,ported: `ReplaceMapGetOrDefault`
+ReplaceMapIndexedWithListGenerator,,,ported: `ReplaceMapIndexedWithListGenerator`
+ReplaceMapKeysCallChainWithKeys,,,ported: `ReplaceMapKeysCallChainWithKeys`
+ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,ported: `ReplaceNegatedIsEmptyWithIsNotEmpty`
+ReplaceNotNullAssertionWithElvisReturn,,,ported: `ReplaceNotNullAssertionWithElvisReturn`
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
 ReplaceRangeStartEndInclusiveWithFirstLast,,,ported: `ReplaceRangeStartEndInclusiveWithFirstLast`
 ReplaceRangeToWithRangeUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
