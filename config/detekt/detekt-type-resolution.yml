@@ -304,6 +304,14 @@ intellij-kotlin-style-issues:
     active: true
   CollectionConcatenationToBuildCollection:
     active: true
+  ConvertToExplicitBackingFields:
+    active: true
+  ConvertToStringTemplate:
+    active: true
+  ConvertTryFinallyToUseCall:
+    active: true
+  ConvertTwoComparisonsToRangeCheck:
+    active: true
   CopyWithoutNamedArguments:
     active: true
   DestructuringDeclaration:
@@ -351,6 +359,12 @@ intellij-kotlin-style-issues:
   ReplaceJavaStaticMethodWithKotlinAnalog:
     active: true
   ReplaceManualRangeWithIndicesCalls:
+    active: true
+  ReplaceMapIndexedWithListGenerator:
+    active: true
+  ReplaceNegatedIsEmptyWithIsNotEmpty:
+    active: true
+  ReplaceNotNullAssertionWithElvisReturn:
     active: true
   ReplaceRangeStartEndInclusiveWithFirstLast:
     active: true
