@@ -7,25 +7,26 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
-import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtFile
 
-class RedundantModalityModifier(config: Config) :
+class VariableInitializerIsRedundant(config: Config) :
     Rule(
         config,
-        "A modality modifier that matches the default modality of the declaration is redundant. Remove it.",
+        "The initial value of a variable is overwritten before it is read. Remove the initializer.",
     ),
     RequiresAnalysisApi {
 
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
-        val owners = analyze(file) {
+        val elements = analyze(file) {
             file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_EXTENDED_CHECKERS)
-                .filterIsInstance<KaFirDiagnostic.RedundantModalityModifier>()
+                .filter { it.factoryName == DIAGNOSTIC }
                 .map { it.psi }
         }
-        owners.mapNotNull { it.modifierList?.getModifier(KtTokens.MODALITY_MODIFIERS) }
-            .forEach { report(Finding(Entity.from(it), "Redundant '${it.text}' modifier")) }
+        elements.forEach { report(Finding(Entity.from(it), "Initializer is redundant")) }
+    }
+
+    private companion object {
+        const val DIAGNOSTIC = "VARIABLE_INITIALIZER_IS_REDUNDANT"
     }
 }

@@ -60,18 +60,29 @@ RemoveEmptyParenthesesFromLambdaCall,,,covered: ktlint `UnnecessaryParenthesesBe
 RemoveEmptyPrimaryConstructor,,,covered: detekt `empty-blocks:EmptyDefaultConstructor`
 RemoveEmptySecondaryConstructorBody,,,covered: detekt `empty-blocks:EmptySecondaryConstructor`
 RemoveExplicitSuperQualifier,,,ported: `RemoveExplicitSuperQualifier`
+RemoveExplicitTypeArguments,,,ported: `RemoveExplicitTypeArguments`
 RemoveRedundantBackticks,,,covered: detekt `style:UnnecessaryBackticks`
+RemoveRedundantQualifierName,,,ported: `RemoveRedundantQualifierName`
+RemoveRedundantSpreadOperator,,,ported: `RemoveRedundantSpreadOperator`
 RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
+RemoveSingleExpressionStringTemplate,,,ported: `RemoveSingleExpressionStringTemplate`
 RemoveToStringInStringTemplate,,,covered: ktlint `StringTemplate`
 ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplaceToStringWithStringTemplate,types,resolves the toString call,
+ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
 SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,
+UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
+UnnecessaryVariable,,,ported: `UnnecessaryVariable`
+UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
+UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
 UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
 UnusedVariable,,,covered: detekt `style:UnusedVariable`
+VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
 WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`

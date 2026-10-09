@@ -68,8 +68,19 @@ names are the short names of the IntelliJ inspections.
 | `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. |
 | `RedundantWith` | A `with` call whose lambda does not use the receiver. |
 | `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
+| `RemoveExplicitTypeArguments` | Explicit type arguments that the compiler can infer. |
+| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. |
+| `RemoveRedundantSpreadOperator` | A spread operator on an array that is created in place with an `arrayOf`-like call or a `[...]` literal. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
+| `RemoveSingleExpressionStringTemplate` | A string template that only holds one non-null `String` expression. |
+| `ScopeFunctionConversion` | A scope function call that another scope function can replace. |
 | `SimplifyWhenWithBooleanConstantCondition` | A subjectless `when` with a `true` or `false` branch condition. |
+| `SuspiciousCallableReferenceInLambda` | A lambda whose only statement is a callable reference. |
+| `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
+| `UnnecessaryVariable` | A local variable that only copies another local value or parameter. |
+| `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments. |
+| `UnusedReceiverParameter` | An extension receiver that is never used. |
+| `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. |
 
 ## Build

@@ -110,6 +110,26 @@ intellij-kotlin-redundant-constructs:
     active: true
   RemoveExplicitSuperQualifier:
     active: true
+  RemoveExplicitTypeArguments:
+    active: true
+  RemoveRedundantQualifierName:
+    active: true
+  RemoveRedundantSpreadOperator:
+    active: true
+  RemoveSingleExpressionStringTemplate:
+    active: true
+  SuspiciousCallableReferenceInLambda:
+    active: true
+  UnnecessaryOptInAnnotation:
+    active: true
+  UnnecessaryVariable:
+    active: true
+  UnusedContextParameterCall:
+    active: true
+  UnusedReceiverParameter:
+    active: true
+  VariableInitializerIsRedundant:
+    active: true
 
 overpas-architecture:
   HiddenAbstraction:
