@@ -224,6 +224,12 @@ names are the short names of the IntelliJ inspections.
 | `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. |
 | `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. |
 | `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. |
+| `LiftReturnOrAssignment` | An `if`, `when` or `try` whose branches all end in a return or in an assignment to the same variable. |
+| `MapToForEach` | A `map`-like call whose result is not used and that `forEach` or `forEachIndexed` can replace. |
+| `MoveLambdaOutsideParentheses` | A lambda passed as the last argument inside the parentheses that can be a trailing lambda. |
+| `MoveVariableDeclarationIntoWhen` | A variable declared right before a `when` and used only in it, which can move into the `when` subject. |
+| `NullableHashCode` | An `x?.hashCode() ?: 0` on a nullable receiver that `x.hashCode()` can replace. |
+| `RedundantAsSequence` | An `asSequence()` call on a sequence, or on an iterable followed by one terminal operation. |
 | `RedundantElseInIf` | An `else` branch after `if` branches that all end with a jump such as `return` or `throw`. |
 | `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. |
 | `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. |
@@ -237,6 +243,10 @@ names are the short names of the IntelliJ inspections.
 | `ReplaceIfExpressionWithFirstOrNull` | An `if` that returns the first element of a non-empty collection, string or array, else `null`, which `firstOrNull()` can replace. |
 | `ReplaceJavaStaticMethodWithKotlinAnalog` | A call of a Java static method that has a Kotlin standard library counterpart. |
 | `ReplaceManualRangeWithIndicesCalls` | A manual range from `0` to the size or last index that `indices`, a loop over the elements or `withIndex()` can replace. |
+| `ReplaceRangeStartEndInclusiveWithFirstLast` | A `start` or `endInclusive` on a primitive range that the unboxed `first` or `last` can replace. |
+| `ReplaceReadLineWithReadln` | A `readLine()` call that `readln()` or `readlnOrNull()` can replace. |
+| `ReplaceSizeCheckWithIsNotEmpty` | A size, length or count comparison that `isNotEmpty()` can replace. |
+| `ReplaceSizeZeroCheckWithIsEmpty` | A size, length or count zero check that `isEmpty()` can replace. |
 | `ReplaceStringFormatWithLiteral` | A `String.format` call with only `%s` placeholders that a string template can replace. |
 | `ReplaceSubstringWithDropLast` | An `s.substring(0, s.length - n)` call that `s.dropLast(n)` can replace. |
 | `ReplaceSubstringWithIndexingOperation` | A `substring(i, i + 1)` call with constant indices that `s[i]` can replace. |
@@ -255,6 +265,9 @@ names are the short names of the IntelliJ inspections.
 | `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. |
 | `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. |
 | `SimplifyAssertNotNull` | An `assert(x != null)` right after the declaration of `x` that can fold into the initializer. |
+| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. |
+| `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. |
+| `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. |
 
 ## Build
 
