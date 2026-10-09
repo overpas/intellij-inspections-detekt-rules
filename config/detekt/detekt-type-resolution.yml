@@ -297,6 +297,22 @@ intellij-kotlin-redundant-constructs:
   VariableInitializerIsRedundant:
     active: true
 
+intellij-kotlin-style-issues:
+  ReplaceAssertBooleanWithAssertEquality:
+    active: true
+  ReplaceAssociateFunction:
+    active: true
+  ReplaceCallWithBinaryOperator:
+    active: true
+  ReplaceCollectionCountWithSize:
+    active: true
+  ReplaceToWithInfixForm:
+    active: true
+  ReplaceWithCallWithContextCall:
+    active: true
+  ReplaceWithIgnoreCaseEquals:
+    active: true
+
 overpas-architecture:
   HiddenAbstraction:
     active: true
