@@ -1,12 +1,16 @@
 shortName,verdict,reason,status
-CanBeParameter,types,searches references inside the class,
+CanBeParameter,types,searches references inside the class,ported: `CanBeParameter`
+CanBePrimaryConstructorProperty,,,ported: `CanBePrimaryConstructorProperty`
+CanUnescapeDollarLiteral,,,ported: `CanUnescapeDollarLiteral`
 ClassName,psi,checks names with regular expressions,
 ComplexRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 ConstPropertyName,psi,checks names with regular expressions,
-ConstantConditionIf,types,evaluates constant conditions,
+ConstantConditionIf,types,evaluates constant conditions,ported: `ConstantConditionIf`
 ControlFlowWithEmptyBody,,,"covered: detekt `empty-blocks:EmptyIfBlock`, `EmptyElseBlock`, `EmptyForBlock`, `EmptyWhileBlock`, `EmptyDoWhileBlock`, `EmptyWhenBlock`"
 EnumEntryName,psi,checks names with regular expressions,
+ExplicitThis,,,ported: `ExplicitThis`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,
+IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,
 KDocUnresolvedReference,types,resolves KDoc references,
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
@@ -27,18 +31,23 @@ RedundantGetter,,,ported: `RedundantGetter`
 RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
 RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
 RedundantRequireNotNullCall,,,covered: detekt `potential-bugs:UnnecessaryNotNullCheck`
+RedundantReturnLabel,,,ported: `RedundantReturnLabel`
+RedundantSamConstructor,,,ported: `RedundantSamConstructor`
 RedundantSemicolon,,,covered: ktlint `NoSemicolons`
-RedundantSetter,types,reads the overridden property,
+RedundantSetter,types,reads the overridden property,ported: `RedundantSetter`
 RedundantSuspendModifier,,,covered: detekt `coroutines:RedundantSuspendModifier`
 RedundantUnitExpression,types,reads the expected type of the expression,covered: detekt `style:OptionalUnit`
 RedundantUnitReturnType,,,"covered: detekt `style:OptionalUnit`, ktlint `NoUnitReturn`"
 RedundantUpperBound,,,ported: `RedundantUpperBound`
+RedundantValueArgument,,,ported: `RedundantValueArgument`
 RedundantVisibilityModifier,,,covered: detekt `style:RedundantVisibilityModifier`
+RedundantWith,,,ported: `RedundantWith`
 RemoveCurlyBracesFromTemplate,,,covered: ktlint `StringTemplate`
 RemoveEmptyClassBody,,,"covered: detekt `empty-blocks:EmptyClassBlock`, ktlint `NoEmptyClassBody`"
 RemoveEmptyParenthesesFromLambdaCall,,,covered: ktlint `UnnecessaryParenthesesBeforeTrailingLambda`
 RemoveEmptyPrimaryConstructor,,,covered: detekt `empty-blocks:EmptyDefaultConstructor`
 RemoveEmptySecondaryConstructorBody,,,covered: detekt `empty-blocks:EmptySecondaryConstructor`
+RemoveExplicitSuperQualifier,,,ported: `RemoveExplicitSuperQualifier`
 RemoveRedundantBackticks,,,covered: detekt `style:UnnecessaryBackticks`
 RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
 RemoveToStringInStringTemplate,,,covered: ktlint `StringTemplate`

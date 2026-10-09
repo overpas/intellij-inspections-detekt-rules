@@ -61,6 +61,34 @@ exceptions:
     active: true
     ignoreLabeled: false
 
+intellij-kotlin-redundant-constructs:
+  CanBeParameter:
+    active: true
+  CanBePrimaryConstructorProperty:
+    active: true
+  CanUnescapeDollarLiteral:
+    active: true
+  ConstantConditionIf:
+    active: true
+  ExplicitThis:
+    active: true
+  IfExpressionWithIdenticalBranches:
+    active: true
+  RedundantReturnLabel:
+    active: true
+  RedundantSamConstructor:
+    active: true
+  RedundantSetter:
+    active: true
+  RedundantUpperBound:
+    active: true
+  RedundantValueArgument:
+    active: true
+  RedundantWith:
+    active: true
+  RemoveExplicitSuperQualifier:
+    active: true
+
 overpas-architecture:
   HiddenAbstraction:
     active: true

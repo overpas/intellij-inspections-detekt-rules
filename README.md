@@ -41,9 +41,22 @@ names are the short names of the IntelliJ inspections.
 
 | Rule | Finds |
 |---|---|
+| `CanBeParameter` | A `val` or `var` constructor parameter that is only used during initialization. Only parameters that are not visible outside the file are checked. |
+| `CanBePrimaryConstructorProperty` | A property that is initialized from the constructor parameter of the same name and type. |
+| `CanUnescapeDollarLiteral` | An escaped dollar in a string literal that can be a plain `$`. |
+| `ConstantConditionIf` | An `if` whose condition is the constant `true` or `false`. |
+| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. |
+| `IfExpressionWithIdenticalBranches` | An `if` whose `then` and `else` branches are identical. |
 | `RedundantGetter` | A getter that only returns the backing field. |
 | `RedundantLabeledReturnOnLastExpressionInLambda` | A `return@label` on the last expression of the lambda with that label. |
 | `RedundantLambdaOrAnonymousFunction` | A lambda or an anonymous function that is called at once. |
+| `RedundantReturnLabel` | A label on a `return` that targets the enclosing function, not a lambda. |
+| `RedundantSamConstructor` | A SAM constructor call in an argument where a plain lambda converts to the same type. |
+| `RedundantSetter` | A setter that is the default one or only assigns the value to the backing field. |
+| `RedundantUpperBound` | A type parameter bound that is `Any?`, the default upper bound. |
+| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. |
+| `RedundantWith` | A `with` call whose lambda does not use the receiver. |
+| `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
 | `SimplifyWhenWithBooleanConstantCondition` | A subjectless `when` with a `true` or `false` branch condition. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. |
