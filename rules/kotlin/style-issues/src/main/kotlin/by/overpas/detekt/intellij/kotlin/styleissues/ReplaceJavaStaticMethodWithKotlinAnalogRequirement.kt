@@ -10,10 +10,11 @@ internal enum class ReplaceJavaStaticMethodWithKotlinAnalogRequirement(
     SORTABLE_LIST({ it.isFirstArgumentMutableList && (it.argumentCount == 1 || it.hasLambdaSecondArgument) }),
     SYSTEM_OUT({ it.isSystemOut }),
     TWO_ARGUMENTS({ it.argumentCount == 2 }),
-    TWO_ARGUMENTS_NON_NULL({ it.argumentCount == 2 && it.isFirstArgumentNullable == false }),
-    PRIMITIVE_TO_STRING({ facts ->
-        facts.argumentCount == 1 ||
-            (facts.argumentCount == 2 && facts.hasValidRadix && facts.isFirstArgumentNullable == false)
+    TWO_ARGUMENTS_NON_NULL({ (argumentCount, isFirstArgumentNullable) ->
+        argumentCount == 2 && isFirstArgumentNullable == false
+    }),
+    PRIMITIVE_TO_STRING({ (argumentCount, isFirstArgumentNullable, hasValidRadix) ->
+        argumentCount == 1 || (argumentCount == 2 && hasValidRadix && isFirstArgumentNullable == false)
     }),
     CHARACTER_TO_STRING({ it.argumentCount == 1 && it.isFirstArgumentChar }),
 }

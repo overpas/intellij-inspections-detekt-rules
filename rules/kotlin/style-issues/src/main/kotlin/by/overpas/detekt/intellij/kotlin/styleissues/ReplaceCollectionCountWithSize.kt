@@ -19,9 +19,13 @@ private val replaceCollectionCountWithSizeCallableId =
     CallableId(FqName("kotlin.collections"), Name.identifier("count"))
 
 private val replaceCollectionCountWithSizeReceivers =
-    setOf(StandardClassIds.Collection, StandardClassIds.Array, StandardClassIds.Map) +
-        StandardClassIds.elementTypeByPrimitiveArrayType.keys +
-        StandardClassIds.unsignedArrayTypeByElementType.keys
+    buildSet {
+        add(StandardClassIds.Collection)
+        add(StandardClassIds.Array)
+        add(StandardClassIds.Map)
+        addAll(StandardClassIds.elementTypeByPrimitiveArrayType.keys)
+        addAll(StandardClassIds.unsignedArrayTypeByElementType.keys)
+    }
 
 class ReplaceCollectionCountWithSize(config: Config) :
     Rule(

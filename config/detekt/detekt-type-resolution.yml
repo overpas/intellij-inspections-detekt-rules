@@ -302,6 +302,16 @@ intellij-kotlin-style-issues:
     active: true
   CascadeIf:
     active: true
+  CollectionConcatenationToBuildCollection:
+    active: true
+  CopyWithoutNamedArguments:
+    active: true
+  DestructuringDeclaration:
+    active: true
+  FilterIsInstanceCallWithClassLiteralArgument:
+    active: true
+  FoldInitializerAndIfToElvis:
+    active: true
   IfThenToElvis:
     active: true
   IfThenToSafeAccess:
@@ -335,6 +345,14 @@ intellij-kotlin-style-issues:
   ReplaceWithCallWithContextCall:
     active: true
   ReplaceWithIgnoreCaseEquals:
+    active: true
+  ReplaceWithOperatorAssignment:
+    active: true
+  SafeCastWithReturn:
+    active: true
+  SimplifiableCall:
+    active: true
+  SimplifiableCallChain:
     active: true
 
 overpas-architecture:

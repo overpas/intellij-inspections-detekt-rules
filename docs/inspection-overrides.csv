@@ -15,16 +15,24 @@ CanUnescapeDollarLiteral,,,ported: `CanUnescapeDollarLiteral`
 CascadeIf,,,ported: `CascadeIf`
 ClassName,psi,checks names with regular expressions,covered: detekt `naming:ClassNaming`
 CollapseCollectionLiteralChainCall,not-portable,needs the experimental language feature CollectionLiterals,
+CollectionConcatenationToBuildCollection,,,ported: `CollectionConcatenationToBuildCollection`
 ComplexRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 ConflictingExtensionProperty,,,ported: `ConflictingExtensionProperty`
 ConstPropertyName,psi,checks names with regular expressions,covered: ktlint `PropertyName`
 ConstantConditionIf,types,evaluates constant conditions,ported: `ConstantConditionIf`
 ControlFlowWithEmptyBody,,,"covered: detekt `empty-blocks:EmptyIfBlock`, `EmptyElseBlock`, `EmptyForBlock`, `EmptyWhileBlock`, `EmptyDoWhileBlock`, `EmptyWhenBlock`"
 ConvertArgumentToSet,,,ported: `ConvertArgumentToSet`
+ConvertCallChainIntoSequence,,,covered: detekt `performance:CouldBeSequence`
+ConvertCollectionLiteralToFunctionCall,not-portable,needs the experimental language feature CollectionLiterals,
+ConvertCollectionLiteralToTypeOfExpression,not-portable,needs the experimental language feature CollectionLiterals,
+ConvertDataClassToValueClass,not-portable,needs the experimental language feature FullValueClasses,
+ConvertExplicitContextArgumentToImplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
 ConvertFromMultiDollarToRegularString,,,ported: `ConvertFromMultiDollarToRegularString`
 ConvertLongToDuration,,,ported: `ConvertLongToDuration`
 ConvertNaNEquality,,,ported: `ConvertNaNEquality`
 ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
+ConvertTypeOfToCollectionLiteral,not-portable,needs the experimental language feature CollectionLiterals,
+CopyWithoutNamedArguments,,,ported: `CopyWithoutNamedArguments`
 CoroutineContextWithJob,,,ported: `CoroutineContextWithJob`
 CustomComponentDestructuringMigration,not-portable,needs the experimental language feature NameBasedDestructuring,
 DataClassPrivateConstructor,,,ported: `DataClassPrivateConstructor`
@@ -32,13 +40,17 @@ DeferredResultUnused,,,ported: `DeferredResultUnused`
 DelegationToVarProperty,,,ported: `DelegationToVarProperty`
 DeprecatedCallableAddReplaceWith,,,ported: `DeprecatedCallableAddReplaceWith`
 DestructingShortFormNameMismatch,not-portable,needs the experimental language feature NameBasedDestructuring,
+DestructuringDeclaration,,,ported: `DestructuringDeclaration`
+DoubleBang,,,covered: detekt `potential-bugs:UnsafeCallOnNullableType`
 DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
 EmptyRange,,,ported: `EmptyRange`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
 EqualsOrHashCode,,,covered: detekt `potential-bugs:EqualsWithHashCodeExist`
 EscapingCapturedVariable,not-portable,needs the compiler flag ReportEscapingCapturedVariable,
 ExplicitThis,,,ported: `ExplicitThis`
+FilterIsInstanceCallWithClassLiteralArgument,,,ported: `FilterIsInstanceCallWithClassLiteralArgument`
 FilterIsInstanceResultIsAlwaysEmpty,,,ported: `FilterIsInstanceResultIsAlwaysEmpty`
+FoldInitializerAndIfToElvis,,,ported: `FoldInitializerAndIfToElvis`
 ForEachJoinOnCollectionOfJob,,,ported: `ForEachJoinOnCollectionOfJob`
 ForEachParameterNotUsed,,,ported: `ForEachParameterNotUsed`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
@@ -171,15 +183,21 @@ ReplaceUntilWithRangeUntil,,,ported: `ReplaceUntilWithRangeUntil`
 ReplaceWithCallWithContextCall,,,ported: `ReplaceWithCallWithContextCall`
 ReplaceWithIgnoreCaseEquals,,,ported: `ReplaceWithIgnoreCaseEquals`
 ReplaceWithImportAlias,,,ported: `ReplaceWithImportAlias`
+ReplaceWithOperatorAssignment,,,ported: `ReplaceWithOperatorAssignment`
+RevertExplicitBackingFields,,,ported: `RevertExplicitBackingFields`
 RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
+SafeCastWithReturn,,,ported: `SafeCastWithReturn`
 ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
 SelfAssignment,,,ported: `SelfAssignment`
 SelfReferenceConstructorParameter,,,ported: `SelfReferenceConstructorParameter`
 SetterBackingFieldAssignment,,,ported: `SetterBackingFieldAssignment`
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
+SimplifiableCall,,,ported: `SimplifiableCall`
+SimplifiableCallChain,,,ported: `SimplifiableCallChain`
 SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`
 SimplifiableFlowCallChain,,,ported: `SimplifiableFlowCallChain`
+SimplifyAssertNotNull,,,ported: `SimplifyAssertNotNull`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
 SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
