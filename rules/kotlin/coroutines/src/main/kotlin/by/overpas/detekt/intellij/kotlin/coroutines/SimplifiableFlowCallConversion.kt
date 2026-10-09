@@ -24,9 +24,7 @@ internal class SimplifiableFlowCallConversion(
 
     fun replacement(): String? {
         val call = with(session) { expression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return null
-        val arguments = call.valueArgumentMapping.entries.associate { (argument, parameter) ->
-            parameter.name.asString() to argument
-        }
+        val arguments = call.valueArgumentMapping.entries.associateBy({ it.value.name.asString() }, { it.key })
         val transform = SimplifiableFlowCallLambda(arguments["transform"] as? KtLambdaExpression)
         val singleLambda = expression.valueArguments.singleOrNull()?.getArgumentExpression() as? KtLambdaExpression
         return when (call.symbol.callableId) {

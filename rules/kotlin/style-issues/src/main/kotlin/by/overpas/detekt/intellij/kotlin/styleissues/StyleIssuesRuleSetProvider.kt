@@ -9,5 +9,20 @@ class StyleIssuesRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-style-issues")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::ReplaceAssertBooleanWithAssertEquality,
+                ::ReplaceAssociateFunction,
+                ::ReplaceCallWithBinaryOperator,
+                ::ReplaceCollectionCountWithSize,
+                ::ReplaceContains,
+                ::ReplaceToStringWithStringTemplate,
+                ::ReplaceToWithInfixForm,
+                ::ReplaceUntilWithRangeUntil,
+                ::ReplaceWithCallWithContextCall,
+                ::ReplaceWithIgnoreCaseEquals,
+                ::ReplaceWithImportAlias,
+            ),
+        )
 }

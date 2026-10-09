@@ -127,10 +127,21 @@ RemoveRedundantSpreadOperator,,,ported: `RemoveRedundantSpreadOperator`
 RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
 RemoveSingleExpressionStringTemplate,,,ported: `RemoveSingleExpressionStringTemplate`
 RemoveToStringInStringTemplate,,,covered: ktlint `StringTemplate`
+ReplaceArrayOfWithLiteral,,,covered: detekt `style:UseArrayLiteralsInAnnotations`
+ReplaceAssertBooleanWithAssertEquality,,,ported: `ReplaceAssertBooleanWithAssertEquality`
+ReplaceAssociateFunction,,,ported: `ReplaceAssociateFunction`
+ReplaceCallWithBinaryOperator,,,ported: `ReplaceCallWithBinaryOperator`
+ReplaceCollectionCountWithSize,,,ported: `ReplaceCollectionCountWithSize`
+ReplaceContains,,,ported: `ReplaceContains`
 ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
-ReplaceToStringWithStringTemplate,types,resolves the toString call,
+ReplaceToStringWithStringTemplate,types,resolves the toString call,ported: `ReplaceToStringWithStringTemplate`
+ReplaceToWithInfixForm,,,ported: `ReplaceToWithInfixForm`
+ReplaceUntilWithRangeUntil,,,ported: `ReplaceUntilWithRangeUntil`
+ReplaceWithCallWithContextCall,,,ported: `ReplaceWithCallWithContextCall`
+ReplaceWithIgnoreCaseEquals,,,ported: `ReplaceWithIgnoreCaseEquals`
+ReplaceWithImportAlias,,,ported: `ReplaceWithImportAlias`
 RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
 ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,

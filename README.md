@@ -205,6 +205,22 @@ names are the short names of the IntelliJ inspections.
 | `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. |
 
+### `intellij-kotlin-style-issues`
+
+| Rule | Finds |
+|---|---|
+| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. |
+| `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. |
+| `ReplaceCallWithBinaryOperator` | An explicit call of `equals`, `compareTo` or an arithmetic or range operator function that a binary operator can replace. |
+| `ReplaceCollectionCountWithSize` | A `count()` call without a predicate on a collection, array or map that `size` can replace. |
+| `ReplaceContains` | A call of an operator `contains` function that the `in` operator can replace. |
+| `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. |
+| `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. |
+| `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. |
+| `ReplaceWithCallWithContextCall` | A `with` call whose receiver is only used as a context argument, so a `context` call fits. |
+| `ReplaceWithIgnoreCaseEquals` | An equality check of two identical case conversions that `equals(..., ignoreCase = true)` can replace. |
+| `ReplaceWithImportAlias` | A qualified name that an existing import alias can replace. |
+
 ## Build
 
 ```shell
