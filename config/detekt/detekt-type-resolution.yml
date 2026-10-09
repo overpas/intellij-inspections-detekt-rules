@@ -312,6 +312,10 @@ intellij-kotlin-style-issues:
     active: true
   JoinDeclarationAndAssignment:
     active: true
+  RedundantRunCatching:
+    active: true
+  RemoveEmptyParenthesesFromAnnotationEntry:
+    active: true
   ReplaceAssertBooleanWithAssertEquality:
     active: true
   ReplaceAssociateFunction:

@@ -219,6 +219,11 @@ names are the short names of the IntelliJ inspections.
 | `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. |
 | `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. |
 | `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. |
+| `RedundantElseInIf` | An `else` branch after `if` branches that all end with a jump such as `return` or `throw`. |
+| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. |
+| `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. |
+| `RemoveEmptyParenthesesFromAnnotationEntry` | Empty parentheses after an annotation that needs no arguments. |
+| `ReplaceAddAllWithMapTo` | An `addAll` or `+=` of a `map` or `filter` result that `mapTo` or `filterTo` can replace. |
 | `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. |
 | `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. |
 | `ReplaceCallWithBinaryOperator` | An explicit call of `equals`, `compareTo` or an arithmetic or range operator function that a binary operator can replace. |
@@ -227,6 +232,12 @@ names are the short names of the IntelliJ inspections.
 | `ReplaceIfExpressionWithFirstOrNull` | An `if` that returns the first element of a non-empty collection, string or array, else `null`, which `firstOrNull()` can replace. |
 | `ReplaceJavaStaticMethodWithKotlinAnalog` | A call of a Java static method that has a Kotlin standard library counterpart. |
 | `ReplaceManualRangeWithIndicesCalls` | A manual range from `0` to the size or last index that `indices`, a loop over the elements or `withIndex()` can replace. |
+| `ReplaceStringFormatWithLiteral` | A `String.format` call with only `%s` placeholders that a string template can replace. |
+| `ReplaceSubstringWithDropLast` | An `s.substring(0, s.length - n)` call that `s.dropLast(n)` can replace. |
+| `ReplaceSubstringWithIndexingOperation` | A `substring(i, i + 1)` call with constant indices that `s[i]` can replace. |
+| `ReplaceSubstringWithSubstringAfter` | An `s.substring(s.indexOf(x))` call that `s.substringAfter(x)` can replace. |
+| `ReplaceSubstringWithSubstringBefore` | An `s.substring(0, s.indexOf(x))` call that `s.substringBefore(x)` can replace. |
+| `ReplaceSubstringWithTake` | An `s.substring(0, n)` call that `s.take(n)` can replace. |
 | `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. |
 | `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. |
 | `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. |

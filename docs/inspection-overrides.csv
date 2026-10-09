@@ -100,6 +100,7 @@ RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword
 RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
 RedundantDestructuringRename,not-portable,needs the experimental language feature NameBasedDestructuring,
 RedundantDestructuringUnderscore,not-portable,needs the experimental language feature NameBasedDestructuring,
+RedundantElseInIf,,,ported: `RedundantElseInIf`
 RedundantElvisReturnNull,,,ported: `RedundantElvisReturnNull`
 RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
 RedundantEnumConstructorInvocation,,,ported: `RedundantEnumConstructorInvocation`
@@ -113,9 +114,11 @@ RedundantLambdaArrow,,,ported: `RedundantLambdaArrow`
 RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
 RedundantModalityModifier,,,ported: `RedundantModalityModifier`
 RedundantNullableReturnType,,,ported: `RedundantNullableReturnType`
+RedundantObjectTypeCheck,,,ported: `RedundantObjectTypeCheck`
 RedundantRequireNotNullCall,,,covered: detekt `potential-bugs:UnnecessaryNotNullCheck`
 RedundantReturnKeyword,,,ported: `RedundantReturnKeyword`
 RedundantReturnLabel,,,ported: `RedundantReturnLabel`
+RedundantRunCatching,,,ported: `RedundantRunCatching`
 RedundantSamConstructor,,,ported: `RedundantSamConstructor`
 RedundantSemicolon,,,covered: ktlint `NoSemicolons`
 RedundantSetter,types,reads the overridden property,ported: `RedundantSetter`
@@ -128,6 +131,7 @@ RedundantVisibilityModifier,,,covered: detekt `style:RedundantVisibilityModifier
 RedundantWith,,,ported: `RedundantWith`
 RemoveCurlyBracesFromTemplate,,,covered: ktlint `StringTemplate`
 RemoveEmptyClassBody,,,"covered: detekt `empty-blocks:EmptyClassBlock`, ktlint `NoEmptyClassBody`"
+RemoveEmptyParenthesesFromAnnotationEntry,,,ported: `RemoveEmptyParenthesesFromAnnotationEntry`
 RemoveEmptyParenthesesFromLambdaCall,,,covered: ktlint `UnnecessaryParenthesesBeforeTrailingLambda`
 RemoveEmptyPrimaryConstructor,,,covered: detekt `empty-blocks:EmptyDefaultConstructor`
 RemoveEmptySecondaryConstructorBody,,,covered: detekt `empty-blocks:EmptySecondaryConstructor`
@@ -139,6 +143,8 @@ RemoveRedundantSpreadOperator,,,ported: `RemoveRedundantSpreadOperator`
 RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
 RemoveSingleExpressionStringTemplate,,,ported: `RemoveSingleExpressionStringTemplate`
 RemoveToStringInStringTemplate,,,covered: ktlint `StringTemplate`
+RemoveUnnecessaryParentheses,,,covered: detekt `style:UnnecessaryParentheses`
+ReplaceAddAllWithMapTo,,,ported: `ReplaceAddAllWithMapTo`
 ReplaceArrayOfWithLiteral,,,covered: detekt `style:UseArrayLiteralsInAnnotations`
 ReplaceAssertBooleanWithAssertEquality,,,ported: `ReplaceAssertBooleanWithAssertEquality`
 ReplaceAssociateFunction,,,ported: `ReplaceAssociateFunction`
@@ -153,6 +159,12 @@ ReplaceJavaStaticMethodWithKotlinAnalog,,,ported: `ReplaceJavaStaticMethodWithKo
 ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,ported: `ReplaceManualRangeWithIndicesCalls`
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
+ReplaceStringFormatWithLiteral,,,ported: `ReplaceStringFormatWithLiteral`
+ReplaceSubstringWithDropLast,,,ported: `ReplaceSubstringWithDropLast`
+ReplaceSubstringWithIndexingOperation,,,ported: `ReplaceSubstringWithIndexingOperation`
+ReplaceSubstringWithSubstringAfter,,,ported: `ReplaceSubstringWithSubstringAfter`
+ReplaceSubstringWithSubstringBefore,,,ported: `ReplaceSubstringWithSubstringBefore`
+ReplaceSubstringWithTake,,,ported: `ReplaceSubstringWithTake`
 ReplaceToStringWithStringTemplate,types,resolves the toString call,ported: `ReplaceToStringWithStringTemplate`
 ReplaceToWithInfixForm,,,ported: `ReplaceToWithInfixForm`
 ReplaceUntilWithRangeUntil,,,ported: `ReplaceUntilWithRangeUntil`
