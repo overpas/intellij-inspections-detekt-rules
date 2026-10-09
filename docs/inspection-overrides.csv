@@ -1,14 +1,20 @@
 shortName,verdict,reason,status
 AddExplicitTargetToParameterAnnotation,not-portable,never reports at the default language version; it is only useful with an older language version,
+AddOperatorModifier,,,ported: `AddOperatorModifier`
+AddVarianceModifier,,,ported: `AddVarianceModifier`
 AmbiguousNonLocalJump,,,ported: `AmbiguousNonLocalJump`
 ArrayInDataClass,,,ported: `ArrayInDataClass`
 AssignedValueIsNeverRead,,,ported: `AssignedValueIsNeverRead`
+BooleanLiteralArgument,,,ported: `BooleanLiteralArgument`
 CanBeParameter,types,searches references inside the class,ported: `CanBeParameter`
 CanBePrimaryConstructorProperty,,,ported: `CanBePrimaryConstructorProperty`
+CanBeVal,,,covered: detekt `style:VarCouldBeVal`
 CanConvertToMultiDollarString,,,ported: `CanConvertToMultiDollarString`
 CanSealedSubClassBeObject,,,ported: `CanSealedSubClassBeObject`
 CanUnescapeDollarLiteral,,,ported: `CanUnescapeDollarLiteral`
+CascadeIf,,,ported: `CascadeIf`
 ClassName,psi,checks names with regular expressions,covered: detekt `naming:ClassNaming`
+CollapseCollectionLiteralChainCall,not-portable,needs the experimental language feature CollectionLiterals,
 ComplexRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 ConflictingExtensionProperty,,,ported: `ConflictingExtensionProperty`
 ConstPropertyName,psi,checks names with regular expressions,covered: ktlint `PropertyName`
@@ -38,14 +44,20 @@ ForEachParameterNotUsed,,,ported: `ForEachParameterNotUsed`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
 HasPlatformType,,,covered: detekt `potential-bugs:HasPlatformType`
 IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
+IfThenToElvis,,,ported: `IfThenToElvis`
+IfThenToSafeAccess,,,ported: `IfThenToSafeAccess`
 ImplicitNullableNothingType,,,ported: `ImplicitNullableNothingType`
+ImplicitThis,,,ported: `ImplicitThis`
 IncompleteDestructuring,,,ported: `IncompleteDestructuring`
 InconsistentCommentForJavaParameter,,,ported: `InconsistentCommentForJavaParameter`
 InfixCallToOrdinary,,,ported: `InfixCallToOrdinary`
+IntroduceWhenSubject,,,ported: `IntroduceWhenSubject`
 JavaCollectionWithNullableTypeArgument,,,ported: `JavaCollectionWithNullableTypeArgument`
 JavaCollectionsStaticMethodOnImmutableList,,,ported: `JavaCollectionsStaticMethodOnImmutableList`
 JavaDefaultMethodsNotOverriddenByDelegation,,,ported: `JavaDefaultMethodsNotOverriddenByDelegation`
 JavaIoSerializableObjectMustHaveReadResolve,,,ported: `JavaIoSerializableObjectMustHaveReadResolve`
+JavaMapForEach,,,ported: `JavaMapForEach`
+JoinDeclarationAndAssignment,,,ported: `JoinDeclarationAndAssignment`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,"covered: detekt `comments:UndocumentedPublicClass`, `UndocumentedPublicFunction`, `UndocumentedPublicProperty`"
 KDocUnresolvedReference,not-portable,the KDoc resolver of the Analysis API fails in detekt 2.0.0-alpha.6 (NoSuchMethodError in RegistryValue),
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
@@ -133,7 +145,12 @@ ReplaceAssociateFunction,,,ported: `ReplaceAssociateFunction`
 ReplaceCallWithBinaryOperator,,,ported: `ReplaceCallWithBinaryOperator`
 ReplaceCollectionCountWithSize,,,ported: `ReplaceCollectionCountWithSize`
 ReplaceContains,,,ported: `ReplaceContains`
-ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,
+ReplaceGetOrSet,,,covered: detekt `style:ExplicitCollectionElementAccessMethod`
+ReplaceGuardClauseWithFunctionCall,,,"covered: detekt `style:UseRequire`, `UseCheckOrError`"
+ReplaceIfExpressionWithFirstOrNull,,,ported: `ReplaceIfExpressionWithFirstOrNull`
+ReplaceIsEmptyWithIfEmpty,,,covered: detekt `style:UseIfEmptyOrIfBlank`
+ReplaceJavaStaticMethodWithKotlinAnalog,,,ported: `ReplaceJavaStaticMethodWithKotlinAnalog`
+ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,ported: `ReplaceManualRangeWithIndicesCalls`
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
 ReplaceToStringWithStringTemplate,types,resolves the toString call,ported: `ReplaceToStringWithStringTemplate`

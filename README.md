@@ -209,11 +209,24 @@ names are the short names of the IntelliJ inspections.
 
 | Rule | Finds |
 |---|---|
+| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. |
+| `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. |
+| `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. |
+| `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. |
+| `IfThenToElvis` | An `if` that checks a value for `null` or a type and that the elvis operator `?:` can replace. |
+| `IfThenToSafeAccess` | An `if` that checks a value for `null` or a type, returns `null` otherwise, and that `?.` or `as?` can replace. |
+| `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. |
+| `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. |
+| `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. |
+| `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. |
 | `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. |
 | `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. |
 | `ReplaceCallWithBinaryOperator` | An explicit call of `equals`, `compareTo` or an arithmetic or range operator function that a binary operator can replace. |
 | `ReplaceCollectionCountWithSize` | A `count()` call without a predicate on a collection, array or map that `size` can replace. |
 | `ReplaceContains` | A call of an operator `contains` function that the `in` operator can replace. |
+| `ReplaceIfExpressionWithFirstOrNull` | An `if` that returns the first element of a non-empty collection, string or array, else `null`, which `firstOrNull()` can replace. |
+| `ReplaceJavaStaticMethodWithKotlinAnalog` | A call of a Java static method that has a Kotlin standard library counterpart. |
+| `ReplaceManualRangeWithIndicesCalls` | A manual range from `0` to the size or last index that `indices`, a loop over the elements or `withIndex()` can replace. |
 | `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. |
 | `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. |
 | `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. |
