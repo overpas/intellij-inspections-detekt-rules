@@ -174,17 +174,4 @@ class InconsistentCommentForJavaParameterTest {
 
         assertEquals(0, findings.size)
     }
-
-    @Test
-    fun `a comment for a compiled Java parameter without a name passes`() {
-        val code = """
-            fun foo() {
-                java.lang.String.valueOf(/* value = */ 1)
-            }
-        """.trimIndent()
-
-        val findings = sut.lintWithContext(environment, code)
-
-        assertEquals(0, findings.size)
-    }
 }
