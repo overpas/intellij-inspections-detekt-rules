@@ -394,6 +394,14 @@ intellij-kotlin-style-issues:
     active: true
   SimplifyNestedEachInScopeFunction:
     active: true
+  UnclearPrecedenceOfBinaryExpression:
+    active: true
+  UnsafeCastWithReturn:
+    active: true
+  UsePropertyAccessSyntax:
+    active: true
+  VerboseNullabilityAndEmptiness:
+    active: true
 
 overpas-architecture:
   HiddenAbstraction:

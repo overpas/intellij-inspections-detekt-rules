@@ -283,6 +283,12 @@ names are the short names of the IntelliJ inspections.
 | `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. |
 | `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. |
 | `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. |
+| `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. |
+| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. |
+| `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. |
+| `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. |
+| `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. |
+| `VerboseNullabilityAndEmptiness` | A null check followed by an emptiness or blankness check that `isNullOrEmpty()` or `isNullOrBlank()` can replace. |
 
 ## Build
 

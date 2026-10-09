@@ -53,6 +53,7 @@ typeResolutionTasks.configureEach {
     val buildDir = layout.buildDirectory.get().asFile
     autoCorrect = false
     buildUponDefaultConfig = false
+    parallel = false
     config.setFrom(rootProject.layout.projectDirectory.file("config/detekt/detekt-type-resolution.yml"))
     exclude { it.file.startsWith(buildDir) }
 }

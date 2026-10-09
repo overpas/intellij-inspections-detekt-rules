@@ -28,6 +28,7 @@ ConvertCollectionLiteralToTypeOfExpression,not-portable,needs the experimental l
 ConvertDataClassToValueClass,not-portable,needs the experimental language feature FullValueClasses,
 ConvertExplicitContextArgumentToImplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
 ConvertFromMultiDollarToRegularString,,,ported: `ConvertFromMultiDollarToRegularString`
+ConvertImplicitContextArgumentToExplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
 ConvertLongToDuration,,,ported: `ConvertLongToDuration`
 ConvertNaNEquality,,,ported: `ConvertNaNEquality`
 ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
@@ -56,11 +57,14 @@ DoubleBang,,,covered: detekt `potential-bugs:UnsafeCallOnNullableType`
 DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
 EmptyRange,,,ported: `EmptyRange`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
+EnumValuesSoftDeprecate,,,ported: `EnumValuesSoftDeprecate`
+EnumValuesTopLevelFunctionSoftDeprecate,,,ported: `EnumValuesTopLevelFunctionSoftDeprecate`
 EqualsOrHashCode,,,covered: detekt `potential-bugs:EqualsWithHashCodeExist`
 EscapingCapturedVariable,not-portable,needs the compiler flag ReportEscapingCapturedVariable,
 ExplicitThis,,,ported: `ExplicitThis`
 FilterIsInstanceCallWithClassLiteralArgument,,,ported: `FilterIsInstanceCallWithClassLiteralArgument`
 FilterIsInstanceResultIsAlwaysEmpty,,,ported: `FilterIsInstanceResultIsAlwaysEmpty`
+FloatingPointLiteralPrecision,,,ported: `FloatingPointLiteralPrecision`
 FoldInitializerAndIfToElvis,,,ported: `FoldInitializerAndIfToElvis`
 ForEachJoinOnCollectionOfJob,,,ported: `ForEachJoinOnCollectionOfJob`
 ForEachParameterNotUsed,,,ported: `ForEachParameterNotUsed`
@@ -86,6 +90,7 @@ KDocUnresolvedReference,not-portable,the KDoc resolver of the Analysis API fails
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
 KotlinArrayHashCode,,,ported: `KotlinArrayHashCode`
 KotlinArrayToString,,,ported: `KotlinArrayToString`
+KotlinBigDecimalEquals,,,ported: `KotlinBigDecimalEquals`
 KotlinConstantConditions,not-portable,needs the data flow analysis engine of IntelliJ,
 KotlinCovariantEquals,,,covered: detekt `potential-bugs:WrongEqualsTypeParameter`
 KotlinDeprecation,,,ported: `KotlinDeprecation`
@@ -108,6 +113,7 @@ MapAwaitOnCollectionOfDeferred,,,ported: `MapAwaitOnCollectionOfDeferred`
 MapGetWithNotNullAssertionOperator,,,covered: detekt `potential-bugs:MapGetWithNotNullAssertionOperator`
 MapToForEach,,,ported: `MapToForEach`
 MayBeConstant,,,covered: detekt `style:MayBeConstant`
+MigrateDiagnosticSuppression,,,ported: `MigrateDiagnosticSuppression`
 MoveLambdaOutsideParentheses,types,resolves the call to check overloads,ported: `MoveLambdaOutsideParentheses`
 MoveVariableDeclarationIntoWhen,,,ported: `MoveVariableDeclarationIntoWhen`
 NestedLambdaShadowedImplicitParameter,,,covered: detekt `naming:NoNameShadowing`
@@ -197,6 +203,7 @@ ReplaceMapKeysCallChainWithKeys,,,ported: `ReplaceMapKeysCallChainWithKeys`
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,ported: `ReplaceNegatedIsEmptyWithIsNotEmpty`
 ReplaceNotNullAssertionWithElvisReturn,,,ported: `ReplaceNotNullAssertionWithElvisReturn`
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
+ReplacePutWithAssignment,,,covered: detekt `style:ExplicitCollectionElementAccessMethod`
 ReplaceRangeStartEndInclusiveWithFirstLast,,,ported: `ReplaceRangeStartEndInclusiveWithFirstLast`
 ReplaceRangeToWithRangeUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
 ReplaceRangeToWithUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
@@ -213,9 +220,11 @@ ReplaceToStringWithStringTemplate,types,resolves the toString call,ported: `Repl
 ReplaceToWithInfixForm,,,ported: `ReplaceToWithInfixForm`
 ReplaceUntilWithRangeUntil,,,ported: `ReplaceUntilWithRangeUntil`
 ReplaceWithCallWithContextCall,,,ported: `ReplaceWithCallWithContextCall`
+ReplaceWithEnumMap,,,ported: `ReplaceWithEnumMap`
 ReplaceWithIgnoreCaseEquals,,,ported: `ReplaceWithIgnoreCaseEquals`
 ReplaceWithImportAlias,,,ported: `ReplaceWithImportAlias`
 ReplaceWithOperatorAssignment,,,ported: `ReplaceWithOperatorAssignment`
+ReplaceWithStringBuilderAppendRange,,,ported: `ReplaceWithStringBuilderAppendRange`
 RevertExplicitBackingFields,,,ported: `RevertExplicitBackingFields`
 RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
 SafeCastWithReturn,,,ported: `SafeCastWithReturn`
@@ -251,8 +260,11 @@ SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInS
 SuspiciousVarProperty,,,ported: `SuspiciousVarProperty`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`
 TrailingComma,,,"covered: ktlint `TrailingCommaOnCallSite`, `TrailingCommaOnDeclarationSite`"
+UnclearPrecedenceOfBinaryExpression,,,ported: `UnclearPrecedenceOfBinaryExpression`
+UnlabeledReturnInsideLambda,,,ported: `UnlabeledReturnInsideLambda`
 UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
 UnnecessaryVariable,,,ported: `UnnecessaryVariable`
+UnsafeCastWithReturn,,,ported: `UnsafeCastWithReturn`
 UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
 UnusedDataClassCopyResult,,,ported: `UnusedDataClassCopyResult`
 UnusedEquals,,,ported: `UnusedEquals`
@@ -264,10 +276,13 @@ UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
 UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
 UnusedUnaryOperator,,,covered: detekt `potential-bugs:UnusedUnaryOperator`
 UnusedVariable,,,covered: detekt `style:UnusedVariable`
+UseExpressionBody,,,ported: `UseExpressionBody`
+UsePropertyAccessSyntax,,,ported: `UsePropertyAccessSyntax`
 UselessCallOnCollection,,,ported: `UselessCallOnCollection`
 UselessCallOnFlow,,,ported: `UselessCallOnFlow`
 UselessCallOnNotNull,,,covered: detekt `style:UselessCallOnNotNull`
 VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
 VariableNeverRead,,,ported: `VariableNeverRead`
+VerboseNullabilityAndEmptiness,,,ported: `VerboseNullabilityAndEmptiness`
 WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`
 WrapUnaryOperator,,,ported: `WrapUnaryOperator`
