@@ -41,11 +41,46 @@ names are the short names of the IntelliJ inspections.
 
 | Rule | Finds |
 |---|---|
+| `CanBeParameter` | A `val` or `var` constructor parameter that is only used during initialization. Only parameters that are not visible outside the file are checked. |
+| `CanBePrimaryConstructorProperty` | A property that is initialized from the constructor parameter of the same name and type. |
+| `CanUnescapeDollarLiteral` | An escaped dollar in a string literal that can be a plain `$`. |
+| `ConstantConditionIf` | An `if` whose condition is the constant `true` or `false`. |
+| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. |
+| `IfExpressionWithIdenticalBranches` | An `if` whose `then` and `else` branches are identical. |
+| `KotlinRedundantOverride` | An override that only calls the super implementation with the same arguments. |
+| `NullChecksToSafeCall` | Chained null checks on a receiver and on a call on it that one safe call check can replace. |
+| `RedundantCompanionReference` | An explicit companion object reference that the code resolves the same without. |
+| `RedundantElvisReturnNull` | A `?: return null` in a returned expression that is null anyway. |
+| `RedundantEnumConstructorInvocation` | Empty parentheses after an enum entry. |
 | `RedundantGetter` | A getter that only returns the backing field. |
+| `RedundantIf` | An `if` that only chooses between `true` and `false`, or a constant and a boolean expression. |
+| `RedundantInterpolationPrefix` | A multi-dollar interpolation prefix on a string that does not need it. |
 | `RedundantLabeledReturnOnLastExpressionInLambda` | A `return@label` on the last expression of the lambda with that label. |
+| `RedundantLambdaArrow` | A lambda arrow with no parameters or with only an explicit `it` parameter. |
 | `RedundantLambdaOrAnonymousFunction` | A lambda or an anonymous function that is called at once. |
+| `RedundantModalityModifier` | A modality modifier that equals the default modality of the declaration. |
+| `RedundantNullableReturnType` | A nullable return type of a function or a read-only property that never returns null. |
+| `RedundantReturnKeyword` | A `return` in a branch of an `if`, `when` or elvis expression that is already returned. |
+| `RedundantReturnLabel` | A label on a `return` that targets the enclosing function, not a lambda. |
+| `RedundantSamConstructor` | A SAM constructor call in an argument where a plain lambda converts to the same type. |
+| `RedundantSetter` | A setter that is the default one or only assigns the value to the backing field. |
+| `RedundantUpperBound` | A type parameter bound that is `Any?`, the default upper bound. |
+| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. |
+| `RedundantWith` | A `with` call whose lambda does not use the receiver. |
+| `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
+| `RemoveExplicitTypeArguments` | Explicit type arguments that the compiler can infer. |
+| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. |
+| `RemoveRedundantSpreadOperator` | A spread operator on an array that is created in place with an `arrayOf`-like call or a `[...]` literal. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
+| `RemoveSingleExpressionStringTemplate` | A string template that only holds one non-null `String` expression. |
+| `ScopeFunctionConversion` | A scope function call that another scope function can replace. |
 | `SimplifyWhenWithBooleanConstantCondition` | A subjectless `when` with a `true` or `false` branch condition. |
+| `SuspiciousCallableReferenceInLambda` | A lambda whose only statement is a callable reference. |
+| `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
+| `UnnecessaryVariable` | A local variable that only copies another local value or parameter. |
+| `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments. |
+| `UnusedReceiverParameter` | An extension receiver that is never used. |
+| `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. |
 
 ## Build

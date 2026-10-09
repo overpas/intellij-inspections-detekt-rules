@@ -1,43 +1,88 @@
 shortName,verdict,reason,status
-CanBeParameter,types,searches references inside the class,
+CanBeParameter,types,searches references inside the class,ported: `CanBeParameter`
+CanBePrimaryConstructorProperty,,,ported: `CanBePrimaryConstructorProperty`
+CanUnescapeDollarLiteral,,,ported: `CanUnescapeDollarLiteral`
 ClassName,psi,checks names with regular expressions,
+ComplexRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 ConstPropertyName,psi,checks names with regular expressions,
-ConstantConditionIf,types,evaluates constant conditions,
+ConstantConditionIf,types,evaluates constant conditions,ported: `ConstantConditionIf`
+ControlFlowWithEmptyBody,,,"covered: detekt `empty-blocks:EmptyIfBlock`, `EmptyElseBlock`, `EmptyForBlock`, `EmptyWhileBlock`, `EmptyDoWhileBlock`, `EmptyWhenBlock`"
 EnumEntryName,psi,checks names with regular expressions,
+ExplicitThis,,,ported: `ExplicitThis`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,
+IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,
 KDocUnresolvedReference,types,resolves KDoc references,
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
+KotlinDoubleNegation,,,covered: detekt `style:DoubleNegativeExpression`
+KotlinRedundantOverride,,,ported: `KotlinRedundantOverride`
 KotlinThrowableNotThrown,types,searches references of a local property only,
-KotlinUnusedImport,types,resolves the references of the file,
+KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
 LocalVariableName,psi,checks names with regular expressions,
 MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
+NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,
 ObjectPropertyName,psi,checks names with regular expressions,
 PackageName,psi,checks names with regular expressions,
 PrivatePropertyName,psi,checks names with regular expressions,
 PropertyName,psi,checks names with regular expressions,
+RedundantCompanionReference,,,ported: `RedundantCompanionReference`
 RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
+RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
+RedundantElvisReturnNull,,,ported: `RedundantElvisReturnNull`
 RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
+RedundantEnumConstructorInvocation,,,ported: `RedundantEnumConstructorInvocation`
+RedundantExplicitType,,,covered: detekt `style:RedundantExplicitType`
 RedundantGetter,,,ported: `RedundantGetter`
+RedundantIf,,,ported: `RedundantIf`
+RedundantInterpolationPrefix,,,ported: `RedundantInterpolationPrefix`
 RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
+RedundantLambdaArrow,,,ported: `RedundantLambdaArrow`
 RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
+RedundantModalityModifier,,,ported: `RedundantModalityModifier`
+RedundantNullableReturnType,,,ported: `RedundantNullableReturnType`
+RedundantRequireNotNullCall,,,covered: detekt `potential-bugs:UnnecessaryNotNullCheck`
+RedundantReturnKeyword,,,ported: `RedundantReturnKeyword`
+RedundantReturnLabel,,,ported: `RedundantReturnLabel`
+RedundantSamConstructor,,,ported: `RedundantSamConstructor`
 RedundantSemicolon,,,covered: ktlint `NoSemicolons`
-RedundantSetter,types,reads the overridden property,
-RedundantUnitExpression,types,reads the expected type of the expression,
+RedundantSetter,types,reads the overridden property,ported: `RedundantSetter`
+RedundantSuspendModifier,,,covered: detekt `coroutines:RedundantSuspendModifier`
+RedundantUnitExpression,types,reads the expected type of the expression,covered: detekt `style:OptionalUnit`
+RedundantUnitReturnType,,,"covered: detekt `style:OptionalUnit`, ktlint `NoUnitReturn`"
+RedundantUpperBound,,,ported: `RedundantUpperBound`
+RedundantValueArgument,,,ported: `RedundantValueArgument`
+RedundantVisibilityModifier,,,covered: detekt `style:RedundantVisibilityModifier`
+RedundantWith,,,ported: `RedundantWith`
 RemoveCurlyBracesFromTemplate,,,covered: ktlint `StringTemplate`
 RemoveEmptyClassBody,,,"covered: detekt `empty-blocks:EmptyClassBlock`, ktlint `NoEmptyClassBody`"
 RemoveEmptyParenthesesFromLambdaCall,,,covered: ktlint `UnnecessaryParenthesesBeforeTrailingLambda`
 RemoveEmptyPrimaryConstructor,,,covered: detekt `empty-blocks:EmptyDefaultConstructor`
 RemoveEmptySecondaryConstructorBody,,,covered: detekt `empty-blocks:EmptySecondaryConstructor`
+RemoveExplicitSuperQualifier,,,ported: `RemoveExplicitSuperQualifier`
+RemoveExplicitTypeArguments,,,ported: `RemoveExplicitTypeArguments`
 RemoveRedundantBackticks,,,covered: detekt `style:UnnecessaryBackticks`
+RemoveRedundantQualifierName,,,ported: `RemoveRedundantQualifierName`
+RemoveRedundantSpreadOperator,,,ported: `RemoveRedundantSpreadOperator`
 RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
+RemoveSingleExpressionStringTemplate,,,ported: `RemoveSingleExpressionStringTemplate`
+RemoveToStringInStringTemplate,,,covered: ktlint `StringTemplate`
 ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplaceToStringWithStringTemplate,types,resolves the toString call,
+ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
+SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
 SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,
+UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
+UnnecessaryVariable,,,ported: `UnnecessaryVariable`
+UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
+UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
+UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
+UnusedVariable,,,covered: detekt `style:UnusedVariable`
+VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
 WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`
