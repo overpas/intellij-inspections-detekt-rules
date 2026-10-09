@@ -151,16 +151,29 @@ SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLamb
 SuspiciousCascadingIf,,,ported: `SuspiciousCascadingIf`
 SuspiciousCollectionReassignment,,,ported: `SuspiciousCollectionReassignment`
 SuspiciousEqualsCombination,,,ported: `SuspiciousEqualsCombination`
+SuspiciousGetterForMutableObject,,,ported: `SuspiciousGetterForMutableObject`
 SuspiciousImplicitCoroutineScopeReceiverAccess,,,ported: `SuspiciousImplicitCoroutineScopeReceiverAccess`
+SuspiciousJavaClassCallableReference,,,ported: `SuspiciousJavaClassCallableReference`
 SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInStateFlow`
+SuspiciousVarProperty,,,ported: `SuspiciousVarProperty`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`
 UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
 UnnecessaryVariable,,,ported: `UnnecessaryVariable`
 UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
+UnusedDataClassCopyResult,,,ported: `UnusedDataClassCopyResult`
+UnusedEquals,,,ported: `UnusedEquals`
+UnusedExpression,,,ported: `UnusedExpression`
 UnusedFlow,,,ported: `UnusedFlow`
+UnusedLambdaExpression,,,ported: `UnusedLambdaExpression`
+UnusedLambdaExpressionBody,,,ported: `UnusedLambdaExpressionBody`
 UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
 UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
+UnusedUnaryOperator,,,covered: detekt `potential-bugs:UnusedUnaryOperator`
 UnusedVariable,,,covered: detekt `style:UnusedVariable`
+UselessCallOnCollection,,,ported: `UselessCallOnCollection`
 UselessCallOnFlow,,,ported: `UselessCallOnFlow`
+UselessCallOnNotNull,,,covered: detekt `style:UselessCallOnNotNull`
 VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
+VariableNeverRead,,,ported: `VariableNeverRead`
 WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`
+WrapUnaryOperator,,,ported: `WrapUnaryOperator`

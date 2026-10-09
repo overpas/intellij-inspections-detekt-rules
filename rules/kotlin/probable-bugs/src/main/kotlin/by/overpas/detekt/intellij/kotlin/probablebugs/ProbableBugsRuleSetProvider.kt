@@ -45,6 +45,17 @@ class ProbableBugsRuleSetProvider : RuleSetProvider {
                 ::SuspiciousCascadingIf,
                 ::SuspiciousCollectionReassignment,
                 ::SuspiciousEqualsCombination,
+                ::SuspiciousGetterForMutableObject,
+                ::SuspiciousJavaClassCallableReference,
+                ::SuspiciousVarProperty,
+                ::UnusedDataClassCopyResult,
+                ::UnusedEquals,
+                ::UnusedExpression,
+                ::UnusedLambdaExpression,
+                ::UnusedLambdaExpressionBody,
+                ::UselessCallOnCollection,
+                ::VariableNeverRead,
+                ::WrapUnaryOperator,
             ),
         )
 }
