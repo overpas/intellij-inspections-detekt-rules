@@ -47,9 +47,20 @@ names are the short names of the IntelliJ inspections.
 | `ConstantConditionIf` | An `if` whose condition is the constant `true` or `false`. |
 | `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. |
 | `IfExpressionWithIdenticalBranches` | An `if` whose `then` and `else` branches are identical. |
+| `KotlinRedundantOverride` | An override that only calls the super implementation with the same arguments. |
+| `NullChecksToSafeCall` | Chained null checks on a receiver and on a call on it that one safe call check can replace. |
+| `RedundantCompanionReference` | An explicit companion object reference that the code resolves the same without. |
+| `RedundantElvisReturnNull` | A `?: return null` in a returned expression that is null anyway. |
+| `RedundantEnumConstructorInvocation` | Empty parentheses after an enum entry. |
 | `RedundantGetter` | A getter that only returns the backing field. |
+| `RedundantIf` | An `if` that only chooses between `true` and `false`, or a constant and a boolean expression. |
+| `RedundantInterpolationPrefix` | A multi-dollar interpolation prefix on a string that does not need it. |
 | `RedundantLabeledReturnOnLastExpressionInLambda` | A `return@label` on the last expression of the lambda with that label. |
+| `RedundantLambdaArrow` | A lambda arrow with no parameters or with only an explicit `it` parameter. |
 | `RedundantLambdaOrAnonymousFunction` | A lambda or an anonymous function that is called at once. |
+| `RedundantModalityModifier` | A modality modifier that equals the default modality of the declaration. |
+| `RedundantNullableReturnType` | A nullable return type of a function or a read-only property that never returns null. |
+| `RedundantReturnKeyword` | A `return` in a branch of an `if`, `when` or elvis expression that is already returned. |
 | `RedundantReturnLabel` | A label on a `return` that targets the enclosing function, not a lambda. |
 | `RedundantSamConstructor` | A SAM constructor call in an argument where a plain lambda converts to the same type. |
 | `RedundantSetter` | A setter that is the default one or only assigns the value to the backing field. |

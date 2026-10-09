@@ -74,6 +74,28 @@ intellij-kotlin-redundant-constructs:
     active: true
   IfExpressionWithIdenticalBranches:
     active: true
+  KotlinRedundantOverride:
+    active: true
+  NullChecksToSafeCall:
+    active: true
+  RedundantCompanionReference:
+    active: true
+  RedundantElvisReturnNull:
+    active: true
+  RedundantEnumConstructorInvocation:
+    active: true
+  RedundantIf:
+    active: true
+  RedundantInterpolationPrefix:
+    active: true
+  RedundantLambdaArrow:
+    active: true
+  RedundantModalityModifier:
+    active: true
+  RedundantNullableReturnType:
+    active: true
+  RedundantReturnKeyword:
+    active: true
   RedundantReturnLabel:
     active: true
   RedundantSamConstructor:

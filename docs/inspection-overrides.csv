@@ -15,22 +15,34 @@ KDocMissingDocumentation,psi,skips tests through detekt excludes,
 KDocUnresolvedReference,types,resolves KDoc references,
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
 KotlinDoubleNegation,,,covered: detekt `style:DoubleNegativeExpression`
+KotlinRedundantOverride,,,ported: `KotlinRedundantOverride`
 KotlinThrowableNotThrown,types,searches references of a local property only,
 KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
 LocalVariableName,psi,checks names with regular expressions,
 MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
+NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,
 ObjectPropertyName,psi,checks names with regular expressions,
 PackageName,psi,checks names with regular expressions,
 PrivatePropertyName,psi,checks names with regular expressions,
 PropertyName,psi,checks names with regular expressions,
+RedundantCompanionReference,,,ported: `RedundantCompanionReference`
 RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
+RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
+RedundantElvisReturnNull,,,ported: `RedundantElvisReturnNull`
 RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
+RedundantEnumConstructorInvocation,,,ported: `RedundantEnumConstructorInvocation`
 RedundantExplicitType,,,covered: detekt `style:RedundantExplicitType`
 RedundantGetter,,,ported: `RedundantGetter`
+RedundantIf,,,ported: `RedundantIf`
+RedundantInterpolationPrefix,,,ported: `RedundantInterpolationPrefix`
 RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
+RedundantLambdaArrow,,,ported: `RedundantLambdaArrow`
 RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
+RedundantModalityModifier,,,ported: `RedundantModalityModifier`
+RedundantNullableReturnType,,,ported: `RedundantNullableReturnType`
 RedundantRequireNotNullCall,,,covered: detekt `potential-bugs:UnnecessaryNotNullCheck`
+RedundantReturnKeyword,,,ported: `RedundantReturnKeyword`
 RedundantReturnLabel,,,ported: `RedundantReturnLabel`
 RedundantSamConstructor,,,ported: `RedundantSamConstructor`
 RedundantSemicolon,,,covered: ktlint `NoSemicolons`

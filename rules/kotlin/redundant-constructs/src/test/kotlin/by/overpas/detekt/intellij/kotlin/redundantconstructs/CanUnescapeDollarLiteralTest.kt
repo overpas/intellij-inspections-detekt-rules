@@ -14,7 +14,7 @@ class CanUnescapeDollarLiteralTest {
 
     @Test
     fun `a slash escaped dollar at the end of a string is reported`() {
-        val code = $$$$$$$"""
+        val code = """
             fun test() = "\$\$\$"
         """.trimIndent()
 
@@ -124,7 +124,7 @@ class CanUnescapeDollarLiteralTest {
 
     @Test
     fun `backslashes in a raw string pass`() {
-        val code = $$$$$$$"""
+        val code = """
             fun test() = '''\$\$\$'''
         """.trimIndent().replace("'''", "\"\"\"")
 
