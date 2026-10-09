@@ -19,14 +19,17 @@ ConvertFromMultiDollarToRegularString,,,ported: `ConvertFromMultiDollarToRegular
 ConvertLongToDuration,,,ported: `ConvertLongToDuration`
 ConvertNaNEquality,,,ported: `ConvertNaNEquality`
 ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
+CoroutineContextWithJob,,,ported: `CoroutineContextWithJob`
 CustomComponentDestructuringMigration,not-portable,needs the experimental language feature NameBasedDestructuring,
 DataClassPrivateConstructor,,,ported: `DataClassPrivateConstructor`
+DeferredResultUnused,,,ported: `DeferredResultUnused`
 DelegationToVarProperty,,,ported: `DelegationToVarProperty`
 DeprecatedCallableAddReplaceWith,,,ported: `DeprecatedCallableAddReplaceWith`
 DestructingShortFormNameMismatch,not-portable,needs the experimental language feature NameBasedDestructuring,
 DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
 ExplicitThis,,,ported: `ExplicitThis`
+ForEachJoinOnCollectionOfJob,,,ported: `ForEachJoinOnCollectionOfJob`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
 HasPlatformType,,,covered: detekt `potential-bugs:HasPlatformType`
 IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
@@ -46,12 +49,14 @@ KotlinRedundantOverride,,,ported: `KotlinRedundantOverride`
 KotlinThrowableNotThrown,types,searches references of a local property only,
 KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
 LocalVariableName,psi,checks names with regular expressions,ported: `LocalVariableName`
+MapAwaitOnCollectionOfDeferred,,,ported: `MapAwaitOnCollectionOfDeferred`
 MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
 NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,covered: detekt `naming:ObjectPropertyNaming`
 ObjectPropertyName,psi,checks names with regular expressions,"covered: detekt `naming:ObjectPropertyNaming`, `TopLevelPropertyNaming`"
 PackageDirectoryMismatch,,,covered: detekt `naming:InvalidPackageDeclaration`
 PackageName,psi,checks names with regular expressions,"covered: detekt `naming:PackageNaming`, ktlint `PackageName`"
+PreferCurrentCoroutineContextToCoroutineContext,,,ported: `PreferCurrentCoroutineContextToCoroutineContext`
 PrivatePropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PublicApiImplicitType,,,covered: detekt `libraries:LibraryCodeMustSpecifyReturnType` (detekt-rules-libraries)
@@ -100,19 +105,28 @@ ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
 ReplaceToStringWithStringTemplate,types,resolves the toString call,
+RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
 ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
+SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`
+SimplifiableFlowCallChain,,,ported: `SimplifiableFlowCallChain`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
 SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+SuppressedCancellationException,,,covered: detekt `coroutines:SuspendFunSwallowedCancellation`
+SuspendCoroutineLacksCancellationGuarantees,,,ported: `SuspendCoroutineLacksCancellationGuarantees`
 SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
+SuspiciousImplicitCoroutineScopeReceiverAccess,,,ported: `SuspiciousImplicitCoroutineScopeReceiverAccess`
+SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInStateFlow`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`
 UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
 UnnecessaryVariable,,,ported: `UnnecessaryVariable`
 UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
+UnusedFlow,,,ported: `UnusedFlow`
 UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
 UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
 UnusedVariable,,,covered: detekt `style:UnusedVariable`
+UselessCallOnFlow,,,ported: `UselessCallOnFlow`
 VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
 WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`
