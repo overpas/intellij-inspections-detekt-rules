@@ -46,6 +46,24 @@ names are the short names of the IntelliJ inspections.
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
 | `InfixCallToOrdinary` | An infix call that can be an ordinary call. |
 
+### `intellij-kotlin-coroutines`
+
+| Rule | Finds |
+|---|---|
+| `CoroutineContextWithJob` | A `Job` or `NonCancellable` in the context argument of a coroutine builder, which breaks structured concurrency. |
+| `DeferredResultUnused` | A call that returns a `Deferred` whose result is never used. |
+| `ForEachJoinOnCollectionOfJob` | A `forEach { it.join() }` on a collection of jobs that `joinAll()` can replace. |
+| `MapAwaitOnCollectionOfDeferred` | A `map { it.await() }` on a collection of deferred values that `awaitAll()` can replace. |
+| `PreferCurrentCoroutineContextToCoroutineContext` | A use of `kotlin.coroutines.coroutineContext` that `currentCoroutineContext()` should replace. |
+| `RunBlockingInSuspendFunction` | A `runBlocking` call inside a suspend function or a suspend lambda. |
+| `SimplifiableFlowCall` | A `Flow` call with a trivial lambda that `flattenMerge`, `flattenConcat`, `filterNotNull` or `filterIsInstance` can replace. |
+| `SimplifiableFlowCallChain` | A chain of two `Flow` calls that one call can replace, such as `filter {}.first()`. |
+| `SuspendCoroutineLacksCancellationGuarantees` | A `suspendCoroutine` call that ignores cancellation when `suspendCancellableCoroutine` is available. |
+| `SuspiciousImplicitCoroutineScopeReceiverAccess` | An implicit access to an outer `CoroutineScope` receiver from inside a suspending lambda or function. |
+| `SuspiciousMutableCollectionInStateFlow` | A `MutableStateFlow` that holds a mutable collection, which emits no new value when it changes in place. |
+| `UnusedFlow` | A `Flow` that is created but never collected, returned or passed on. |
+| `UselessCallOnFlow` | A `filterNotNull`, `filterIsInstance` or `mapNotNull` call on a `Flow` that does nothing or can be simpler. |
+
 ### `intellij-kotlin-java-interop`
 
 | Rule | Finds |

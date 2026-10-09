@@ -9,5 +9,22 @@ class CoroutinesRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-coroutines")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::CoroutineContextWithJob,
+                ::DeferredResultUnused,
+                ::ForEachJoinOnCollectionOfJob,
+                ::MapAwaitOnCollectionOfDeferred,
+                ::PreferCurrentCoroutineContextToCoroutineContext,
+                ::RunBlockingInSuspendFunction,
+                ::SimplifiableFlowCall,
+                ::SimplifiableFlowCallChain,
+                ::SuspendCoroutineLacksCancellationGuarantees,
+                ::SuspiciousImplicitCoroutineScopeReceiverAccess,
+                ::SuspiciousMutableCollectionInStateFlow,
+                ::UnusedFlow,
+                ::UselessCallOnFlow,
+            ),
+        )
 }
