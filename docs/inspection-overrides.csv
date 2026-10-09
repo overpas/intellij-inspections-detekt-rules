@@ -1,22 +1,40 @@
 shortName,verdict,reason,status
+AddExplicitTargetToParameterAnnotation,not-portable,never reports at the default language version; it is only useful with an older language version,
+AmbiguousNonLocalJump,,,ported: `AmbiguousNonLocalJump`
+ArrayInDataClass,,,ported: `ArrayInDataClass`
+AssignedValueIsNeverRead,,,ported: `AssignedValueIsNeverRead`
 CanBeParameter,types,searches references inside the class,ported: `CanBeParameter`
 CanBePrimaryConstructorProperty,,,ported: `CanBePrimaryConstructorProperty`
 CanConvertToMultiDollarString,,,ported: `CanConvertToMultiDollarString`
+CanSealedSubClassBeObject,,,ported: `CanSealedSubClassBeObject`
 CanUnescapeDollarLiteral,,,ported: `CanUnescapeDollarLiteral`
 ClassName,psi,checks names with regular expressions,covered: detekt `naming:ClassNaming`
 ComplexRedundantLet,,,covered: detekt `style:UnnecessaryLet`
+ConflictingExtensionProperty,,,ported: `ConflictingExtensionProperty`
 ConstPropertyName,psi,checks names with regular expressions,covered: ktlint `PropertyName`
 ConstantConditionIf,types,evaluates constant conditions,ported: `ConstantConditionIf`
 ControlFlowWithEmptyBody,,,"covered: detekt `empty-blocks:EmptyIfBlock`, `EmptyElseBlock`, `EmptyForBlock`, `EmptyWhileBlock`, `EmptyDoWhileBlock`, `EmptyWhenBlock`"
+ConvertArgumentToSet,,,ported: `ConvertArgumentToSet`
 ConvertFromMultiDollarToRegularString,,,ported: `ConvertFromMultiDollarToRegularString`
 ConvertLongToDuration,,,ported: `ConvertLongToDuration`
+ConvertNaNEquality,,,ported: `ConvertNaNEquality`
+ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
 CustomComponentDestructuringMigration,not-portable,needs the experimental language feature NameBasedDestructuring,
+DataClassPrivateConstructor,,,ported: `DataClassPrivateConstructor`
+DelegationToVarProperty,,,ported: `DelegationToVarProperty`
+DeprecatedCallableAddReplaceWith,,,ported: `DeprecatedCallableAddReplaceWith`
+DestructingShortFormNameMismatch,not-portable,needs the experimental language feature NameBasedDestructuring,
+DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
 ExplicitThis,,,ported: `ExplicitThis`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
+HasPlatformType,,,covered: detekt `potential-bugs:HasPlatformType`
 IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
 InconsistentCommentForJavaParameter,,,ported: `InconsistentCommentForJavaParameter`
 InfixCallToOrdinary,,,ported: `InfixCallToOrdinary`
+JavaCollectionWithNullableTypeArgument,,,ported: `JavaCollectionWithNullableTypeArgument`
+JavaCollectionsStaticMethodOnImmutableList,,,ported: `JavaCollectionsStaticMethodOnImmutableList`
+JavaDefaultMethodsNotOverriddenByDelegation,,,ported: `JavaDefaultMethodsNotOverriddenByDelegation`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,"covered: detekt `comments:UndocumentedPublicClass`, `UndocumentedPublicFunction`, `UndocumentedPublicProperty`"
 KDocUnresolvedReference,types,resolves KDoc references,
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
@@ -32,6 +50,7 @@ MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
 NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,covered: detekt `naming:ObjectPropertyNaming`
 ObjectPropertyName,psi,checks names with regular expressions,"covered: detekt `naming:ObjectPropertyNaming`, `TopLevelPropertyNaming`"
+PackageDirectoryMismatch,,,covered: detekt `naming:InvalidPackageDeclaration`
 PackageName,psi,checks names with regular expressions,"covered: detekt `naming:PackageNaming`, ktlint `PackageName`"
 PrivatePropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"

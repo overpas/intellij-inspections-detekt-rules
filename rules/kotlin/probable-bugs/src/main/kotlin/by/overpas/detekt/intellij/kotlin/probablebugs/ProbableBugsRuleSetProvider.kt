@@ -9,5 +9,18 @@ class ProbableBugsRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-probable-bugs")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::AmbiguousNonLocalJump,
+                ::ArrayInDataClass,
+                ::AssignedValueIsNeverRead,
+                ::CanSealedSubClassBeObject,
+                ::ConflictingExtensionProperty,
+                ::ConvertNaNEquality,
+                ::DataClassPrivateConstructor,
+                ::DelegationToVarProperty,
+                ::DuplicateArgumentsInSetOfAndMapOfFunctions,
+            ),
+        )
 }
