@@ -27,30 +27,51 @@ DelegationToVarProperty,,,ported: `DelegationToVarProperty`
 DeprecatedCallableAddReplaceWith,,,ported: `DeprecatedCallableAddReplaceWith`
 DestructingShortFormNameMismatch,not-portable,needs the experimental language feature NameBasedDestructuring,
 DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
+EmptyRange,,,ported: `EmptyRange`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
+EqualsOrHashCode,,,covered: detekt `potential-bugs:EqualsWithHashCodeExist`
+EscapingCapturedVariable,not-portable,needs the compiler flag ReportEscapingCapturedVariable,
 ExplicitThis,,,ported: `ExplicitThis`
+FilterIsInstanceResultIsAlwaysEmpty,,,ported: `FilterIsInstanceResultIsAlwaysEmpty`
 ForEachJoinOnCollectionOfJob,,,ported: `ForEachJoinOnCollectionOfJob`
+ForEachParameterNotUsed,,,ported: `ForEachParameterNotUsed`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
 HasPlatformType,,,covered: detekt `potential-bugs:HasPlatformType`
 IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
+ImplicitNullableNothingType,,,ported: `ImplicitNullableNothingType`
+IncompleteDestructuring,,,ported: `IncompleteDestructuring`
 InconsistentCommentForJavaParameter,,,ported: `InconsistentCommentForJavaParameter`
 InfixCallToOrdinary,,,ported: `InfixCallToOrdinary`
 JavaCollectionWithNullableTypeArgument,,,ported: `JavaCollectionWithNullableTypeArgument`
 JavaCollectionsStaticMethodOnImmutableList,,,ported: `JavaCollectionsStaticMethodOnImmutableList`
 JavaDefaultMethodsNotOverriddenByDelegation,,,ported: `JavaDefaultMethodsNotOverriddenByDelegation`
+JavaIoSerializableObjectMustHaveReadResolve,,,ported: `JavaIoSerializableObjectMustHaveReadResolve`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,"covered: detekt `comments:UndocumentedPublicClass`, `UndocumentedPublicFunction`, `UndocumentedPublicProperty`"
-KDocUnresolvedReference,types,resolves KDoc references,
+KDocUnresolvedReference,not-portable,the KDoc resolver of the Analysis API fails in detekt 2.0.0-alpha.6 (NoSuchMethodError in RegistryValue),
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
+KotlinArrayHashCode,,,ported: `KotlinArrayHashCode`
+KotlinArrayToString,,,ported: `KotlinArrayToString`
+KotlinConstantConditions,not-portable,needs the data flow analysis engine of IntelliJ,
+KotlinCovariantEquals,,,covered: detekt `potential-bugs:WrongEqualsTypeParameter`
 KotlinDeprecation,,,ported: `KotlinDeprecation`
 KotlinDoubleNegation,,,covered: detekt `style:DoubleNegativeExpression`
+KotlinEqualsBetweenInconvertibleTypes,,,ported: `KotlinEqualsBetweenInconvertibleTypes`
 KotlinLoggerInitializedWithForeignClass,,,ported: `KotlinLoggerInitializedWithForeignClass`
+KotlinMisorderedAssertEqualsArguments,,,ported: `KotlinMisorderedAssertEqualsArguments`
 KotlinNoActualForExpect,not-portable,searches actual declarations across the multiplatform modules,
 KotlinRedundantOverride,,,ported: `KotlinRedundantOverride`
-KotlinThrowableNotThrown,types,searches references of a local property only,
+KotlinThrowableNotThrown,types,searches references of a local property only,ported: `KotlinThrowableNotThrown`
+KotlinUnreachableCode,,,covered: detekt `potential-bugs:UnreachableCode`
 KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
+LateinitVarOverridesLateinitVar,,,ported: `LateinitVarOverridesLateinitVar`
+LazyWithoutDelegation,,,ported: `LazyWithoutDelegation`
 LocalVariableName,psi,checks names with regular expressions,ported: `LocalVariableName`
+MainFunctionReturnUnit,,,ported: `MainFunctionReturnUnit`
+MainKtsAnnotationUsageInPlainKts,not-portable,needs the IDE script definitions to tell .main.kts from .kts files,
 MapAwaitOnCollectionOfDeferred,,,ported: `MapAwaitOnCollectionOfDeferred`
 MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
+NonNullableBooleanPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
+NonVarPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
 NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,covered: detekt `naming:ObjectPropertyNaming`
 ObjectPropertyName,psi,checks names with regular expressions,"covered: detekt `naming:ObjectPropertyNaming`, `TopLevelPropertyNaming`"
@@ -60,9 +81,13 @@ PreferCurrentCoroutineContextToCoroutineContext,,,ported: `PreferCurrentCoroutin
 PrivatePropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PublicApiImplicitType,,,covered: detekt `libraries:LibraryCodeMustSpecifyReturnType` (detekt-rules-libraries)
+RecursiveEqualsCall,,,ported: `RecursiveEqualsCall`
+RecursivePropertyAccessor,,,ported: `RecursivePropertyAccessor`
 RedundantCompanionReference,,,ported: `RedundantCompanionReference`
 RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
 RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
+RedundantDestructuringRename,not-portable,needs the experimental language feature NameBasedDestructuring,
+RedundantDestructuringUnderscore,not-portable,needs the experimental language feature NameBasedDestructuring,
 RedundantElvisReturnNull,,,ported: `RedundantElvisReturnNull`
 RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
 RedundantEnumConstructorInvocation,,,ported: `RedundantEnumConstructorInvocation`
@@ -70,6 +95,7 @@ RedundantExplicitType,,,covered: detekt `style:RedundantExplicitType`
 RedundantGetter,,,ported: `RedundantGetter`
 RedundantIf,,,ported: `RedundantIf`
 RedundantInterpolationPrefix,,,ported: `RedundantInterpolationPrefix`
+RedundantLabel,,,ported: `RedundantLabel`
 RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
 RedundantLambdaArrow,,,ported: `RedundantLambdaArrow`
 RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
@@ -108,25 +134,46 @@ ReplaceToStringWithStringTemplate,types,resolves the toString call,
 RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
 ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
+SelfAssignment,,,ported: `SelfAssignment`
+SelfReferenceConstructorParameter,,,ported: `SelfReferenceConstructorParameter`
+SetterBackingFieldAssignment,,,ported: `SetterBackingFieldAssignment`
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`
 SimplifiableFlowCallChain,,,ported: `SimplifiableFlowCallChain`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
 SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+StringReferentialEquality,,,covered: detekt `potential-bugs:AvoidReferentialEquality`
 SuppressedCancellationException,,,covered: detekt `coroutines:SuspendFunSwallowedCancellation`
 SuspendCoroutineLacksCancellationGuarantees,,,ported: `SuspendCoroutineLacksCancellationGuarantees`
+SuspiciousCallOnCollectionToAddOrRemovePath,,,ported: `SuspiciousCallOnCollectionToAddOrRemovePath`
 SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
+SuspiciousCascadingIf,,,ported: `SuspiciousCascadingIf`
+SuspiciousCollectionReassignment,,,ported: `SuspiciousCollectionReassignment`
+SuspiciousEqualsCombination,,,ported: `SuspiciousEqualsCombination`
+SuspiciousGetterForMutableObject,,,ported: `SuspiciousGetterForMutableObject`
 SuspiciousImplicitCoroutineScopeReceiverAccess,,,ported: `SuspiciousImplicitCoroutineScopeReceiverAccess`
+SuspiciousJavaClassCallableReference,,,ported: `SuspiciousJavaClassCallableReference`
 SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInStateFlow`
+SuspiciousVarProperty,,,ported: `SuspiciousVarProperty`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`
 UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
 UnnecessaryVariable,,,ported: `UnnecessaryVariable`
 UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
+UnusedDataClassCopyResult,,,ported: `UnusedDataClassCopyResult`
+UnusedEquals,,,ported: `UnusedEquals`
+UnusedExpression,,,ported: `UnusedExpression`
 UnusedFlow,,,ported: `UnusedFlow`
+UnusedLambdaExpression,,,ported: `UnusedLambdaExpression`
+UnusedLambdaExpressionBody,,,ported: `UnusedLambdaExpressionBody`
 UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
 UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
+UnusedUnaryOperator,,,covered: detekt `potential-bugs:UnusedUnaryOperator`
 UnusedVariable,,,covered: detekt `style:UnusedVariable`
+UselessCallOnCollection,,,ported: `UselessCallOnCollection`
 UselessCallOnFlow,,,ported: `UselessCallOnFlow`
+UselessCallOnNotNull,,,covered: detekt `style:UselessCallOnNotNull`
 VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
+VariableNeverRead,,,ported: `VariableNeverRead`
 WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`
+WrapUnaryOperator,,,ported: `WrapUnaryOperator`

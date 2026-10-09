@@ -123,6 +123,41 @@ names are the short names of the IntelliJ inspections.
 | `DataClassPrivateConstructor` | A private primary constructor of a data class that the generated `copy()` exposes. |
 | `DelegationToVarProperty` | Class delegation to a `var` constructor property that the class never reassigns. |
 | `DuplicateArgumentsInSetOfAndMapOfFunctions` | A duplicate constant element in a `setOf` call or a duplicate constant key in a `mapOf` call. |
+| `EmptyRange` | A range whose constant start is past its end in the direction of the operator. |
+| `FilterIsInstanceResultIsAlwaysEmpty` | A `filterIsInstance` call whose target type no element of the receiver can have. |
+| `ForEachParameterNotUsed` | A `forEach` call whose lambda never uses the implicit `it` parameter. |
+| `ImplicitNullableNothingType` | A `var` or open declaration without an explicit type whose inferred type is `Nothing?`. |
+| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. |
+| `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. |
+| `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. |
+| `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
+| `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. |
+| `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. |
+| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. |
+| `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. |
+| `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. |
+| `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. |
+| `RecursiveEqualsCall` | An `equals` implementation that compares `this` with its parameter through `==`, `!=` or `equals`. |
+| `RecursivePropertyAccessor` | A property accessor or a synthetic Java accessor override that accesses its own property. |
+| `RedundantLabel` | A label on an expression that no `break`, `continue` or `return` can reference. |
+| `SelfAssignment` | An assignment of a variable or property to itself. |
+| `SelfReferenceConstructorParameter` | A primary constructor with a non-null parameter of its own class type, which no code can call. |
+| `SetterBackingFieldAssignment` | A setter that never assigns the backing field, so the new value is lost. |
+| `SuspiciousCallOnCollectionToAddOrRemovePath` | A `plus` or `minus` call that iterates over a self-iterable argument such as a `Path` instead of using it as one element. |
+| `SuspiciousCascadingIf` | An operator or call after the last `else` block of a cascading `if` that applies only to the nested `if`. |
+| `SuspiciousCollectionReassignment` | A `+=` or `-=` on a `var` of a read-only collection that creates a new collection each time. |
+| `SuspiciousEqualsCombination` | A condition that compares the same variable with both `==` and `===`. |
+| `SuspiciousGetterForMutableObject` | A getter that creates a new mutable collection or coroutine object on each access. |
+| `SuspiciousJavaClassCallableReference` | A `::javaClass` callable reference that was meant to be `.javaClass` or `::class.java`. |
+| `SuspiciousVarProperty` | A `var` property whose getter never reads the backing field, so the setter has no visible effect. |
+| `UnusedDataClassCopyResult` | A data class `copy` call whose result is not used. |
+| `UnusedEquals` | An `==` expression or `equals` call whose result is not used. |
+| `UnusedExpression` | An expression whose value is not used and that has no effect. |
+| `UnusedLambdaExpression` | A lambda expression that is a statement and is never called. |
+| `UnusedLambdaExpressionBody` | An unused call of a function whose expression body is a lambda, so the lambda never runs. |
+| `UselessCallOnCollection` | A `filterNotNull`, `filterIsInstance`, constant `filter` or `mapNotNull`-like call on a collection or sequence that does nothing or can be simpler. |
+| `VariableNeverRead` | A local variable that gets values but is never read. |
+| `WrapUnaryOperator` | A unary minus or plus before a number literal with a call, where the operator applies to the call result. |
 
 ### `intellij-kotlin-redundant-constructs`
 
