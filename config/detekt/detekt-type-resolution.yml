@@ -322,6 +322,18 @@ intellij-kotlin-style-issues:
     active: true
   JoinDeclarationAndAssignment:
     active: true
+  LiftReturnOrAssignment:
+    active: true
+  MapToForEach:
+    active: true
+  MoveLambdaOutsideParentheses:
+    active: true
+  MoveVariableDeclarationIntoWhen:
+    active: true
+  NullableHashCode:
+    active: true
+  RedundantAsSequence:
+    active: true
   RedundantRunCatching:
     active: true
   RemoveEmptyParenthesesFromAnnotationEntry:
@@ -340,6 +352,14 @@ intellij-kotlin-style-issues:
     active: true
   ReplaceManualRangeWithIndicesCalls:
     active: true
+  ReplaceRangeStartEndInclusiveWithFirstLast:
+    active: true
+  ReplaceReadLineWithReadln:
+    active: true
+  ReplaceSizeCheckWithIsNotEmpty:
+    active: true
+  ReplaceSizeZeroCheckWithIsEmpty:
+    active: true
   ReplaceToWithInfixForm:
     active: true
   ReplaceWithCallWithContextCall:
@@ -353,6 +373,12 @@ intellij-kotlin-style-issues:
   SimplifiableCall:
     active: true
   SimplifiableCallChain:
+    active: true
+  SimplifyBooleanWithConstants:
+    active: true
+  SimplifyNegatedBinaryExpression:
+    active: true
+  SimplifyNestedEachInScopeFunction:
     active: true
 
 overpas-architecture:

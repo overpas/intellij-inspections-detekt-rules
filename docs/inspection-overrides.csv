@@ -89,14 +89,23 @@ KotlinUnreachableCode,,,covered: detekt `potential-bugs:UnreachableCode`
 KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
 LateinitVarOverridesLateinitVar,,,ported: `LateinitVarOverridesLateinitVar`
 LazyWithoutDelegation,,,ported: `LazyWithoutDelegation`
+LiftReturnOrAssignment,,,ported: `LiftReturnOrAssignment`
 LocalVariableName,psi,checks names with regular expressions,ported: `LocalVariableName`
 MainFunctionReturnUnit,,,ported: `MainFunctionReturnUnit`
 MainKtsAnnotationUsageInPlainKts,not-portable,needs the IDE script definitions to tell .main.kts from .kts files,
 MapAwaitOnCollectionOfDeferred,,,ported: `MapAwaitOnCollectionOfDeferred`
-MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
+MapGetWithNotNullAssertionOperator,,,covered: detekt `potential-bugs:MapGetWithNotNullAssertionOperator`
+MapToForEach,,,ported: `MapToForEach`
+MayBeConstant,,,covered: detekt `style:MayBeConstant`
+MoveLambdaOutsideParentheses,types,resolves the call to check overloads,ported: `MoveLambdaOutsideParentheses`
+MoveVariableDeclarationIntoWhen,,,ported: `MoveVariableDeclarationIntoWhen`
+NestedLambdaShadowedImplicitParameter,,,covered: detekt `naming:NoNameShadowing`
 NonNullableBooleanPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
 NonVarPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
 NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
+NullableBooleanElvis,,,covered: detekt `style:NullableBooleanCheck`
+NullableHashCode,,,ported: `NullableHashCode`
+ObjectLiteralToLambda,,,covered: detekt `style:ObjectLiteralToLambda`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,covered: detekt `naming:ObjectPropertyNaming`
 ObjectPropertyName,psi,checks names with regular expressions,"covered: detekt `naming:ObjectPropertyNaming`, `TopLevelPropertyNaming`"
 PackageDirectoryMismatch,,,covered: detekt `naming:InvalidPackageDeclaration`
@@ -104,9 +113,11 @@ PackageName,psi,checks names with regular expressions,"covered: detekt `naming:P
 PreferCurrentCoroutineContextToCoroutineContext,,,ported: `PreferCurrentCoroutineContextToCoroutineContext`
 PrivatePropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
+ProtectedInFinal,,,covered: detekt `style:ProtectedMemberInFinalClass`
 PublicApiImplicitType,,,covered: detekt `libraries:LibraryCodeMustSpecifyReturnType` (detekt-rules-libraries)
 RecursiveEqualsCall,,,ported: `RecursiveEqualsCall`
 RecursivePropertyAccessor,,,ported: `RecursivePropertyAccessor`
+RedundantAsSequence,,,ported: `RedundantAsSequence`
 RedundantCompanionReference,,,ported: `RedundantCompanionReference`
 RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
 RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
@@ -171,6 +182,12 @@ ReplaceJavaStaticMethodWithKotlinAnalog,,,ported: `ReplaceJavaStaticMethodWithKo
 ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,ported: `ReplaceManualRangeWithIndicesCalls`
 ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
+ReplaceRangeStartEndInclusiveWithFirstLast,,,ported: `ReplaceRangeStartEndInclusiveWithFirstLast`
+ReplaceRangeToWithRangeUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
+ReplaceRangeToWithUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
+ReplaceReadLineWithReadln,,,ported: `ReplaceReadLineWithReadln`
+ReplaceSizeCheckWithIsNotEmpty,,,ported: `ReplaceSizeCheckWithIsNotEmpty`
+ReplaceSizeZeroCheckWithIsEmpty,,,ported: `ReplaceSizeZeroCheckWithIsEmpty`
 ReplaceStringFormatWithLiteral,,,ported: `ReplaceStringFormatWithLiteral`
 ReplaceSubstringWithDropLast,,,ported: `ReplaceSubstringWithDropLast`
 ReplaceSubstringWithIndexingOperation,,,ported: `ReplaceSubstringWithIndexingOperation`
@@ -198,12 +215,15 @@ SimplifiableCallChain,,,ported: `SimplifiableCallChain`
 SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`
 SimplifiableFlowCallChain,,,ported: `SimplifiableFlowCallChain`
 SimplifyAssertNotNull,,,ported: `SimplifyAssertNotNull`
-SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
-SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
+SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,ported: `SimplifyBooleanWithConstants`
+SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,ported: `SimplifyNegatedBinaryExpression`
+SimplifyNestedEachInScopeFunction,,,ported: `SimplifyNestedEachInScopeFunction`
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+SortModifiers,,,"covered: detekt `style:ModifierOrder`, ktlint `ModifierOrdering`"
 StringReferentialEquality,,,covered: detekt `potential-bugs:AvoidReferentialEquality`
 SuppressedCancellationException,,,covered: detekt `coroutines:SuspendFunSwallowedCancellation`
 SuspendCoroutineLacksCancellationGuarantees,,,ported: `SuspendCoroutineLacksCancellationGuarantees`
+SuspiciousAsDynamic,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
 SuspiciousCallOnCollectionToAddOrRemovePath,,,ported: `SuspiciousCallOnCollectionToAddOrRemovePath`
 SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
 SuspiciousCascadingIf,,,ported: `SuspiciousCascadingIf`
@@ -215,6 +235,7 @@ SuspiciousJavaClassCallableReference,,,ported: `SuspiciousJavaClassCallableRefer
 SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInStateFlow`
 SuspiciousVarProperty,,,ported: `SuspiciousVarProperty`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`
+TrailingComma,,,"covered: ktlint `TrailingCommaOnCallSite`, `TrailingCommaOnDeclarationSite`"
 UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
 UnnecessaryVariable,,,ported: `UnnecessaryVariable`
 UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
