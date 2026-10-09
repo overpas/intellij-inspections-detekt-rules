@@ -27,20 +27,31 @@ DelegationToVarProperty,,,ported: `DelegationToVarProperty`
 DeprecatedCallableAddReplaceWith,,,ported: `DeprecatedCallableAddReplaceWith`
 DestructingShortFormNameMismatch,not-portable,needs the experimental language feature NameBasedDestructuring,
 DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
+EmptyRange,,,ported: `EmptyRange`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
+EqualsOrHashCode,,,covered: detekt `potential-bugs:EqualsWithHashCodeExist`
+EscapingCapturedVariable,not-portable,needs the compiler flag ReportEscapingCapturedVariable,
 ExplicitThis,,,ported: `ExplicitThis`
+FilterIsInstanceResultIsAlwaysEmpty,,,ported: `FilterIsInstanceResultIsAlwaysEmpty`
 ForEachJoinOnCollectionOfJob,,,ported: `ForEachJoinOnCollectionOfJob`
+ForEachParameterNotUsed,,,ported: `ForEachParameterNotUsed`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
 HasPlatformType,,,covered: detekt `potential-bugs:HasPlatformType`
 IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
+ImplicitNullableNothingType,,,ported: `ImplicitNullableNothingType`
+IncompleteDestructuring,,,ported: `IncompleteDestructuring`
 InconsistentCommentForJavaParameter,,,ported: `InconsistentCommentForJavaParameter`
 InfixCallToOrdinary,,,ported: `InfixCallToOrdinary`
 JavaCollectionWithNullableTypeArgument,,,ported: `JavaCollectionWithNullableTypeArgument`
 JavaCollectionsStaticMethodOnImmutableList,,,ported: `JavaCollectionsStaticMethodOnImmutableList`
 JavaDefaultMethodsNotOverriddenByDelegation,,,ported: `JavaDefaultMethodsNotOverriddenByDelegation`
+JavaIoSerializableObjectMustHaveReadResolve,,,ported: `JavaIoSerializableObjectMustHaveReadResolve`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,"covered: detekt `comments:UndocumentedPublicClass`, `UndocumentedPublicFunction`, `UndocumentedPublicProperty`"
-KDocUnresolvedReference,types,resolves KDoc references,
+KDocUnresolvedReference,not-portable,the KDoc resolver of the Analysis API fails in detekt 2.0.0-alpha.6 (NoSuchMethodError in RegistryValue),
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
+KotlinArrayHashCode,,,ported: `KotlinArrayHashCode`
+KotlinArrayToString,,,ported: `KotlinArrayToString`
+KotlinConstantConditions,not-portable,needs the data flow analysis engine of IntelliJ,
 KotlinDeprecation,,,ported: `KotlinDeprecation`
 KotlinDoubleNegation,,,covered: detekt `style:DoubleNegativeExpression`
 KotlinLoggerInitializedWithForeignClass,,,ported: `KotlinLoggerInitializedWithForeignClass`
@@ -108,15 +119,21 @@ ReplaceToStringWithStringTemplate,types,resolves the toString call,
 RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
 ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
+SetterBackingFieldAssignment,,,ported: `SetterBackingFieldAssignment`
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`
 SimplifiableFlowCallChain,,,ported: `SimplifiableFlowCallChain`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
 SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+StringReferentialEquality,,,covered: detekt `potential-bugs:AvoidReferentialEquality`
 SuppressedCancellationException,,,covered: detekt `coroutines:SuspendFunSwallowedCancellation`
 SuspendCoroutineLacksCancellationGuarantees,,,ported: `SuspendCoroutineLacksCancellationGuarantees`
+SuspiciousCallOnCollectionToAddOrRemovePath,,,ported: `SuspiciousCallOnCollectionToAddOrRemovePath`
 SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
+SuspiciousCascadingIf,,,ported: `SuspiciousCascadingIf`
+SuspiciousCollectionReassignment,,,ported: `SuspiciousCollectionReassignment`
+SuspiciousEqualsCombination,,,ported: `SuspiciousEqualsCombination`
 SuspiciousImplicitCoroutineScopeReceiverAccess,,,ported: `SuspiciousImplicitCoroutineScopeReceiverAccess`
 SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInStateFlow`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`

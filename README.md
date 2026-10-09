@@ -123,6 +123,19 @@ names are the short names of the IntelliJ inspections.
 | `DataClassPrivateConstructor` | A private primary constructor of a data class that the generated `copy()` exposes. |
 | `DelegationToVarProperty` | Class delegation to a `var` constructor property that the class never reassigns. |
 | `DuplicateArgumentsInSetOfAndMapOfFunctions` | A duplicate constant element in a `setOf` call or a duplicate constant key in a `mapOf` call. |
+| `EmptyRange` | A range whose constant start is past its end in the direction of the operator. |
+| `FilterIsInstanceResultIsAlwaysEmpty` | A `filterIsInstance` call whose target type no element of the receiver can have. |
+| `ForEachParameterNotUsed` | A `forEach` call whose lambda never uses the implicit `it` parameter. |
+| `ImplicitNullableNothingType` | A `var` or open declaration without an explicit type whose inferred type is `Nothing?`. |
+| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. |
+| `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. |
+| `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. |
+| `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
+| `SetterBackingFieldAssignment` | A setter that never assigns the backing field, so the new value is lost. |
+| `SuspiciousCallOnCollectionToAddOrRemovePath` | A `plus` or `minus` call that iterates over a self-iterable argument such as a `Path` instead of using it as one element. |
+| `SuspiciousCascadingIf` | An operator or call after the last `else` block of a cascading `if` that applies only to the nested `if`. |
+| `SuspiciousCollectionReassignment` | A `+=` or `-=` on a `var` of a read-only collection that creates a new collection each time. |
+| `SuspiciousEqualsCombination` | A condition that compares the same variable with both `==` and `===`. |
 
 ### `intellij-kotlin-redundant-constructs`
 

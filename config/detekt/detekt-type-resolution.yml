@@ -158,6 +158,30 @@ intellij-kotlin-probable-bugs:
     active: true
   DuplicateArgumentsInSetOfAndMapOfFunctions:
     active: true
+  EmptyRange:
+    active: true
+  FilterIsInstanceResultIsAlwaysEmpty:
+    active: true
+  ForEachParameterNotUsed:
+    active: true
+  ImplicitNullableNothingType:
+    active: true
+  JavaIoSerializableObjectMustHaveReadResolve:
+    active: true
+  KotlinArrayHashCode:
+    active: true
+  KotlinArrayToString:
+    active: true
+  SetterBackingFieldAssignment:
+    active: true
+  SuspiciousCallOnCollectionToAddOrRemovePath:
+    active: true
+  SuspiciousCascadingIf:
+    active: true
+  SuspiciousCollectionReassignment:
+    active: true
+  SuspiciousEqualsCombination:
+    active: true
 
 intellij-kotlin-redundant-constructs:
   CanBeParameter:
