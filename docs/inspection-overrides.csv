@@ -52,16 +52,26 @@ KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
 KotlinArrayHashCode,,,ported: `KotlinArrayHashCode`
 KotlinArrayToString,,,ported: `KotlinArrayToString`
 KotlinConstantConditions,not-portable,needs the data flow analysis engine of IntelliJ,
+KotlinCovariantEquals,,,covered: detekt `potential-bugs:WrongEqualsTypeParameter`
 KotlinDeprecation,,,ported: `KotlinDeprecation`
 KotlinDoubleNegation,,,covered: detekt `style:DoubleNegativeExpression`
+KotlinEqualsBetweenInconvertibleTypes,,,ported: `KotlinEqualsBetweenInconvertibleTypes`
 KotlinLoggerInitializedWithForeignClass,,,ported: `KotlinLoggerInitializedWithForeignClass`
+KotlinMisorderedAssertEqualsArguments,,,ported: `KotlinMisorderedAssertEqualsArguments`
 KotlinNoActualForExpect,not-portable,searches actual declarations across the multiplatform modules,
 KotlinRedundantOverride,,,ported: `KotlinRedundantOverride`
-KotlinThrowableNotThrown,types,searches references of a local property only,
+KotlinThrowableNotThrown,types,searches references of a local property only,ported: `KotlinThrowableNotThrown`
+KotlinUnreachableCode,,,covered: detekt `potential-bugs:UnreachableCode`
 KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
+LateinitVarOverridesLateinitVar,,,ported: `LateinitVarOverridesLateinitVar`
+LazyWithoutDelegation,,,ported: `LazyWithoutDelegation`
 LocalVariableName,psi,checks names with regular expressions,ported: `LocalVariableName`
+MainFunctionReturnUnit,,,ported: `MainFunctionReturnUnit`
+MainKtsAnnotationUsageInPlainKts,not-portable,needs the IDE script definitions to tell .main.kts from .kts files,
 MapAwaitOnCollectionOfDeferred,,,ported: `MapAwaitOnCollectionOfDeferred`
 MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
+NonNullableBooleanPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
+NonVarPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
 NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,covered: detekt `naming:ObjectPropertyNaming`
 ObjectPropertyName,psi,checks names with regular expressions,"covered: detekt `naming:ObjectPropertyNaming`, `TopLevelPropertyNaming`"
@@ -71,9 +81,13 @@ PreferCurrentCoroutineContextToCoroutineContext,,,ported: `PreferCurrentCoroutin
 PrivatePropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PublicApiImplicitType,,,covered: detekt `libraries:LibraryCodeMustSpecifyReturnType` (detekt-rules-libraries)
+RecursiveEqualsCall,,,ported: `RecursiveEqualsCall`
+RecursivePropertyAccessor,,,ported: `RecursivePropertyAccessor`
 RedundantCompanionReference,,,ported: `RedundantCompanionReference`
 RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
 RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
+RedundantDestructuringRename,not-portable,needs the experimental language feature NameBasedDestructuring,
+RedundantDestructuringUnderscore,not-portable,needs the experimental language feature NameBasedDestructuring,
 RedundantElvisReturnNull,,,ported: `RedundantElvisReturnNull`
 RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
 RedundantEnumConstructorInvocation,,,ported: `RedundantEnumConstructorInvocation`
@@ -81,6 +95,7 @@ RedundantExplicitType,,,covered: detekt `style:RedundantExplicitType`
 RedundantGetter,,,ported: `RedundantGetter`
 RedundantIf,,,ported: `RedundantIf`
 RedundantInterpolationPrefix,,,ported: `RedundantInterpolationPrefix`
+RedundantLabel,,,ported: `RedundantLabel`
 RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
 RedundantLambdaArrow,,,ported: `RedundantLambdaArrow`
 RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
@@ -119,6 +134,8 @@ ReplaceToStringWithStringTemplate,types,resolves the toString call,
 RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
 ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
 ScriptShebangExecPermission,not-portable,reads file system permissions,
+SelfAssignment,,,ported: `SelfAssignment`
+SelfReferenceConstructorParameter,,,ported: `SelfReferenceConstructorParameter`
 SetterBackingFieldAssignment,,,ported: `SetterBackingFieldAssignment`
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`

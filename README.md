@@ -131,6 +131,17 @@ names are the short names of the IntelliJ inspections.
 | `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. |
 | `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. |
 | `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
+| `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. |
+| `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. |
+| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. |
+| `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. |
+| `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. |
+| `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. |
+| `RecursiveEqualsCall` | An `equals` implementation that compares `this` with its parameter through `==`, `!=` or `equals`. |
+| `RecursivePropertyAccessor` | A property accessor or a synthetic Java accessor override that accesses its own property. |
+| `RedundantLabel` | A label on an expression that no `break`, `continue` or `return` can reference. |
+| `SelfAssignment` | An assignment of a variable or property to itself. |
+| `SelfReferenceConstructorParameter` | A primary constructor with a non-null parameter of its own class type, which no code can call. |
 | `SetterBackingFieldAssignment` | A setter that never assigns the backing field, so the new value is lost. |
 | `SuspiciousCallOnCollectionToAddOrRemovePath` | A `plus` or `minus` call that iterates over a self-iterable argument such as a `Path` instead of using it as one element. |
 | `SuspiciousCascadingIf` | An operator or call after the last `else` block of a cascading `if` that applies only to the nested `if`. |

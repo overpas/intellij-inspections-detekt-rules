@@ -172,6 +172,28 @@ intellij-kotlin-probable-bugs:
     active: true
   KotlinArrayToString:
     active: true
+  KotlinEqualsBetweenInconvertibleTypes:
+    active: true
+  KotlinMisorderedAssertEqualsArguments:
+    active: true
+  KotlinThrowableNotThrown:
+    active: true
+  LateinitVarOverridesLateinitVar:
+    active: true
+  LazyWithoutDelegation:
+    active: true
+  MainFunctionReturnUnit:
+    active: true
+  RecursiveEqualsCall:
+    active: true
+  RecursivePropertyAccessor:
+    active: true
+  RedundantLabel:
+    active: true
+  SelfAssignment:
+    active: true
+  SelfReferenceConstructorParameter:
+    active: true
   SetterBackingFieldAssignment:
     active: true
   SuspiciousCallOnCollectionToAddOrRemovePath:
