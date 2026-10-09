@@ -86,6 +86,12 @@ class StyleIssuesRuleSetProvider : RuleSetProvider {
                 ::SimplifyBooleanWithConstants,
                 ::SimplifyNegatedBinaryExpression,
                 ::SimplifyNestedEachInScopeFunction,
+                ::UnclearPrecedenceOfBinaryExpression,
+                ::UnlabeledReturnInsideLambda,
+                ::UnsafeCastWithReturn,
+                ::UseExpressionBody,
+                ::UsePropertyAccessSyntax,
+                ::VerboseNullabilityAndEmptiness,
             ),
         )
 }
