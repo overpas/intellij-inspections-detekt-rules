@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import com.intellij.psi.PsiElement
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
@@ -15,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 
+@IntellijInspection("DeferredResultUnused")
 class DeferredResultUnused(config: Config) :
     Rule(
         config,

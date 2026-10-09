@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -15,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
 private val REPLACE_MAP_GET_OR_DEFAULT_FQ_NAME = FqName("kotlin.collections.Map.getOrDefault")
 
+@IntellijInspection("ReplaceMapGetOrDefault")
 class ReplaceMapGetOrDefault(config: Config) :
     Rule(
         config,

@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.numericissues
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 private const val KOTLIN_BIG_DECIMAL_EQUALS_MESSAGE =
     "'equals()' between BigDecimal values should probably be 'compareTo()'"
 
+@IntellijInspection("KotlinBigDecimalEquals")
 class KotlinBigDecimalEquals(config: Config) :
     Rule(
         config,

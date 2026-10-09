@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 
 private val KOTLIN_ARRAY_HASH_CODE_CALLABLE_ID = CallableId(StandardClassIds.Any, Name.identifier("hashCode"))
 
+@IntellijInspection("KotlinArrayHashCode")
 class KotlinArrayHashCode(config: Config) :
     Rule(
         config,

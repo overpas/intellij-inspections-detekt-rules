@@ -9,6 +9,12 @@
 - Keep each class and object one group of linked members. Split a class whose members fall into
   unrelated groups, because each group is a separate responsibility.
 
+## Rules
+
+- Annotate each rule with the inspection annotation and the short name of its IntelliJ inspection,
+  and each rule set provider with the group annotation. The catalog and the upstream sync scripts
+  read them.
+
 ## Kotlin
 
 When writing kotlin code use skills:

@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -16,6 +17,7 @@ private val FOR_EACH_ID = CallableId(FqName("kotlin.collections"), Name.identifi
 
 private val JOIN_ID = CallableId(ClassId(FqName("kotlinx.coroutines"), Name.identifier("Job")), Name.identifier("join"))
 
+@IntellijInspection("ForEachJoinOnCollectionOfJob")
 class ForEachJoinOnCollectionOfJob(config: Config) :
     Rule(
         config,

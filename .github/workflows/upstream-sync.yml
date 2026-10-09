@@ -1,0 +1,28 @@
+name: Upstream sync
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: intellij-community branch, tag or commit to compare with
+        default: master
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency: upstream-sync
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: python3 scripts/inspection-sync.py "$RUNNER_TEMP/intellij-community" --ref "$REF" --output "$RUNNER_TEMP/report.md"
+        env:
+          REF: ${{ inputs.ref || 'master' }}
+      - run: .github/scripts/sync-issue.sh "$RUNNER_TEMP/report.md"
+        env:
+          GH_TOKEN: ${{ github.token }}

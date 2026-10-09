@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 
 private val SIMPLIFIABLE_FLOW_CALL_NAMES = setOf("flatMapMerge", "flatMapConcat", "filter")
 
+@IntellijInspection("SimplifiableFlowCall")
 class SimplifiableFlowCall(config: Config) :
     Rule(
         config,

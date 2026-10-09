@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 
 private const val MESSAGE = "Usage of 'kotlin.coroutine.coroutineContext' can be ambiguous"
 
+@IntellijInspection("PreferCurrentCoroutineContextToCoroutineContext")
 class PreferCurrentCoroutineContextToCoroutineContext(config: Config) :
     Rule(
         config,
