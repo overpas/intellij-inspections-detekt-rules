@@ -57,7 +57,7 @@ internal class CanUnescapeDollarLiteralScan(
 
 private val KtStringTemplateEntry.isEscapedDollar: Boolean
     get() = when (this) {
-        is KtEscapeStringTemplateEntry -> unescapedValue == DOLLAR.toString()
+        is KtEscapeStringTemplateEntry -> unescapedValue == "$DOLLAR"
         is KtBlockStringTemplateEntry -> expression?.text in DOLLAR_LITERAL_EXPRESSIONS
         else -> false
     }

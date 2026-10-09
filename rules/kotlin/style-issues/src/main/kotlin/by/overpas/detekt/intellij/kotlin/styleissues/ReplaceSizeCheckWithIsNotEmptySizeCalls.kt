@@ -46,7 +46,7 @@ private val sizeCheckReceiversByCallableId: Map<CallableId, Set<ClassId>> =
         )
 
 internal fun KtExpression?.isSizeCheckConstant(value: Int): Boolean {
-    val constant = this?.let(KtPsiUtil::deparenthesize) as? KtConstantExpression
+    val constant = this?.let { KtPsiUtil.deparenthesize(it) } as? KtConstantExpression
     return constant?.run { node.elementType == KtNodeTypes.INTEGER_CONSTANT && text.toIntOrNull() == value } == true
 }
 

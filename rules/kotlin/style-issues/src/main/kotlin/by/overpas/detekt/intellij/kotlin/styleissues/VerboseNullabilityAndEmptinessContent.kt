@@ -40,7 +40,7 @@ internal class VerboseNullabilityAndEmptinessContent(
 
 internal fun KtExpression.verboseNullabilityContent(): VerboseNullabilityAndEmptinessContent? {
     val negated = (this as? KtPrefixExpression)?.takeIf { it.operationToken == KtTokens.EXCL }?.baseExpression
-    val check = negated?.let(KtPsiUtil::safeDeparenthesize) ?: this
+    val check = negated?.let { KtPsiUtil.safeDeparenthesize(it) } ?: this
     val call = ((check as? KtDotQualifiedExpression)?.selectorExpression ?: check) as? KtCallExpression
     val target = when (check) {
         is KtDotQualifiedExpression -> check.receiverExpression.verboseNullabilityTarget()

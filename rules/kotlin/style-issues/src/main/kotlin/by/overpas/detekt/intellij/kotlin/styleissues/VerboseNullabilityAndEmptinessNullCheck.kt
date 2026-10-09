@@ -23,7 +23,7 @@ internal class VerboseNullabilityAndEmptinessNullCheck(
             binary.left === wrapped -> binary.right
             else -> (binary.parent as? KtBinaryExpression)?.takeIf { it.operationToken == operation }?.right
         }
-        return content?.let(KtPsiUtil::safeDeparenthesize)
+        return content?.let { KtPsiUtil.safeDeparenthesize(it) }
     }
 }
 

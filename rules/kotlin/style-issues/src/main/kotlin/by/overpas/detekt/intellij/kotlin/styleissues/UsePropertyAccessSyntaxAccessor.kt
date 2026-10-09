@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.KtSuperExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelectorOrThis
 
-private val forbiddenGetterPrefixes = listOf("^getOr[A-Z]", "^getAnd[A-Z]", "^getIf[A-Z]").map(::Regex)
+private val forbiddenGetterPrefixes = listOf("^getOr[A-Z]", "^getAnd[A-Z]", "^getIf[A-Z]").map { Regex(it) }
 
 internal class UsePropertyAccessSyntaxAccessor(
     val call: KtCallExpression,

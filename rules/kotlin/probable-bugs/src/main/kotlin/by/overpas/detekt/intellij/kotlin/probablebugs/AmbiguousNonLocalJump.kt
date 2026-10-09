@@ -27,7 +27,6 @@ class AmbiguousNonLocalJump(config: Config) :
         expression.reportIfAmbiguous()
     }
 
-    private fun KtExpressionWithLabel.reportIfAmbiguous() {
+    private fun KtExpressionWithLabel.reportIfAmbiguous() =
         AmbiguousNonLocalJumpCandidate(this).message()?.let { report(Finding(Entity.from(this), it)) }
-    }
 }

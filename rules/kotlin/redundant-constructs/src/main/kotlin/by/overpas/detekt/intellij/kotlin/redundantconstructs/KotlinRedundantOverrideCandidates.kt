@@ -36,7 +36,7 @@ internal fun KtDotQualifiedExpression.superCallElement(): KtCallElement? {
 
 internal fun KtNamedFunction.hasOnlyOverrideModifier(): Boolean =
     modifierList?.let { modifiers ->
-        modifiers.hasModifier(KtTokens.OVERRIDE_KEYWORD) && NON_OVERRIDE_MODIFIERS.none(modifiers::hasModifier)
+        modifiers.hasModifier(KtTokens.OVERRIDE_KEYWORD) && NON_OVERRIDE_MODIFIERS.none { modifiers.hasModifier(it) }
     } == true
 
 internal fun KtNamedFunction.hasNonSuppressAnnotations(): Boolean =

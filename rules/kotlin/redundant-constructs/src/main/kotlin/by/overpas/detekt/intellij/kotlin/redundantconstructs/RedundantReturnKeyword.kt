@@ -62,7 +62,8 @@ class RedundantReturnKeyword(config: Config) :
             is KtBinaryExpression -> container.takeIf { elvis ->
                 elvis.operationToken == KtTokens.ELVIS &&
                     elvis.right === normalized &&
-                    (normalized as? KtReturnExpression)?.returnedExpression?.let(KtPsiUtil::isNullConstant) != true
+                    (normalized as? KtReturnExpression)?.returnedExpression
+                        ?.let { KtPsiUtil.isNullConstant(it) } != true
             }
 
             else -> null

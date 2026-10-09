@@ -17,10 +17,11 @@ internal class ForEachJoinOnCollectionOfJobCall(
     fun collectionLambda(): ForEachJoinOnCollectionOfJobLambda? =
         with(session) {
             val lambda = expression.valueArguments.singleOrNull()?.getArgumentExpression() as? KtLambdaExpression
-            val call = lambda?.let { expression.resolveToCall()?.successfulFunctionCallOrNull() } ?: return null
-            val isCollectionCall = call.symbol.callableId == functionId &&
+            val call = lambda?.let { expression.resolveToCall()?.successfulFunctionCallOrNull() }
+            val isCollectionCall = call != null &&
+                call.symbol.callableId == functionId &&
                 call.symbol.receiverParameter?.run { returnType.isSubtypeOf(StandardClassIds.Iterable) } == true &&
                 call.extensionReceiver?.run { type.isSubtypeOf(StandardClassIds.Collection) } == true
-            lambda.takeIf { isCollectionCall }?.let { ForEachJoinOnCollectionOfJobLambda(session, it) }
+            lambda?.takeIf { isCollectionCall }?.let { ForEachJoinOnCollectionOfJobLambda(session, it) }
         }
 }

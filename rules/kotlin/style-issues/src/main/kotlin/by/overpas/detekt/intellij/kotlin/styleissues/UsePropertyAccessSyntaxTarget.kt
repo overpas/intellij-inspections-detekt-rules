@@ -29,23 +29,24 @@ internal class UsePropertyAccessSyntaxTarget(
                     .map { it.symbol }
                     .filterIsInstance<KaSyntheticJavaPropertySymbol>()
                     .firstOrNull { it.name.asString() in accessor.propertyNames && it.name.asString() !in keywords }
-            } ?: return null
+            }
             val overridden = (symbol.allOverriddenSymbols + symbol).toList()
             val isFromJava = overridden.none { it.callableId?.run { asSingleFqName().asString() } in notProperties } &&
                 overridden.any { overriddenSymbol ->
                     overriddenSymbol.origin in javaOrigins && overriddenSymbol.directlyOverriddenSymbols.none()
                 }
             val typeScope = receiverType.scope
-            val hasVisibleField = typeScope != null &&
+            val hasVisibleField = property != null &&
+                typeScope != null &&
                 typeScope.declarationScope.callables(property.name)
                     .any { it is KaJavaFieldSymbol && it.visibility != KaSymbolVisibility.PRIVATE }
             val isTrivial = symbol.psi?.isTrivialAccessor() == true
-            property.takeIf { isFromJava && !hasVisibleField && isTrivial && accessor.matches(property, symbol) }
+            property?.takeIf { isFromJava && !hasVisibleField && isTrivial && accessor.matches(it, symbol) }
         }
 
     private companion object {
 
-        val keywords = KtTokens.KEYWORDS.types.map { it.toString() }.toSet()
+        val keywords = KtTokens.KEYWORDS.types.map { "$it" }.toSet()
 
         val javaOrigins = setOf(KaSymbolOrigin.JAVA_SOURCE, KaSymbolOrigin.JAVA_LIBRARY)
 

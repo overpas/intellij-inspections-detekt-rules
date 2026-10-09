@@ -23,10 +23,10 @@ internal fun KtExpression.liftReturnOrAssignmentType(): String? {
         .toSet()
     val isUsed = parent !is KtBlockExpression && with(session) { isUsedAsExpression }
     val isLiftableReturn = returns.size > 1 &&
-        returns.all(KtExpression::isLiftSingleStatement) &&
+        returns.all { it.isLiftSingleStatement() } &&
         !anyDescendantOfType<KtReturnExpression> { it !in returns }
     val isLiftableAssignment = assignments.size > 1 &&
-        assignments.all(KtExpression::isLiftSingleStatement) &&
+        assignments.all { it.isLiftSingleStatement() } &&
         hasLiftableAssignments(assignments)
     return when {
         isUsed -> null
@@ -40,7 +40,7 @@ context(session: KaSession)
 private fun KtExpression.hasLiftableAssignments(assignments: Set<KtBinaryExpression>): Boolean {
     val first = assignments.firstOrNull { it.right?.isNull() != true } ?: assignments.first()
     val matcher = LiftReturnOrAssignmentMatcher(session, first)
-    return assignments.all(matcher::matches) &&
+    return assignments.all { matcher.matches(it) } &&
         !anyDescendantOfType<KtBinaryExpression> { assignment ->
             val isInFinally = assignment.getNonStrictParentOfType<KtFinallySection>() != null
             assignment.operationToken in KtTokens.ALL_ASSIGNMENTS &&

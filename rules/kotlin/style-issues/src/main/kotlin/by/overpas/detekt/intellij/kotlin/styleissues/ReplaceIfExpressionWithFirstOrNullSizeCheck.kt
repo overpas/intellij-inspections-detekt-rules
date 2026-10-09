@@ -56,7 +56,7 @@ internal class ReplaceIfExpressionWithFirstOrNullSizeCheck(binary: KtBinaryExpre
         else -> null
     }
 
-    private val sizeAccess = operand?.first?.let(KtPsiUtil::safeDeparenthesize) as? KtDotQualifiedExpression
+    private val sizeAccess = operand?.first?.let { KtPsiUtil.safeDeparenthesize(it) } as? KtDotQualifiedExpression
 
     private val sizeName = (sizeAccess?.selectorExpression as? KtNameReferenceExpression)?.getReferencedName()
 

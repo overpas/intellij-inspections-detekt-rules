@@ -49,7 +49,7 @@ internal class UselessCallOnFlowCall(
 
     fun isReducibleMapNotNull(): Boolean =
         isRedundantNullFilter() &&
-            function?.valueArgumentMapping?.keys?.lastOrNull()?.let(::returnsNotNull) != false
+            function?.valueArgumentMapping?.keys?.lastOrNull()?.let { returnsNotNull(it) } != false
 
     @OptIn(KaExperimentalApi::class)
     private fun returnsNotNull(transform: KtExpression): Boolean =

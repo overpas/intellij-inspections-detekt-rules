@@ -31,13 +31,15 @@ internal class CoroutineContextWithJobBuilderCall(
     fun problem(): CoroutineContextWithJobProblem? =
         with(session) {
             val call = expression.resolveToCall()?.successfulFunctionCallOrNull()
-            val builder = call?.symbol?.callableId?.takeIf { it in BUILDERS_ALLOWING_NON_CANCELLABLE } ?: return null
-            val job = call.valueArgumentMapping.entries
-                .firstOrNull { (_, parameter) -> parameter.returnType.isSubtypeOf(COROUTINE_CONTEXT_CLASS_ID) }
+            val builder = call?.symbol?.callableId?.takeIf { it in BUILDERS_ALLOWING_NON_CANCELLABLE }
+            val job = call?.valueArgumentMapping?.entries
+                ?.takeIf { builder != null }
+                ?.firstOrNull { (_, parameter) -> parameter.returnType.isSubtypeOf(COROUTINE_CONTEXT_CLASS_ID) }
                 ?.let { (argument, _) -> CoroutineContextWithJobDetector(session, argument).status() }
                 as? CoroutineContextWithJobStatus.WithJob
+            val builderName = builder?.run { callableName.asString() }.orEmpty()
             job
                 ?.takeIf { it.isCancellable || BUILDERS_ALLOWING_NON_CANCELLABLE[builder] == false }
-                ?.let { CoroutineContextWithJobProblem(it.source, it.messageFor(builder.callableName.asString())) }
+                ?.let { CoroutineContextWithJobProblem(it.source, it.messageFor(builderName)) }
         }
 }

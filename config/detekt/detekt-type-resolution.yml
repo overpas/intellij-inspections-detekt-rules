@@ -166,6 +166,8 @@ intellij-kotlin-probable-bugs:
     active: true
   ImplicitNullableNothingType:
     active: true
+  IncompleteDestructuring:
+    active: true
   JavaIoSerializableObjectMustHaveReadResolve:
     active: true
   KotlinArrayHashCode:
@@ -298,11 +300,23 @@ intellij-kotlin-redundant-constructs:
     active: true
 
 intellij-kotlin-style-issues:
+  AddOperatorModifier:
+    active: true
+  AddVarianceModifier:
+    active: true
   BooleanLiteralArgument:
     active: true
   CascadeIf:
     active: true
   CollectionConcatenationToBuildCollection:
+    active: true
+  ConvertPairConstructorToToFunction:
+    active: true
+  ConvertReferenceToLambda:
+    active: true
+  ConvertSealedClassToSealedInterface:
+    active: true
+  ConvertSecondaryConstructorToPrimary:
     active: true
   ConvertToExplicitBackingFields:
     active: true
@@ -342,9 +356,15 @@ intellij-kotlin-style-issues:
     active: true
   RedundantAsSequence:
     active: true
+  RedundantElseInIf:
+    active: true
+  RedundantObjectTypeCheck:
+    active: true
   RedundantRunCatching:
     active: true
   RemoveEmptyParenthesesFromAnnotationEntry:
+    active: true
+  ReplaceAddAllWithMapTo:
     active: true
   ReplaceAssertBooleanWithAssertEquality:
     active: true
@@ -354,13 +374,19 @@ intellij-kotlin-style-issues:
     active: true
   ReplaceCollectionCountWithSize:
     active: true
+  ReplaceContains:
+    active: true
   ReplaceIfExpressionWithFirstOrNull:
     active: true
   ReplaceJavaStaticMethodWithKotlinAnalog:
     active: true
   ReplaceManualRangeWithIndicesCalls:
     active: true
+  ReplaceMapGetOrDefault:
+    active: true
   ReplaceMapIndexedWithListGenerator:
+    active: true
+  ReplaceMapKeysCallChainWithKeys:
     active: true
   ReplaceNegatedIsEmptyWithIsNotEmpty:
     active: true
@@ -374,11 +400,29 @@ intellij-kotlin-style-issues:
     active: true
   ReplaceSizeZeroCheckWithIsEmpty:
     active: true
+  ReplaceStringFormatWithLiteral:
+    active: true
+  ReplaceSubstringWithDropLast:
+    active: true
+  ReplaceSubstringWithIndexingOperation:
+    active: true
+  ReplaceSubstringWithSubstringAfter:
+    active: true
+  ReplaceSubstringWithSubstringBefore:
+    active: true
+  ReplaceSubstringWithTake:
+    active: true
+  ReplaceToStringWithStringTemplate:
+    active: true
   ReplaceToWithInfixForm:
+    active: true
+  ReplaceUntilWithRangeUntil:
     active: true
   ReplaceWithCallWithContextCall:
     active: true
   ReplaceWithIgnoreCaseEquals:
+    active: true
+  ReplaceWithImportAlias:
     active: true
   ReplaceWithOperatorAssignment:
     active: true
@@ -388,6 +432,8 @@ intellij-kotlin-style-issues:
     active: true
   SimplifiableCallChain:
     active: true
+  SimplifyAssertNotNull:
+    active: true
   SimplifyBooleanWithConstants:
     active: true
   SimplifyNegatedBinaryExpression:
@@ -396,7 +442,11 @@ intellij-kotlin-style-issues:
     active: true
   UnclearPrecedenceOfBinaryExpression:
     active: true
+  UnlabeledReturnInsideLambda:
+    active: true
   UnsafeCastWithReturn:
+    active: true
+  UseExpressionBody:
     active: true
   UsePropertyAccessSyntax:
     active: true

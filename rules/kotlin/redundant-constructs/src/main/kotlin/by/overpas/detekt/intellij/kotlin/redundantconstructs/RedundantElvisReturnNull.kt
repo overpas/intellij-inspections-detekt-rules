@@ -26,8 +26,8 @@ class RedundantElvisReturnNull(config: Config) :
         val innerReturn = expression.right as? KtReturnExpression
         val outerReturn = expression.getStrictParentOfType<KtReturnExpression>()
         val isElvisReturnNull = expression.operationToken == KtTokens.ELVIS &&
-            innerReturn?.returnedExpression?.let(KtPsiUtil::isNullConstant) == true &&
-            outerReturn?.returnedExpression?.let(KtPsiUtil::safeDeparenthesize) == expression
+            innerReturn?.returnedExpression?.let { KtPsiUtil.isNullConstant(it) } == true &&
+            outerReturn?.returnedExpression?.let { KtPsiUtil.safeDeparenthesize(it) } == expression
         if (isElvisReturnNull && expression.isRedundant(innerReturn, outerReturn)) {
             report(Finding(Entity.from(expression), "Redundant '?: return null'"))
         }

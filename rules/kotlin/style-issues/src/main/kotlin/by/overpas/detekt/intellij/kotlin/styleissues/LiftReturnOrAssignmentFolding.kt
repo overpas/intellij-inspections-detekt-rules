@@ -26,7 +26,7 @@ internal class LiftReturnOrAssignmentFolding<T : KtExpression>(
         val branchResults = expression
             ?.takeUnless { hasMissingCases }
             ?.liftReturnOrAssignmentBranches()
-            ?.map { branch -> foldable(branch)?.let(::listOf) ?: collect(branch?.lastBlockStatementOrThis()) }
+            ?.map { branch -> foldable(branch)?.let { listOf(it) } ?: collect(branch?.lastBlockStatementOrThis()) }
         val isExit = isJump || isExitReturn || isNothingCall
         return if (isExit) emptyList() else branchResults?.takeUnless { null in it }?.flatMap { it.orEmpty() }
     }

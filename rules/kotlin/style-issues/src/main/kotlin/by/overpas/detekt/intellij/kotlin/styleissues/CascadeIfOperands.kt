@@ -9,9 +9,9 @@ internal class CascadeIfOperands(binary: KtBinaryExpression) {
 
     private val operator = binary.operationToken
 
-    private val left = CascadeIfCondition(binary.left?.let(KtPsiUtil::safeDeparenthesize), operator).subject
+    private val left = CascadeIfCondition(binary.left?.let { KtPsiUtil.safeDeparenthesize(it) }, operator).subject
 
-    private val right = CascadeIfCondition(binary.right?.let(KtPsiUtil::safeDeparenthesize), operator).subject
+    private val right = CascadeIfCondition(binary.right?.let { KtPsiUtil.safeDeparenthesize(it) }, operator).subject
 
     private val isConjunction = operator == KtTokens.ANDAND
 

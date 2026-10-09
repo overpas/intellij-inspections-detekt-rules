@@ -26,7 +26,7 @@ class CascadeIf(config: Config) :
         val branches = ifs.map { it.then } + listOfNotNull(ifs.last().`else`)
         val subjects = ifs.map { CascadeIfCondition(it.condition, null).subject?.cascadeIfSubjectText }
         val isCascade = branches.size > 2 &&
-            expression.text.contains('\n') &&
+            '\n' in expression.text &&
             branches.none { it == null || it.lastBlockStatementOrThis() is KtIfExpression } &&
             expression.parent.node.elementType != KtNodeTypes.ELSE &&
             !expression.anyDescendantOfType<KtExpressionWithLabel> {
