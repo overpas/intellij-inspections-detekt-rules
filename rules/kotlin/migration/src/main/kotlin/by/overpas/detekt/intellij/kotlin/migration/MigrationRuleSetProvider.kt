@@ -9,5 +9,10 @@ class MigrationRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-migration")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::KotlinDeprecation,
+            ),
+        )
 }

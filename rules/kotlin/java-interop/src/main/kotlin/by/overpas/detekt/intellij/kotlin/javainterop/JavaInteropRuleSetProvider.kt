@@ -9,5 +9,12 @@ class JavaInteropRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-java-interop")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::JavaCollectionWithNullableTypeArgument,
+                ::JavaCollectionsStaticMethodOnImmutableList,
+                ::JavaDefaultMethodsNotOverriddenByDelegation,
+            ),
+        )
 }

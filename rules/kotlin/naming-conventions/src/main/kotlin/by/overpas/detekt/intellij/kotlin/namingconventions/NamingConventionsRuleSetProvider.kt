@@ -9,5 +9,11 @@ class NamingConventionsRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-naming-conventions")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::InconsistentCommentForJavaParameter,
+                ::LocalVariableName,
+            ),
+        )
 }

@@ -61,6 +61,104 @@ exceptions:
     active: true
     ignoreLabeled: false
 
+intellij-kotlin-code-migration:
+  CanConvertToMultiDollarString:
+    active: true
+  ConvertLongToDuration:
+    active: true
+
+intellij-kotlin-coroutines:
+  CoroutineContextWithJob:
+    active: true
+  DeferredResultUnused:
+    active: true
+  ForEachJoinOnCollectionOfJob:
+    active: true
+  MapAwaitOnCollectionOfDeferred:
+    active: true
+  PreferCurrentCoroutineContextToCoroutineContext:
+    active: true
+  RunBlockingInSuspendFunction:
+    active: true
+  SimplifiableFlowCall:
+    active: true
+  SimplifiableFlowCallChain:
+    active: true
+  SuspendCoroutineLacksCancellationGuarantees:
+    active: true
+  SuspiciousImplicitCoroutineScopeReceiverAccess:
+    active: true
+  SuspiciousMutableCollectionInStateFlow:
+    active: true
+  UnusedFlow:
+    active: true
+  UselessCallOnFlow:
+    active: true
+
+intellij-kotlin-java-interop:
+  JavaCollectionWithNullableTypeArgument:
+    active: true
+  JavaCollectionsStaticMethodOnImmutableList:
+    active: true
+  JavaDefaultMethodsNotOverriddenByDelegation:
+    active: true
+
+intellij-kotlin-logging:
+  KotlinLoggerInitializedWithForeignClass:
+    active: true
+
+intellij-kotlin-migration:
+  KotlinDeprecation:
+    active: true
+
+intellij-kotlin-naming-conventions:
+  InconsistentCommentForJavaParameter:
+    active: true
+  LocalVariableName:
+    active: true
+
+intellij-kotlin-numeric-issues:
+  KotlinBigDecimalEquals:
+    active: true
+
+intellij-kotlin-other-problems:
+  ConvertArgumentToSet:
+    active: true
+  DeprecatedCallableAddReplaceWith:
+    active: true
+  EnumValuesSoftDeprecate:
+    active: true
+  EnumValuesTopLevelFunctionSoftDeprecate:
+    active: true
+  FloatingPointLiteralPrecision:
+    active: true
+  MigrateDiagnosticSuppression:
+    active: true
+  ReplaceWithEnumMap:
+    active: true
+  ReplaceWithStringBuilderAppendRange:
+    active: true
+
+intellij-kotlin-probable-bugs:
+  AmbiguousNonLocalJump:
+    active: true
+  ArrayInDataClass:
+    active: true
+  AssignedValueIsNeverRead:
+    active: true
+  CanSealedSubClassBeObject:
+    active: true
+  ConflictingExtensionProperty:
+    active: true
+  ConvertNaNEquality:
+    active: true
+  DataClassPrivateConstructor:
+    active: true
+  DelegationToVarProperty:
+    active: true
+  DuplicateArgumentsInSetOfAndMapOfFunctions:
+    active: true
+
 intellij-kotlin-redundant-constructs:
   CanBeParameter:
     active: true
