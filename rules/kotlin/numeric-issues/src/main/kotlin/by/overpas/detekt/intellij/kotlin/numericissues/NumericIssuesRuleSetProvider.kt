@@ -9,5 +9,10 @@ class NumericIssuesRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-numeric-issues")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::KotlinBigDecimalEquals,
+            ),
+        )
 }

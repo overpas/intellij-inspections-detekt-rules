@@ -11,10 +11,10 @@ class RemoveSetterParameterTypeTest {
 
     @Test
     fun `an explicit setter parameter type is reported`() {
-        val code = """
+        val code = $$"""
             var x: String = ""
                 set(param: String) {
-                    field = "${'$'}param "
+                    field = "$param "
                 }
         """.trimIndent()
 

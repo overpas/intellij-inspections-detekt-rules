@@ -3,7 +3,6 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.symbols.KaCallableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
-import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbolModality
 import org.jetbrains.kotlin.analysis.api.symbols.KaTypeParameterSymbol
 import org.jetbrains.kotlin.analysis.api.types.KaTypeParameterType
@@ -43,7 +42,7 @@ internal class UnusedReceiverParameterUsage(
             val returnTypeParameters = declaration.typeReference?.typeParameters().orEmpty()
             declaration.expectedType != null ||
                 receiverTypeParameters.any { it in returnTypeParameters } ||
-                (receiverSymbol as? KaClassSymbol)?.classKind == KaClassKind.COMPANION_OBJECT
+                receiverSymbol?.classKind == KaClassKind.COMPANION_OBJECT
         }
 
     fun usesClassLabels(): Boolean =

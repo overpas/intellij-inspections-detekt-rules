@@ -9,5 +9,15 @@ class OtherProblemsRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-other-problems")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::EnumValuesSoftDeprecate,
+                ::EnumValuesTopLevelFunctionSoftDeprecate,
+                ::FloatingPointLiteralPrecision,
+                ::MigrateDiagnosticSuppression,
+                ::ReplaceWithEnumMap,
+                ::ReplaceWithStringBuilderAppendRange,
+            ),
+        )
 }
