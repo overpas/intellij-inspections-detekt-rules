@@ -147,6 +147,17 @@ names are the short names of the IntelliJ inspections.
 | `SuspiciousCascadingIf` | An operator or call after the last `else` block of a cascading `if` that applies only to the nested `if`. |
 | `SuspiciousCollectionReassignment` | A `+=` or `-=` on a `var` of a read-only collection that creates a new collection each time. |
 | `SuspiciousEqualsCombination` | A condition that compares the same variable with both `==` and `===`. |
+| `SuspiciousGetterForMutableObject` | A getter that creates a new mutable collection or coroutine object on each access. |
+| `SuspiciousJavaClassCallableReference` | A `::javaClass` callable reference that was meant to be `.javaClass` or `::class.java`. |
+| `SuspiciousVarProperty` | A `var` property whose getter never reads the backing field, so the setter has no visible effect. |
+| `UnusedDataClassCopyResult` | A data class `copy` call whose result is not used. |
+| `UnusedEquals` | An `==` expression or `equals` call whose result is not used. |
+| `UnusedExpression` | An expression whose value is not used and that has no effect. |
+| `UnusedLambdaExpression` | A lambda expression that is a statement and is never called. |
+| `UnusedLambdaExpressionBody` | An unused call of a function whose expression body is a lambda, so the lambda never runs. |
+| `UselessCallOnCollection` | A `filterNotNull`, `filterIsInstance`, constant `filter` or `mapNotNull`-like call on a collection or sequence that does nothing or can be simpler. |
+| `VariableNeverRead` | A local variable that gets values but is never read. |
+| `WrapUnaryOperator` | A unary minus or plus before a number literal with a call, where the operator applies to the call result. |
 
 ### `intellij-kotlin-redundant-constructs`
 

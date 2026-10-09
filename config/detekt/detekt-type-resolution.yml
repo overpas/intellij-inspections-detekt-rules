@@ -204,6 +204,28 @@ intellij-kotlin-probable-bugs:
     active: true
   SuspiciousEqualsCombination:
     active: true
+  SuspiciousGetterForMutableObject:
+    active: true
+  SuspiciousJavaClassCallableReference:
+    active: true
+  SuspiciousVarProperty:
+    active: true
+  UnusedDataClassCopyResult:
+    active: true
+  UnusedEquals:
+    active: true
+  UnusedExpression:
+    active: true
+  UnusedLambdaExpression:
+    active: true
+  UnusedLambdaExpressionBody:
+    active: true
+  UselessCallOnCollection:
+    active: true
+  VariableNeverRead:
+    active: true
+  WrapUnaryOperator:
+    active: true
 
 intellij-kotlin-redundant-constructs:
   CanBeParameter:
