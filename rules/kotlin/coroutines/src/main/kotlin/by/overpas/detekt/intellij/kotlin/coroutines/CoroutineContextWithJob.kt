@@ -18,7 +18,8 @@ class CoroutineContextWithJob(config: Config) :
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        val problem = analyze(expression) { CoroutineContextWithJobBuilderCall(this, expression).problem() } ?: return
-        report(Finding(Entity.from(problem.source), problem.message))
+        val (source, message) =
+            analyze(expression) { CoroutineContextWithJobBuilderCall(this, expression).problem() } ?: return
+        report(Finding(Entity.from(source), message))
     }
 }

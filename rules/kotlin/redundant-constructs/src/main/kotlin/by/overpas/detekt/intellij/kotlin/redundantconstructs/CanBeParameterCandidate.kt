@@ -53,9 +53,11 @@ internal class CanBeParameterCandidate(private val parameter: KtParameter) {
 
     private fun KaSession.hasShadowingReference(targets: Set<KaSymbol>): Boolean {
         val properties = klass?.getProperties().orEmpty()
-        val scopes = klass?.getAnonymousInitializers().orEmpty() +
-            properties.mapNotNull { it.initializer } +
-            properties.mapNotNull { it.delegate }
+        val scopes = buildList {
+            addAll(klass?.getAnonymousInitializers().orEmpty())
+            properties.mapNotNullTo(this) { it.initializer }
+            properties.mapNotNullTo(this) { it.delegate }
+        }
         return scopes.asSequence()
             .flatMap { scope ->
                 scope.collectDescendantsOfType<KtSimpleNameExpression> {

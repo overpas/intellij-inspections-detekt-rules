@@ -21,9 +21,11 @@ private val FIRST_OR_NULL_SUPERTYPES = listOf(
     StandardClassIds.Set,
 )
 
-private val FIRST_OR_NULL_ARRAYS = setOf(StandardClassIds.Array) +
-    StandardClassIds.primitiveArrayTypeByElementType.values +
-    StandardClassIds.unsignedArrayTypeByElementType.values
+private val FIRST_OR_NULL_ARRAYS = buildSet {
+    add(StandardClassIds.Array)
+    addAll(StandardClassIds.primitiveArrayTypeByElementType.values)
+    addAll(StandardClassIds.unsignedArrayTypeByElementType.values)
+}
 
 internal class ReplaceIfExpressionWithFirstOrNullCandidate(private val expression: KtIfExpression) {
 

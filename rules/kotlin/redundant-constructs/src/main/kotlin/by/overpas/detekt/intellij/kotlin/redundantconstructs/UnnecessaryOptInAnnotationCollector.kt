@@ -95,9 +95,11 @@ internal class UnnecessaryOptInAnnotationCollector(private val session: KaSessio
             val setters = resolved.filterIsInstance<KaPropertySymbol>().mapNotNull { it.setter }
             val abbreviation = (parent as? KtCallExpression)?.expressionType?.abbreviation
             symbols.markers(
-                roots = symbols.relatedSymbols(resolved) +
-                    setters.takeIf { isWriteAccess() }.orEmpty() +
-                    listOfNotNull(abbreviation).map { it.symbol },
+                roots = buildList {
+                    addAll(symbols.relatedSymbols(resolved))
+                    addAll(setters.takeIf { isWriteAccess() }.orEmpty())
+                    abbreviation?.let { add(it.symbol) }
+                },
                 types = symbols.signatureTypes(resolved),
             )
         }

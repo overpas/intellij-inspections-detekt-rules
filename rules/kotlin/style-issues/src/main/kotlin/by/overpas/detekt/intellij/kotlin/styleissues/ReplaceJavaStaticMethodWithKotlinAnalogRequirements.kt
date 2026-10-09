@@ -31,27 +31,25 @@ private val ARRAYS_NULLABLE_EXTENSIONS = listOf("deepEquals", "deepHashCode", "h
 private val COLLECTIONS_MUTABLE_EXTENSIONS = listOf("reverse", "fill", "shuffle")
 
 internal val REPLACE_JAVA_STATIC_METHOD_REQUIREMENTS =
-    (
-        MATH_FUNCTIONS.map { "$MATH.$it" to ANY } +
-            MATH_EXTENSIONS.map { "$MATH.$it" to NON_NULL_RECEIVER } +
-            PRIMITIVES.map { "java.lang.$it.compare" to NON_NULL_RECEIVER } +
-            PRIMITIVES.map { "java.lang.$it.toString" to PRIMITIVE_TO_STRING } +
-            ARRAYS_NULLABLE_EXTENSIONS.map { "$ARRAYS.$it" to NULLABLE_RECEIVER } +
-            COLLECTIONS_MUTABLE_EXTENSIONS.map { "$COLLECTIONS.$it" to MUTABLE_LIST_RECEIVER } +
-            listOf(
-                "java.lang.Character.toString" to CHARACTER_TO_STRING,
-                "java.lang.System.exit" to ANY,
-                "java.io.PrintStream.print" to SYSTEM_OUT,
-                "java.io.PrintStream.println" to SYSTEM_OUT,
-                "$ARRAYS.copyOf" to TWO_ARGUMENTS_NON_NULL,
-                "$ARRAYS.copyOfRange" to NON_NULL_RECEIVER,
-                "$ARRAYS.equals" to TWO_ARGUMENTS,
-                "$ARRAYS.asList" to ANY,
-                "java.util.Set.of" to ANY,
-                "java.util.List.of" to ANY,
-                "$COLLECTIONS.binarySearch" to NON_NULL_RECEIVER,
-                "$COLLECTIONS.sort" to SORTABLE_LIST,
-            )
-        )
+    buildList {
+        MATH_FUNCTIONS.mapTo(this) { "$MATH.$it" to ANY }
+        MATH_EXTENSIONS.mapTo(this) { "$MATH.$it" to NON_NULL_RECEIVER }
+        PRIMITIVES.mapTo(this) { "java.lang.$it.compare" to NON_NULL_RECEIVER }
+        PRIMITIVES.mapTo(this) { "java.lang.$it.toString" to PRIMITIVE_TO_STRING }
+        ARRAYS_NULLABLE_EXTENSIONS.mapTo(this) { "$ARRAYS.$it" to NULLABLE_RECEIVER }
+        COLLECTIONS_MUTABLE_EXTENSIONS.mapTo(this) { "$COLLECTIONS.$it" to MUTABLE_LIST_RECEIVER }
+        add("java.lang.Character.toString" to CHARACTER_TO_STRING)
+        add("java.lang.System.exit" to ANY)
+        add("java.io.PrintStream.print" to SYSTEM_OUT)
+        add("java.io.PrintStream.println" to SYSTEM_OUT)
+        add("$ARRAYS.copyOf" to TWO_ARGUMENTS_NON_NULL)
+        add("$ARRAYS.copyOfRange" to NON_NULL_RECEIVER)
+        add("$ARRAYS.equals" to TWO_ARGUMENTS)
+        add("$ARRAYS.asList" to ANY)
+        add("java.util.Set.of" to ANY)
+        add("java.util.List.of" to ANY)
+        add("$COLLECTIONS.binarySearch" to NON_NULL_RECEIVER)
+        add("$COLLECTIONS.sort" to SORTABLE_LIST)
+    }
         .groupBy { it.first.substringAfterLast('.') }
         .mapValues { it.value.toMap() }

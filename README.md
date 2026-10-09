@@ -213,6 +213,11 @@ names are the short names of the IntelliJ inspections.
 | `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. |
 | `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. |
 | `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. |
+| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. |
+| `CopyWithoutNamedArguments` | A data class `copy` call that passes arguments without names. |
+| `DestructuringDeclaration` | A local variable, loop variable or lambda parameter of a data class or `Map.Entry` type that is only used to read its components. |
+| `FilterIsInstanceCallWithClassLiteralArgument` | A `filterIsInstance(X::class.java)` call that `filterIsInstance<X>()` can replace. |
+| `FoldInitializerAndIfToElvis` | An `if` null or type check that exits right after a variable declaration and can fold into the initializer with `?:`. |
 | `IfThenToElvis` | An `if` that checks a value for `null` or a type and that the elvis operator `?:` can replace. |
 | `IfThenToSafeAccess` | An `if` that checks a value for `null` or a type, returns `null` otherwise, and that `?.` or `as?` can replace. |
 | `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. |
@@ -244,6 +249,12 @@ names are the short names of the IntelliJ inspections.
 | `ReplaceWithCallWithContextCall` | A `with` call whose receiver is only used as a context argument, so a `context` call fits. |
 | `ReplaceWithIgnoreCaseEquals` | An equality check of two identical case conversions that `equals(..., ignoreCase = true)` can replace. |
 | `ReplaceWithImportAlias` | A qualified name that an existing import alias can replace. |
+| `ReplaceWithOperatorAssignment` | An assignment such as `x = x + y` that an operator assignment such as `x += y` can replace. |
+| `RevertExplicitBackingFields` | A property with an explicit backing field that a private backing property can replace. |
+| `SafeCastWithReturn` | An `x as? T ?: return` statement that an `if (x !is T) return` check can replace. |
+| `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. |
+| `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. |
+| `SimplifyAssertNotNull` | An `assert(x != null)` right after the declaration of `x` that can fold into the initializer. |
 
 ## Build
 
