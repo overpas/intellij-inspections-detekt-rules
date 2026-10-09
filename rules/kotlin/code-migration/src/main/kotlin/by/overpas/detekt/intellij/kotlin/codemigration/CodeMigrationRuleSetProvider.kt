@@ -9,5 +9,13 @@ class CodeMigrationRuleSetProvider : RuleSetProvider {
     override val ruleSetId = RuleSetId("intellij-kotlin-code-migration")
 
     override fun instance() =
-        RuleSet(ruleSetId, emptyList())
+        RuleSet(
+            ruleSetId,
+            listOf(
+                ::CanConvertToMultiDollarString,
+                ::ConvertFromMultiDollarToRegularString,
+                ::ConvertLongToDuration,
+                ::InfixCallToOrdinary,
+            ),
+        )
 }

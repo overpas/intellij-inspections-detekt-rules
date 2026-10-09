@@ -37,6 +37,51 @@ The script makes a sparse clone at the given path if it does not exist.
 Every rule takes the standard detekt options (`active`, `excludes`, `includes`, ...). The rule
 names are the short names of the IntelliJ inspections.
 
+### `intellij-kotlin-code-migration`
+
+| Rule | Finds |
+|---|---|
+| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. |
+| `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. |
+| `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
+| `InfixCallToOrdinary` | An infix call that can be an ordinary call. |
+
+### `intellij-kotlin-logging`
+
+| Rule | Finds |
+|---|---|
+| `KotlinLoggerInitializedWithForeignClass` | A logger that is created with the class literal of another class. |
+
+### `intellij-kotlin-migration`
+
+| Rule | Finds |
+|---|---|
+| `KotlinDeprecation` | A deprecated symbol with a replacement, an import of such a symbol, deprecated syntax, or a useless cast, elvis, safe call or `!!`. |
+
+### `intellij-kotlin-naming-conventions`
+
+| Rule | Finds |
+|---|---|
+| `InconsistentCommentForJavaParameter` | A `/* name = */` comment before an argument of a Java call that does not match the parameter name. |
+| `LocalVariableName` | A local variable, destructuring entry or non-property parameter whose name is not lowerCamelCase with only letters and digits. |
+
+### `intellij-kotlin-numeric-issues`
+
+| Rule | Finds |
+|---|---|
+| `KotlinBigDecimalEquals` | An `equals()` or `==` comparison of `BigDecimal` values that should use `compareTo()`. |
+
+### `intellij-kotlin-other-problems`
+
+| Rule | Finds |
+|---|---|
+| `EnumValuesSoftDeprecate` | A `values()` call of an enum class that `entries` can replace. |
+| `EnumValuesTopLevelFunctionSoftDeprecate` | An `enumValues<T>()` call that `enumEntries<T>()` can replace. |
+| `FloatingPointLiteralPrecision` | A floating-point literal with more digits than its type can hold. |
+| `MigrateDiagnosticSuppression` | An old diagnostic name in `@Suppress` that has a new name. |
+| `ReplaceWithEnumMap` | A `HashMap` with enum keys that an `EnumMap` can replace. |
+| `ReplaceWithStringBuilderAppendRange` | An `append(CharArray, Int, Int)` call that `appendRange` can replace. |
+
 ### `intellij-kotlin-redundant-constructs`
 
 | Rule | Finds |

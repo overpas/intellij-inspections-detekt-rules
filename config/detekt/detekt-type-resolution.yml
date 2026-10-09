@@ -61,6 +61,44 @@ exceptions:
     active: true
     ignoreLabeled: false
 
+intellij-kotlin-code-migration:
+  CanConvertToMultiDollarString:
+    active: true
+  ConvertLongToDuration:
+    active: true
+
+intellij-kotlin-logging:
+  KotlinLoggerInitializedWithForeignClass:
+    active: true
+
+intellij-kotlin-migration:
+  KotlinDeprecation:
+    active: true
+
+intellij-kotlin-naming-conventions:
+  InconsistentCommentForJavaParameter:
+    active: true
+  LocalVariableName:
+    active: true
+
+intellij-kotlin-numeric-issues:
+  KotlinBigDecimalEquals:
+    active: true
+
+intellij-kotlin-other-problems:
+  EnumValuesSoftDeprecate:
+    active: true
+  EnumValuesTopLevelFunctionSoftDeprecate:
+    active: true
+  FloatingPointLiteralPrecision:
+    active: true
+  MigrateDiagnosticSuppression:
+    active: true
+  ReplaceWithEnumMap:
+    active: true
+  ReplaceWithStringBuilderAppendRange:
+    active: true
+
 intellij-kotlin-redundant-constructs:
   CanBeParameter:
     active: true
