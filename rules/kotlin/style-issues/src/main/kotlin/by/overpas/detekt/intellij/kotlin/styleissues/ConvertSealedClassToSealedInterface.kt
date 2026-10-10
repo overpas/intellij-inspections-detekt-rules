@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-@OppositeRule("ConvertSealedInterfaceToSealedClass")
+@OppositeRule(ConvertSealedInterfaceToSealedClass::class)
 @IntellijInspection("ConvertSealedClassToSealedInterface")
 class ConvertSealedClassToSealedInterface(config: Config) :
     Rule(

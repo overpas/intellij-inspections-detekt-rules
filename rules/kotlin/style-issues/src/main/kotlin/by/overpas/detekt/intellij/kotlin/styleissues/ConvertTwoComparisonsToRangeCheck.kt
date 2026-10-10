@@ -9,7 +9,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 
-@OppositeRule("ConvertRangeCheckToTwoComparisons")
+@OppositeRule(ConvertRangeCheckToTwoComparisons::class)
 @IntellijInspection("ConvertTwoComparisonsToRangeCheck")
 class ConvertTwoComparisonsToRangeCheck(config: Config) :
     Rule(

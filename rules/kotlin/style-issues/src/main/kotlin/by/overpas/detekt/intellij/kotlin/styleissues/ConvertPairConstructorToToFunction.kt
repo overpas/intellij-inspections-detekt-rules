@@ -1,7 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
 import by.overpas.detekt.intellij.IntellijInspection
-import by.overpas.detekt.intellij.OppositeRule
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -18,7 +17,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 
 private val CONVERT_PAIR_CONSTRUCTOR_CLASS_ID = ClassId(FqName("kotlin"), Name.identifier("Pair"))
 
-@OppositeRule("InfixCallToOrdinary")
 @IntellijInspection("ConvertPairConstructorToToFunction")
 class ConvertPairConstructorToToFunction(config: Config) :
     Rule(

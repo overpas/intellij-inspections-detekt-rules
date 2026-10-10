@@ -10,7 +10,7 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
-@OppositeRule("RevertExplicitBackingFields")
+@OppositeRule(RevertExplicitBackingFields::class)
 @IntellijInspection("ConvertToExplicitBackingFields")
 class ConvertToExplicitBackingFields(config: Config) :
     Rule(

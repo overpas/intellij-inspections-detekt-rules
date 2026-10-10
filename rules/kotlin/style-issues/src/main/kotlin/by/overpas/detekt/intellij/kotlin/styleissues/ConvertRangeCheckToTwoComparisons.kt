@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 
-@OppositeRule("ConvertTwoComparisonsToRangeCheck")
+@OppositeRule(ConvertTwoComparisonsToRangeCheck::class)
 @IntellijInspection("ConvertRangeCheckToTwoComparisons")
 class ConvertRangeCheckToTwoComparisons(config: Config) :
     Rule(

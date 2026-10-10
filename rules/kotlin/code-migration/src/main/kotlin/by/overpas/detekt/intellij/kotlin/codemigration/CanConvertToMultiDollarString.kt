@@ -9,7 +9,7 @@ import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
-@OppositeRule("ConvertFromMultiDollarToRegularString")
+@OppositeRule(ConvertFromMultiDollarToRegularString::class)
 @IntellijInspection("CanConvertToMultiDollarString")
 class CanConvertToMultiDollarString(config: Config) :
     Rule(
