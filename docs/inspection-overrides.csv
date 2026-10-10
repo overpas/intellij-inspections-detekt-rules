@@ -85,6 +85,7 @@ ReplacePutWithAssignment,,,covered: detekt `style:ExplicitCollectionElementAcces
 ReplaceRangeToWithRangeUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
 ReplaceRangeToWithUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
 ReplaceToStringWithStringTemplate,types,resolves the toString call,
+ScopeFunctionConversion,not-portable,an IDE intention; each scope function call converts to another one and back,
 ScriptShebangExecPermission,not-portable,reads file system permissions,
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
 SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,

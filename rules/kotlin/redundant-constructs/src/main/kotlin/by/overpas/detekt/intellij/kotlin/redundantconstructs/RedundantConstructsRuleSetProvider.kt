@@ -46,7 +46,6 @@ class RedundantConstructsRuleSetProvider : RuleSetProvider {
                 ::RemoveRedundantSpreadOperator,
                 ::RemoveSetterParameterType,
                 ::RemoveSingleExpressionStringTemplate,
-                ::ScopeFunctionConversion,
                 ::SimplifyWhenWithBooleanConstantCondition,
                 ::SuspiciousCallableReferenceInLambda,
                 ::UnnecessaryOptInAnnotation,
