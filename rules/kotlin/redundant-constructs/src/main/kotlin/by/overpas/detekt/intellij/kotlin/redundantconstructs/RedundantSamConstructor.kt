@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -12,6 +13,7 @@ private const val SINGLE_MESSAGE = "Redundant SAM constructor"
 
 private const val MULTIPLE_MESSAGE = "Redundant SAM constructors"
 
+@IntellijInspection("RedundantSamConstructor")
 class RedundantSamConstructor(config: Config) :
     Rule(
         config,

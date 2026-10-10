@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
+@IntellijInspection("UnnecessaryOptInAnnotation")
 class UnnecessaryOptInAnnotation(config: Config) :
     Rule(
         config,

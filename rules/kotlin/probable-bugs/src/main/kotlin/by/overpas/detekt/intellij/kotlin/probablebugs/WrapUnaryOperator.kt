@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -15,6 +16,7 @@ private val wrapUnaryOperatorTokens = setOf(KtTokens.MINUS, KtTokens.PLUS)
 
 private val wrapUnaryOperatorNumberTypes = setOf(KtNodeTypes.INTEGER_CONSTANT, KtNodeTypes.FLOAT_CONSTANT)
 
+@IntellijInspection("WrapUnaryOperator")
 class WrapUnaryOperator(config: Config) :
     Rule(
         config,

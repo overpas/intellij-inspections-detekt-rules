@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -14,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
+@IntellijInspection("RedundantLabeledReturnOnLastExpressionInLambda")
 class RedundantLabeledReturnOnLastExpressionInLambda(config: Config) :
     Rule(
         config,

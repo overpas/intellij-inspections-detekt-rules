@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -9,6 +10,7 @@ import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
+@IntellijInspection("ConstantConditionIf")
 class ConstantConditionIf(config: Config) :
     Rule(
         config,

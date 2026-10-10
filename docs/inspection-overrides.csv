@@ -1,288 +1,101 @@
 shortName,verdict,reason,status
 AddExplicitTargetToParameterAnnotation,not-portable,never reports at the default language version; it is only useful with an older language version,
-AddOperatorModifier,,,ported: `AddOperatorModifier`
-AddVarianceModifier,,,ported: `AddVarianceModifier`
-AmbiguousNonLocalJump,,,ported: `AmbiguousNonLocalJump`
-ArrayInDataClass,,,ported: `ArrayInDataClass`
-AssignedValueIsNeverRead,,,ported: `AssignedValueIsNeverRead`
-BooleanLiteralArgument,,,ported: `BooleanLiteralArgument`
-CanBeParameter,types,searches references inside the class,ported: `CanBeParameter`
-CanBePrimaryConstructorProperty,,,ported: `CanBePrimaryConstructorProperty`
+CanBeParameter,types,searches references inside the class,
 CanBeVal,,,covered: detekt `style:VarCouldBeVal`
-CanConvertToMultiDollarString,,,ported: `CanConvertToMultiDollarString`
-CanSealedSubClassBeObject,,,ported: `CanSealedSubClassBeObject`
-CanUnescapeDollarLiteral,,,ported: `CanUnescapeDollarLiteral`
-CascadeIf,,,ported: `CascadeIf`
 ClassName,psi,checks names with regular expressions,covered: detekt `naming:ClassNaming`
 CollapseCollectionLiteralChainCall,not-portable,needs the experimental language feature CollectionLiterals,
-CollectionConcatenationToBuildCollection,,,ported: `CollectionConcatenationToBuildCollection`
 ComplexRedundantLet,,,covered: detekt `style:UnnecessaryLet`
-ConflictingExtensionProperty,,,ported: `ConflictingExtensionProperty`
 ConstPropertyName,psi,checks names with regular expressions,covered: ktlint `PropertyName`
-ConstantConditionIf,types,evaluates constant conditions,ported: `ConstantConditionIf`
+ConstantConditionIf,types,evaluates constant conditions,
 ControlFlowWithEmptyBody,,,"covered: detekt `empty-blocks:EmptyIfBlock`, `EmptyElseBlock`, `EmptyForBlock`, `EmptyWhileBlock`, `EmptyDoWhileBlock`, `EmptyWhenBlock`"
-ConvertArgumentToSet,,,ported: `ConvertArgumentToSet`
 ConvertCallChainIntoSequence,,,covered: detekt `performance:CouldBeSequence`
 ConvertCollectionLiteralToFunctionCall,not-portable,needs the experimental language feature CollectionLiterals,
 ConvertCollectionLiteralToTypeOfExpression,not-portable,needs the experimental language feature CollectionLiterals,
 ConvertDataClassToValueClass,not-portable,needs the experimental language feature FullValueClasses,
 ConvertExplicitContextArgumentToImplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
-ConvertFromMultiDollarToRegularString,,,ported: `ConvertFromMultiDollarToRegularString`
 ConvertImplicitContextArgumentToExplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
-ConvertLongToDuration,,,ported: `ConvertLongToDuration`
-ConvertNaNEquality,,,ported: `ConvertNaNEquality`
 ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
-ConvertPairConstructorToToFunction,,,ported: `ConvertPairConstructorToToFunction`
-ConvertRangeCheckToTwoComparisons,,,ported: `ConvertRangeCheckToTwoComparisons`
-ConvertReferenceToLambda,,,ported: `ConvertReferenceToLambda`
-ConvertSealedClassToSealedInterface,,,ported: `ConvertSealedClassToSealedInterface`
-ConvertSealedInterfaceToSealedClass,,,ported: `ConvertSealedInterfaceToSealedClass`
-ConvertSecondaryConstructorToPrimary,,,ported: `ConvertSecondaryConstructorToPrimary`
 ConvertToCollectionLiterals,not-portable,needs the experimental language feature CollectionLiterals,
-ConvertToExplicitBackingFields,,,ported: `ConvertToExplicitBackingFields`
-ConvertToStringTemplate,,,ported: `ConvertToStringTemplate`
-ConvertTryFinallyToUseCall,,,ported: `ConvertTryFinallyToUseCall`
-ConvertTwoComparisonsToRangeCheck,,,ported: `ConvertTwoComparisonsToRangeCheck`
 ConvertTypeOfToCollectionLiteral,not-portable,needs the experimental language feature CollectionLiterals,
-CopyWithoutNamedArguments,,,ported: `CopyWithoutNamedArguments`
-CoroutineContextWithJob,,,ported: `CoroutineContextWithJob`
 CustomComponentDestructuringMigration,not-portable,needs the experimental language feature NameBasedDestructuring,
-DataClassPrivateConstructor,,,ported: `DataClassPrivateConstructor`
-DeferredResultUnused,,,ported: `DeferredResultUnused`
-DelegationToVarProperty,,,ported: `DelegationToVarProperty`
-DeprecatedCallableAddReplaceWith,,,ported: `DeprecatedCallableAddReplaceWith`
 DestructingShortFormNameMismatch,not-portable,needs the experimental language feature NameBasedDestructuring,
-DestructuringDeclaration,,,ported: `DestructuringDeclaration`
 DoubleBang,,,covered: detekt `potential-bugs:UnsafeCallOnNullableType`
-DuplicateArgumentsInSetOfAndMapOfFunctions,,,ported: `DuplicateArgumentsInSetOfAndMapOfFunctions`
-EmptyRange,,,ported: `EmptyRange`
 EnumEntryName,psi,checks names with regular expressions,covered: ktlint `EnumEntryNameCase`
-EnumValuesSoftDeprecate,,,ported: `EnumValuesSoftDeprecate`
-EnumValuesTopLevelFunctionSoftDeprecate,,,ported: `EnumValuesTopLevelFunctionSoftDeprecate`
 EqualsOrHashCode,,,covered: detekt `potential-bugs:EqualsWithHashCodeExist`
 EscapingCapturedVariable,not-portable,needs the compiler flag ReportEscapingCapturedVariable,
-ExplicitThis,,,ported: `ExplicitThis`
-FilterIsInstanceCallWithClassLiteralArgument,,,ported: `FilterIsInstanceCallWithClassLiteralArgument`
-FilterIsInstanceResultIsAlwaysEmpty,,,ported: `FilterIsInstanceResultIsAlwaysEmpty`
-FloatingPointLiteralPrecision,,,ported: `FloatingPointLiteralPrecision`
-FoldInitializerAndIfToElvis,,,ported: `FoldInitializerAndIfToElvis`
-ForEachJoinOnCollectionOfJob,,,ported: `ForEachJoinOnCollectionOfJob`
-ForEachParameterNotUsed,,,ported: `ForEachParameterNotUsed`
 FunctionName,psi,checks names with regular expressions; skips tests through detekt excludes,covered: detekt `naming:FunctionNaming`
 HasPlatformType,,,covered: detekt `potential-bugs:HasPlatformType`
-IfExpressionWithIdenticalBranches,,,ported: `IfExpressionWithIdenticalBranches`
-IfThenToElvis,,,ported: `IfThenToElvis`
-IfThenToSafeAccess,,,ported: `IfThenToSafeAccess`
-ImplicitNullableNothingType,,,ported: `ImplicitNullableNothingType`
-ImplicitThis,,,ported: `ImplicitThis`
-IncompleteDestructuring,,,ported: `IncompleteDestructuring`
-InconsistentCommentForJavaParameter,,,ported: `InconsistentCommentForJavaParameter`
-InfixCallToOrdinary,,,ported: `InfixCallToOrdinary`
-IntroduceWhenSubject,,,ported: `IntroduceWhenSubject`
-JavaCollectionWithNullableTypeArgument,,,ported: `JavaCollectionWithNullableTypeArgument`
-JavaCollectionsStaticMethodOnImmutableList,,,ported: `JavaCollectionsStaticMethodOnImmutableList`
-JavaDefaultMethodsNotOverriddenByDelegation,,,ported: `JavaDefaultMethodsNotOverriddenByDelegation`
-JavaIoSerializableObjectMustHaveReadResolve,,,ported: `JavaIoSerializableObjectMustHaveReadResolve`
-JavaMapForEach,,,ported: `JavaMapForEach`
-JoinDeclarationAndAssignment,,,ported: `JoinDeclarationAndAssignment`
 KDocMissingDocumentation,psi,skips tests through detekt excludes,"covered: detekt `comments:UndocumentedPublicClass`, `UndocumentedPublicFunction`, `UndocumentedPublicProperty`"
 KDocUnresolvedReference,not-portable,the KDoc resolver of the Analysis API fails in detekt 2.0.0-alpha.6 (NoSuchMethodError in RegistryValue),
 KotlinAmbiguousActuals,not-portable,reads the multiplatform module structure,
-KotlinArrayHashCode,,,ported: `KotlinArrayHashCode`
-KotlinArrayToString,,,ported: `KotlinArrayToString`
-KotlinBigDecimalEquals,,,ported: `KotlinBigDecimalEquals`
 KotlinConstantConditions,not-portable,needs the data flow analysis engine of IntelliJ,
 KotlinCovariantEquals,,,covered: detekt `potential-bugs:WrongEqualsTypeParameter`
-KotlinDeprecation,,,ported: `KotlinDeprecation`
 KotlinDoubleNegation,,,covered: detekt `style:DoubleNegativeExpression`
-KotlinEqualsBetweenInconvertibleTypes,,,ported: `KotlinEqualsBetweenInconvertibleTypes`
-KotlinLoggerInitializedWithForeignClass,,,ported: `KotlinLoggerInitializedWithForeignClass`
-KotlinMisorderedAssertEqualsArguments,,,ported: `KotlinMisorderedAssertEqualsArguments`
 KotlinNoActualForExpect,not-portable,searches actual declarations across the multiplatform modules,
-KotlinRedundantOverride,,,ported: `KotlinRedundantOverride`
-KotlinThrowableNotThrown,types,searches references of a local property only,ported: `KotlinThrowableNotThrown`
+KotlinThrowableNotThrown,types,searches references of a local property only,
 KotlinUnreachableCode,,,covered: detekt `potential-bugs:UnreachableCode`
 KotlinUnusedImport,types,resolves the references of the file,"covered: detekt `style:UnusedImport`, ktlint `NoUnusedImports`"
-LateinitVarOverridesLateinitVar,,,ported: `LateinitVarOverridesLateinitVar`
-LazyWithoutDelegation,,,ported: `LazyWithoutDelegation`
-LiftReturnOrAssignment,,,ported: `LiftReturnOrAssignment`
-LocalVariableName,psi,checks names with regular expressions,ported: `LocalVariableName`
-MainFunctionReturnUnit,,,ported: `MainFunctionReturnUnit`
+LocalVariableName,psi,checks names with regular expressions,
 MainKtsAnnotationUsageInPlainKts,not-portable,needs the IDE script definitions to tell .main.kts from .kts files,
-MapAwaitOnCollectionOfDeferred,,,ported: `MapAwaitOnCollectionOfDeferred`
 MapGetWithNotNullAssertionOperator,,,covered: detekt `potential-bugs:MapGetWithNotNullAssertionOperator`
-MapToForEach,,,ported: `MapToForEach`
 MayBeConstant,,,covered: detekt `style:MayBeConstant`
-MigrateDiagnosticSuppression,,,ported: `MigrateDiagnosticSuppression`
-MoveLambdaOutsideParentheses,types,resolves the call to check overloads,ported: `MoveLambdaOutsideParentheses`
-MoveVariableDeclarationIntoWhen,,,ported: `MoveVariableDeclarationIntoWhen`
+MoveLambdaOutsideParentheses,types,resolves the call to check overloads,
 NestedLambdaShadowedImplicitParameter,,,covered: detekt `naming:NoNameShadowing`
 NonNullableBooleanPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
 NonVarPropertyInExternalInterface,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
-NullChecksToSafeCall,,,ported: `NullChecksToSafeCall`
 NullableBooleanElvis,,,covered: detekt `style:NullableBooleanCheck`
-NullableHashCode,,,ported: `NullableHashCode`
 ObjectLiteralToLambda,,,covered: detekt `style:ObjectLiteralToLambda`
 ObjectPrivatePropertyName,psi,checks names with regular expressions,covered: detekt `naming:ObjectPropertyNaming`
 ObjectPropertyName,psi,checks names with regular expressions,"covered: detekt `naming:ObjectPropertyNaming`, `TopLevelPropertyNaming`"
 PackageDirectoryMismatch,,,covered: detekt `naming:InvalidPackageDeclaration`
 PackageName,psi,checks names with regular expressions,"covered: detekt `naming:PackageNaming`, ktlint `PackageName`"
-PreferCurrentCoroutineContextToCoroutineContext,,,ported: `PreferCurrentCoroutineContextToCoroutineContext`
 PrivatePropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 PropertyName,psi,checks names with regular expressions,"covered: detekt `naming:VariableNaming`, `ConstructorParameterNaming`"
 ProtectedInFinal,,,covered: detekt `style:ProtectedMemberInFinalClass`
 PublicApiImplicitType,,,covered: detekt `libraries:LibraryCodeMustSpecifyReturnType` (detekt-rules-libraries)
-RecursiveEqualsCall,,,ported: `RecursiveEqualsCall`
-RecursivePropertyAccessor,,,ported: `RecursivePropertyAccessor`
-RedundantAsSequence,,,ported: `RedundantAsSequence`
-RedundantCompanionReference,,,ported: `RedundantCompanionReference`
 RedundantConstructorKeyword,,,covered: detekt `style:RedundantConstructorKeyword`
 RedundantContextSensitiveResolutionQualifier,not-portable,"needs the language feature ContextSensitiveResolutionUsingExpectedType, which is off by default",
 RedundantDestructuringRename,not-portable,needs the experimental language feature NameBasedDestructuring,
 RedundantDestructuringUnderscore,not-portable,needs the experimental language feature NameBasedDestructuring,
-RedundantElseInIf,,,ported: `RedundantElseInIf`
-RedundantElvisReturnNull,,,ported: `RedundantElvisReturnNull`
 RedundantEmptyInitializerBlock,,,covered: detekt `empty-blocks:EmptyInitBlock`
-RedundantEnumConstructorInvocation,,,ported: `RedundantEnumConstructorInvocation`
 RedundantExplicitType,,,covered: detekt `style:RedundantExplicitType`
-RedundantGetter,,,ported: `RedundantGetter`
-RedundantIf,,,ported: `RedundantIf`
-RedundantInterpolationPrefix,,,ported: `RedundantInterpolationPrefix`
-RedundantLabel,,,ported: `RedundantLabel`
-RedundantLabeledReturnOnLastExpressionInLambda,,,ported: `RedundantLabeledReturnOnLastExpressionInLambda`
-RedundantLambdaArrow,,,ported: `RedundantLambdaArrow`
-RedundantLambdaOrAnonymousFunction,,,ported: `RedundantLambdaOrAnonymousFunction`
-RedundantModalityModifier,,,ported: `RedundantModalityModifier`
-RedundantNullableReturnType,,,ported: `RedundantNullableReturnType`
-RedundantObjectTypeCheck,,,ported: `RedundantObjectTypeCheck`
 RedundantRequireNotNullCall,,,covered: detekt `potential-bugs:UnnecessaryNotNullCheck`
-RedundantReturnKeyword,,,ported: `RedundantReturnKeyword`
-RedundantReturnLabel,,,ported: `RedundantReturnLabel`
-RedundantRunCatching,,,ported: `RedundantRunCatching`
-RedundantSamConstructor,,,ported: `RedundantSamConstructor`
 RedundantSemicolon,,,covered: ktlint `NoSemicolons`
-RedundantSetter,types,reads the overridden property,ported: `RedundantSetter`
+RedundantSetter,types,reads the overridden property,
 RedundantSuspendModifier,,,covered: detekt `coroutines:RedundantSuspendModifier`
 RedundantUnitExpression,types,reads the expected type of the expression,covered: detekt `style:OptionalUnit`
 RedundantUnitReturnType,,,"covered: detekt `style:OptionalUnit`, ktlint `NoUnitReturn`"
-RedundantUpperBound,,,ported: `RedundantUpperBound`
-RedundantValueArgument,,,ported: `RedundantValueArgument`
 RedundantVisibilityModifier,,,covered: detekt `style:RedundantVisibilityModifier`
-RedundantWith,,,ported: `RedundantWith`
 RemoveCurlyBracesFromTemplate,,,covered: ktlint `StringTemplate`
 RemoveEmptyClassBody,,,"covered: detekt `empty-blocks:EmptyClassBlock`, ktlint `NoEmptyClassBody`"
-RemoveEmptyParenthesesFromAnnotationEntry,,,ported: `RemoveEmptyParenthesesFromAnnotationEntry`
 RemoveEmptyParenthesesFromLambdaCall,,,covered: ktlint `UnnecessaryParenthesesBeforeTrailingLambda`
 RemoveEmptyPrimaryConstructor,,,covered: detekt `empty-blocks:EmptyDefaultConstructor`
 RemoveEmptySecondaryConstructorBody,,,covered: detekt `empty-blocks:EmptySecondaryConstructor`
-RemoveExplicitSuperQualifier,,,ported: `RemoveExplicitSuperQualifier`
-RemoveExplicitTypeArguments,,,ported: `RemoveExplicitTypeArguments`
 RemoveRedundantBackticks,,,covered: detekt `style:UnnecessaryBackticks`
-RemoveRedundantQualifierName,,,ported: `RemoveRedundantQualifierName`
-RemoveRedundantSpreadOperator,,,ported: `RemoveRedundantSpreadOperator`
-RemoveSetterParameterType,,,ported: `RemoveSetterParameterType`
-RemoveSingleExpressionStringTemplate,,,ported: `RemoveSingleExpressionStringTemplate`
 RemoveToStringInStringTemplate,,,covered: ktlint `StringTemplate`
 RemoveUnnecessaryParentheses,,,covered: detekt `style:UnnecessaryParentheses`
-ReplaceAddAllWithMapTo,,,ported: `ReplaceAddAllWithMapTo`
 ReplaceArrayOfWithLiteral,,,covered: detekt `style:UseArrayLiteralsInAnnotations`
-ReplaceAssertBooleanWithAssertEquality,,,ported: `ReplaceAssertBooleanWithAssertEquality`
-ReplaceAssociateFunction,,,ported: `ReplaceAssociateFunction`
-ReplaceCallWithBinaryOperator,,,ported: `ReplaceCallWithBinaryOperator`
-ReplaceCollectionCountWithSize,,,ported: `ReplaceCollectionCountWithSize`
-ReplaceContains,,,ported: `ReplaceContains`
 ReplaceGetOrSet,,,covered: detekt `style:ExplicitCollectionElementAccessMethod`
 ReplaceGuardClauseWithFunctionCall,,,"covered: detekt `style:UseRequire`, `UseCheckOrError`"
-ReplaceIfExpressionWithFirstOrNull,,,ported: `ReplaceIfExpressionWithFirstOrNull`
 ReplaceIsEmptyWithIfEmpty,,,covered: detekt `style:UseIfEmptyOrIfBlank`
-ReplaceJavaStaticMethodWithKotlinAnalog,,,ported: `ReplaceJavaStaticMethodWithKotlinAnalog`
-ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,ported: `ReplaceManualRangeWithIndicesCalls`
-ReplaceMapGetOrDefault,,,ported: `ReplaceMapGetOrDefault`
-ReplaceMapIndexedWithListGenerator,,,ported: `ReplaceMapIndexedWithListGenerator`
-ReplaceMapKeysCallChainWithKeys,,,ported: `ReplaceMapKeysCallChainWithKeys`
-ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,ported: `ReplaceNegatedIsEmptyWithIsNotEmpty`
-ReplaceNotNullAssertionWithElvisReturn,,,ported: `ReplaceNotNullAssertionWithElvisReturn`
+ReplaceManualRangeWithIndicesCalls,types,searches references of a loop parameter only,
+ReplaceNegatedIsEmptyWithIsNotEmpty,types,matches resolved callables,
 ReplacePrintlnWithLogging,,,covered: detekt `style:ForbiddenMethodCall`
 ReplacePutWithAssignment,,,covered: detekt `style:ExplicitCollectionElementAccessMethod`
-ReplaceRangeStartEndInclusiveWithFirstLast,,,ported: `ReplaceRangeStartEndInclusiveWithFirstLast`
 ReplaceRangeToWithRangeUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
 ReplaceRangeToWithUntil,,,covered: detekt `style:RangeUntilInsteadOfRangeTo`
-ReplaceReadLineWithReadln,,,ported: `ReplaceReadLineWithReadln`
-ReplaceSizeCheckWithIsNotEmpty,,,ported: `ReplaceSizeCheckWithIsNotEmpty`
-ReplaceSizeZeroCheckWithIsEmpty,,,ported: `ReplaceSizeZeroCheckWithIsEmpty`
-ReplaceStringFormatWithLiteral,,,ported: `ReplaceStringFormatWithLiteral`
-ReplaceSubstringWithDropLast,,,ported: `ReplaceSubstringWithDropLast`
-ReplaceSubstringWithIndexingOperation,,,ported: `ReplaceSubstringWithIndexingOperation`
-ReplaceSubstringWithSubstringAfter,,,ported: `ReplaceSubstringWithSubstringAfter`
-ReplaceSubstringWithSubstringBefore,,,ported: `ReplaceSubstringWithSubstringBefore`
-ReplaceSubstringWithTake,,,ported: `ReplaceSubstringWithTake`
-ReplaceToStringWithStringTemplate,types,resolves the toString call,ported: `ReplaceToStringWithStringTemplate`
-ReplaceToWithInfixForm,,,ported: `ReplaceToWithInfixForm`
-ReplaceUntilWithRangeUntil,,,ported: `ReplaceUntilWithRangeUntil`
-ReplaceWithCallWithContextCall,,,ported: `ReplaceWithCallWithContextCall`
-ReplaceWithEnumMap,,,ported: `ReplaceWithEnumMap`
-ReplaceWithIgnoreCaseEquals,,,ported: `ReplaceWithIgnoreCaseEquals`
-ReplaceWithImportAlias,,,ported: `ReplaceWithImportAlias`
-ReplaceWithOperatorAssignment,,,ported: `ReplaceWithOperatorAssignment`
-ReplaceWithStringBuilderAppendRange,,,ported: `ReplaceWithStringBuilderAppendRange`
-RevertExplicitBackingFields,,,ported: `RevertExplicitBackingFields`
-RunBlockingInSuspendFunction,,,ported: `RunBlockingInSuspendFunction`
-SafeCastWithReturn,,,ported: `SafeCastWithReturn`
-ScopeFunctionConversion,,,ported: `ScopeFunctionConversion`
+ReplaceToStringWithStringTemplate,types,resolves the toString call,
 ScriptShebangExecPermission,not-portable,reads file system permissions,
-SelfAssignment,,,ported: `SelfAssignment`
-SelfReferenceConstructorParameter,,,ported: `SelfReferenceConstructorParameter`
-SetterBackingFieldAssignment,,,ported: `SetterBackingFieldAssignment`
 SimpleRedundantLet,,,covered: detekt `style:UnnecessaryLet`
-SimplifiableCall,,,ported: `SimplifiableCall`
-SimplifiableCallChain,,,ported: `SimplifiableCallChain`
-SimplifiableFlowCall,,,ported: `SimplifiableFlowCall`
-SimplifiableFlowCallChain,,,ported: `SimplifiableFlowCallChain`
-SimplifyAssertNotNull,,,ported: `SimplifyAssertNotNull`
-SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,ported: `SimplifyBooleanWithConstants`
-SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,ported: `SimplifyNegatedBinaryExpression`
-SimplifyNestedEachInScopeFunction,,,ported: `SimplifyNestedEachInScopeFunction`
-SimplifyWhenWithBooleanConstantCondition,,,ported: `SimplifyWhenWithBooleanConstantCondition`
+SimplifyBooleanWithConstants,types,evaluates constants and reads Boolean types,
+SimplifyNegatedBinaryExpression,types,reads operand types to keep floating-point semantics,
 SortModifiers,,,"covered: detekt `style:ModifierOrder`, ktlint `ModifierOrdering`"
 StringReferentialEquality,,,covered: detekt `potential-bugs:AvoidReferentialEquality`
 SuppressedCancellationException,,,covered: detekt `coroutines:SuspendFunSwallowedCancellation`
-SuspendCoroutineLacksCancellationGuarantees,,,ported: `SuspendCoroutineLacksCancellationGuarantees`
 SuspiciousAsDynamic,not-portable,applies only to Kotlin/JS; the detekt session is JVM,
-SuspiciousCallOnCollectionToAddOrRemovePath,,,ported: `SuspiciousCallOnCollectionToAddOrRemovePath`
-SuspiciousCallableReferenceInLambda,,,ported: `SuspiciousCallableReferenceInLambda`
-SuspiciousCascadingIf,,,ported: `SuspiciousCascadingIf`
-SuspiciousCollectionReassignment,,,ported: `SuspiciousCollectionReassignment`
-SuspiciousEqualsCombination,,,ported: `SuspiciousEqualsCombination`
-SuspiciousGetterForMutableObject,,,ported: `SuspiciousGetterForMutableObject`
-SuspiciousImplicitCoroutineScopeReceiverAccess,,,ported: `SuspiciousImplicitCoroutineScopeReceiverAccess`
-SuspiciousJavaClassCallableReference,,,ported: `SuspiciousJavaClassCallableReference`
-SuspiciousMutableCollectionInStateFlow,,,ported: `SuspiciousMutableCollectionInStateFlow`
-SuspiciousVarProperty,,,ported: `SuspiciousVarProperty`
 TestFunctionName,psi,checks names with regular expressions; detects tests through detekt excludes,covered: ktlint `FunctionName`
 TrailingComma,,,"covered: ktlint `TrailingCommaOnCallSite`, `TrailingCommaOnDeclarationSite`"
-UnclearPrecedenceOfBinaryExpression,,,ported: `UnclearPrecedenceOfBinaryExpression`
-UnlabeledReturnInsideLambda,,,ported: `UnlabeledReturnInsideLambda`
-UnnecessaryOptInAnnotation,,,ported: `UnnecessaryOptInAnnotation`
-UnnecessaryVariable,,,ported: `UnnecessaryVariable`
-UnsafeCastWithReturn,,,ported: `UnsafeCastWithReturn`
-UnusedContextParameterCall,,,ported: `UnusedContextParameterCall`
-UnusedDataClassCopyResult,,,ported: `UnusedDataClassCopyResult`
-UnusedEquals,,,ported: `UnusedEquals`
-UnusedExpression,,,ported: `UnusedExpression`
-UnusedFlow,,,ported: `UnusedFlow`
-UnusedLambdaExpression,,,ported: `UnusedLambdaExpression`
-UnusedLambdaExpressionBody,,,ported: `UnusedLambdaExpressionBody`
-UnusedReceiverParameter,,,ported: `UnusedReceiverParameter`
 UnusedSymbol,not-portable,"searches references in the whole project; detekt `UnusedPrivateClass`, `UnusedPrivateFunction`, `UnusedPrivateProperty` cover private declarations",
 UnusedUnaryOperator,,,covered: detekt `potential-bugs:UnusedUnaryOperator`
 UnusedVariable,,,covered: detekt `style:UnusedVariable`
-UseExpressionBody,,,ported: `UseExpressionBody`
-UsePropertyAccessSyntax,,,ported: `UsePropertyAccessSyntax`
-UselessCallOnCollection,,,ported: `UselessCallOnCollection`
-UselessCallOnFlow,,,ported: `UselessCallOnFlow`
 UselessCallOnNotNull,,,covered: detekt `style:UselessCallOnNotNull`
-VariableInitializerIsRedundant,,,ported: `VariableInitializerIsRedundant`
-VariableNeverRead,,,ported: `VariableNeverRead`
-VerboseNullabilityAndEmptiness,,,ported: `VerboseNullabilityAndEmptiness`
-WhenWithOnlyElse,,,ported: `WhenWithOnlyElse`
-WrapUnaryOperator,,,ported: `WrapUnaryOperator`

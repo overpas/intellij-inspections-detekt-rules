@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtSuperExpression
 private val replaceCallWithBinaryOperatorNames =
     setOf("equals", "compareTo", "plus", "minus", "times", "div", "rem", "rangeTo", "rangeUntil")
 
+@IntellijInspection("ReplaceCallWithBinaryOperator")
 class ReplaceCallWithBinaryOperator(config: Config) :
     Rule(
         config,

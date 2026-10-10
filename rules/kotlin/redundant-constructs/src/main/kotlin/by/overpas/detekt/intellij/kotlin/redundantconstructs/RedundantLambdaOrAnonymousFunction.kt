@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.util.OperatorNameConventions
 
+@IntellijInspection("RedundantLambdaOrAnonymousFunction")
 class RedundantLambdaOrAnonymousFunction(config: Config) :
     Rule(
         config,

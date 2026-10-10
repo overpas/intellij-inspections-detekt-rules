@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 
+@IntellijInspection("IfThenToSafeAccess")
 class IfThenToSafeAccess(config: Config) :
     Rule(
         config,

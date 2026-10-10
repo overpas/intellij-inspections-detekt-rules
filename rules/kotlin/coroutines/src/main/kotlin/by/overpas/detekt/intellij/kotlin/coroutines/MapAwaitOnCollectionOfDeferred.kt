@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -19,6 +20,7 @@ private val AWAIT_ID = CallableId(
     Name.identifier("await"),
 )
 
+@IntellijInspection("MapAwaitOnCollectionOfDeferred")
 class MapAwaitOnCollectionOfDeferred(config: Config) :
     Rule(
         config,

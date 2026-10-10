@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 
 private val THROWABLE_NAME_HINTS = listOf("Exception", "Error")
 
+@IntellijInspection("KotlinThrowableNotThrown")
 class KotlinThrowableNotThrown(config: Config) :
     Rule(
         config,

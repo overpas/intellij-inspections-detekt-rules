@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
+@IntellijInspection("UnusedLambdaExpressionBody")
 class UnusedLambdaExpressionBody(config: Config) :
     Rule(
         config,

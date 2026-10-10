@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -9,6 +10,7 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 
+@IntellijInspection("SelfReferenceConstructorParameter")
 class SelfReferenceConstructorParameter(config: Config) :
     Rule(
         config,

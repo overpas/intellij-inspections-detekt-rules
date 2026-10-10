@@ -10,6 +10,7 @@ plugins {
 val libs = the<LibrariesForLibs>()
 
 dependencies {
+    compileOnly(project(":annotations"))
     compileOnly(libs.detekt.api)
 
     testImplementation(libs.detekt.api)

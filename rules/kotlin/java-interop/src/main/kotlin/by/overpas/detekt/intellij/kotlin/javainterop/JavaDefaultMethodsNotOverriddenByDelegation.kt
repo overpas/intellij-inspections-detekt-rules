@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.javainterop
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
+@IntellijInspection("JavaDefaultMethodsNotOverriddenByDelegation")
 class JavaDefaultMethodsNotOverriddenByDelegation(config: Config) :
     Rule(
         config,
