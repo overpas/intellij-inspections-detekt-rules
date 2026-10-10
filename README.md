@@ -268,7 +268,7 @@ names are the short names of the IntelliJ inspections.
 | `ReplaceSubstringWithSubstringAfter` | An `s.substring(s.indexOf(x))` call that `s.substringAfter(x)` can replace. |
 | `ReplaceSubstringWithSubstringBefore` | An `s.substring(0, s.indexOf(x))` call that `s.substringBefore(x)` can replace. |
 | `ReplaceSubstringWithTake` | An `s.substring(0, n)` call that `s.take(n)` can replace. |
-| `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. The `minInterpolatedValues` option (default 1) sets how many such calls one string concatenation must hold before the rule reports them. |
+| `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. |
 | `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. Opposite of `InfixCallToOrdinary`; enable one of them. |
 | `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. |
 | `ReplaceWithCallWithContextCall` | A `with` call whose receiver is only used as a context argument, so a `context` call fits. |
