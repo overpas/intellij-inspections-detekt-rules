@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -9,6 +10,7 @@ import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 
+@IntellijInspection("AmbiguousNonLocalJump")
 class AmbiguousNonLocalJump(config: Config) :
     Rule(
         config,

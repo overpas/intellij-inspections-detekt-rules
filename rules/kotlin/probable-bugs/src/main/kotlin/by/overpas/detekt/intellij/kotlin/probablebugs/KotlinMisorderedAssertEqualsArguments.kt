@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -19,6 +20,7 @@ internal val MISORDERED_ASSERT_METHOD_NAMES = setOf(
     "failNotEquals",
 )
 
+@IntellijInspection("KotlinMisorderedAssertEqualsArguments")
 class KotlinMisorderedAssertEqualsArguments(config: Config) :
     Rule(
         config,

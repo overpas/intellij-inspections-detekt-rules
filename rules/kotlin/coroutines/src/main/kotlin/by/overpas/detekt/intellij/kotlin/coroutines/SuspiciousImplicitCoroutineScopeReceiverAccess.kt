@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -11,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForSelector
 
+@IntellijInspection("SuspiciousImplicitCoroutineScopeReceiverAccess")
 class SuspiciousImplicitCoroutineScopeReceiverAccess(config: Config) :
     Rule(
         config,

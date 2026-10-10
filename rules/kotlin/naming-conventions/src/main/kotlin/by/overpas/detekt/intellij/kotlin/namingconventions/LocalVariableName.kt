@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.namingconventions
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 
+@IntellijInspection("LocalVariableName")
 class LocalVariableName(config: Config) :
     Rule(
         config,

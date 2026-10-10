@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -8,6 +9,7 @@ import dev.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 
+@IntellijInspection("ReplaceManualRangeWithIndicesCalls")
 class ReplaceManualRangeWithIndicesCalls(config: Config) :
     Rule(
         config,

@@ -1,9 +1,11 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs
 
+import by.overpas.detekt.intellij.IntellijInspectionGroup
 import dev.detekt.api.RuleSet
 import dev.detekt.api.RuleSetId
 import dev.detekt.api.RuleSetProvider
 
+@IntellijInspectionGroup("group.names.probable.bugs")
 class ProbableBugsRuleSetProvider : RuleSetProvider {
 
     override val ruleSetId = RuleSetId("intellij-kotlin-probable-bugs")

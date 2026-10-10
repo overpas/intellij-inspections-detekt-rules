@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.coroutines
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.name.StandardClassIds
 import org.jetbrains.kotlin.psi.KtCallExpression
 
+@IntellijInspection("SuspiciousMutableCollectionInStateFlow")
 class SuspiciousMutableCollectionInStateFlow(config: Config) :
     Rule(
         config,

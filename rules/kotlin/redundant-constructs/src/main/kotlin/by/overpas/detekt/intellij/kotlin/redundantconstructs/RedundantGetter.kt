@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import com.intellij.psi.PsiComment
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
@@ -13,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 
+@IntellijInspection("RedundantGetter")
 class RedundantGetter(config: Config) :
     Rule(
         config,

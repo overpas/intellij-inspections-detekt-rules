@@ -33,20 +33,25 @@ SPARSE_PATTERNS = [
 ]
 
 GROUPS = {
-    "group.names.code.migration": ("Code migration", "code-migration"),
-    "group.names.coroutine": ("Coroutines", "coroutines"),
-    "group.names.java.interop.issues": ("Java interop issues", "java-interop"),
-    "group.names.logging": ("Logging", "logging"),
-    "group.names.migration": ("Migration", "migration"),
-    "group.names.naming.conventions": ("Naming conventions", "naming-conventions"),
-    "group.names.numeric.issues": ("Numeric issues", "numeric-issues"),
-    "group.names.other.problems": ("Other problems", "other-problems"),
-    "group.names.probable.bugs": ("Probable bugs", "probable-bugs"),
-    "group.names.redundant.constructs": ("Redundant constructs", "redundant-constructs"),
-    "group.names.style.issues": ("Style issues", "style-issues"),
-    "group.names.gradle": ("Gradle", ""),
-    "group.names.kotlin": ("Kotlin", ""),
+    "group.names.code.migration": "Code migration",
+    "group.names.coroutine": "Coroutines",
+    "group.names.java.interop.issues": "Java interop issues",
+    "group.names.logging": "Logging",
+    "group.names.migration": "Migration",
+    "group.names.naming.conventions": "Naming conventions",
+    "group.names.numeric.issues": "Numeric issues",
+    "group.names.other.problems": "Other problems",
+    "group.names.probable.bugs": "Probable bugs",
+    "group.names.redundant.constructs": "Redundant constructs",
+    "group.names.style.issues": "Style issues",
+    "group.names.gradle": "Gradle",
+    "group.names.kotlin": "Kotlin",
 }
+
+PROJECT = Path(__file__).resolve().parents[1]
+RULE_SOURCES = "rules/*/*/src/main/kotlin/**/*.kt"
+INSPECTION_ANNOTATION = re.compile(r'@IntellijInspection\("(\w+)"\)\s*class\s+(\w+)')
+GROUP_ANNOTATION = re.compile(r'@IntellijInspectionGroup\("([\w.]+)"\)')
 
 NOT_PORTABLE = [
     ("GlobalInspectionTool", "is a global inspection over the whole project"),
@@ -107,13 +112,38 @@ def git(repo, *args):
     return subprocess.run(["git", "-C", str(repo), *args], check=True, capture_output=True, text=True).stdout
 
 
-def ensure_checkout(repo):
+def ensure_checkout(repo, ref=None):
     if not (repo / ".git").exists():
         subprocess.run(
             ["git", "clone", "--depth", "1", "--filter=blob:none", "--sparse", REPO_URL, str(repo)],
             check=True,
         )
         git(repo, "sparse-checkout", "set", "--no-cone", *SPARSE_PATTERNS)
+    if ref:
+        git(repo, "fetch", "--depth", "1", "--filter=blob:none", "origin", ref)
+        git(repo, "checkout", "--detach", "FETCH_HEAD")
+
+
+def rule_sources(project):
+    for path in sorted(project.glob(RULE_SOURCES)):
+        yield path, path.read_text(encoding="utf-8")
+
+
+def ported_rules(project):
+    rules = {}
+    for _, text in rule_sources(project):
+        for short_name, rule in INSPECTION_ANNOTATION.findall(text):
+            rules.setdefault(short_name, []).append(rule)
+    return rules
+
+
+def group_modules(project):
+    modules = {}
+    for path, text in rule_sources(project):
+        for key in GROUP_ANNOTATION.findall(text):
+            parts = path.relative_to(project).parts
+            modules[key] = ":" + ":".join(parts[:3])
+    return modules
 
 
 def load_bundles(repo):
@@ -132,6 +162,9 @@ def load_bundles(repo):
 
 def registrations(repo):
     for xml in REGISTRATIONS:
+        if not (repo / xml).is_file():
+            print(f"missing registration file {xml}", file=sys.stderr)
+            continue
         root = ET.parse(repo / xml).getroot()
         for element in root.iter():
             if element.tag in ("localInspection", "globalInspection"):
@@ -311,7 +344,7 @@ def load_overrides(path):
         return {row["shortName"]: row for row in csv.DictReader(handle)}
 
 
-def build(repo, declared):
+def build(repo, declared, modules):
     tree = git(repo, "ls-tree", "-r", "--name-only", "HEAD", KOTLIN).splitlines()
     index = source_index(tree)
     bundles = load_bundles(repo)
@@ -323,7 +356,9 @@ def build(repo, declared):
         short_name = attrs.get("shortName") or re.sub(r"Inspection$", "", simple)
         bundle = attrs.get("bundle") or attrs.get("groupBundle") or "messages.KotlinBundle"
         name = attrs.get("displayName") or bundles.get(bundle, {}).get(attrs.get("key", ""), attrs.get("key", ""))
-        group_name, module = GROUPS.get(attrs.get("groupKey", ""), (attrs.get("groupName", ""), ""))
+        group_key = attrs.get("groupKey", "")
+        group_name = GROUPS.get(group_key, attrs.get("groupName", ""))
+        module = modules.get(group_key, "")
         group_path = attrs.get("groupPath", "Kotlin")
         if "React" in group_path:
             group_name, module = "React", ""
@@ -331,7 +366,7 @@ def build(repo, declared):
             "shortName": short_name,
             "displayName": name,
             "group": group_name,
-            "module": f":rules:kotlin:{module}" if module else "",
+            "module": module,
             "scope": scope(group_path, attrs.get("groupKey", ""), module, attrs.get("language", "")),
             "level": attrs.get("level", "WARNING"),
             "enabledByDefault": attrs.get("enabledByDefault", "false"),
@@ -367,7 +402,8 @@ def write_markdown(path, rows, commit):
         "",
         "Refresh with `scripts/inspection-catalog.py <intellij-community checkout>`. Put manual verdicts",
         "into [inspection-overrides.csv](inspection-overrides.csv), because the script finds the",
-        "verdicts with heuristics.",
+        "verdicts with heuristics. The `ported` status comes from the `@IntellijInspection` annotations",
+        "of the rules.",
         "",
         "Verdicts:",
         "",
@@ -414,20 +450,23 @@ def link(commit, path, text):
     return f"[{text}](https://github.com/JetBrains/intellij-community/blob/{commit}/{path})"
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Catalogs the Kotlin inspections of IntelliJ IDEA.")
-    parser.add_argument("checkout", type=Path, help="intellij-community checkout; a sparse clone is made if absent")
-    parser.add_argument("--docs", type=Path, default=Path(__file__).resolve().parents[1] / "docs")
-    args = parser.parse_args()
-    repo = args.checkout.resolve()
-    ensure_checkout(repo)
+COLUMNS = [
+    "shortName", "displayName", "group", "module", "scope", "level", "enabledByDefault", "verdict", "reason", "status",
+    "implementationClass", "implementationPath", "testData", "language", "registration",
+]
+
+
+def catalog(repo, docs, ref=None):
+    ensure_checkout(repo, ref)
     commit = git(repo, "rev-parse", "HEAD").strip()
-    fetch_sources(repo, build(repo, {}))
+    modules = group_modules(PROJECT)
+    fetch_sources(repo, build(repo, {}, modules))
     declared = declarations(repo)
-    rows = build(repo, declared)
+    rows = build(repo, declared, modules)
     helpers = analysis_functions(repo)
     tests = test_data(repo, k2_test_roots(repo))
-    overrides = load_overrides(args.docs / "inspection-overrides.csv")
+    overrides = load_overrides(docs / "inspection-overrides.csv")
+    ported = ported_rules(PROJECT)
     for row in rows:
         path = repo / row["implementationPath"] if row["implementationPath"] else None
         source = path.read_text(encoding="utf-8") if path and path.is_file() else ""
@@ -438,18 +477,24 @@ def main():
         override = overrides.get(row["shortName"], {})
         row["verdict"] = override.get("verdict") or row["verdict"]
         row["reason"] = override.get("reason") or row["reason"]
-        row["status"] = override.get("status") or ""
+        rules = ported.get(row["shortName"])
+        row["status"] = "ported: " + ", ".join(f"`{rule}`" for rule in rules) if rules else override.get("status") or ""
         row["testData"] = ";".join(tests.get(row["implementationClass"], []))
     rows.sort(key=lambda row: (row["module"] or "~", row["shortName"]))
-    columns = [
-        "shortName", "displayName", "group", "module", "scope", "level", "enabledByDefault", "verdict", "reason", "status",
-        "implementationClass", "implementationPath", "testData", "language", "registration",
-    ]
+    return rows, commit
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Catalogs the Kotlin inspections of IntelliJ IDEA.")
+    parser.add_argument("checkout", type=Path, help="intellij-community checkout; a sparse clone is made if absent")
+    parser.add_argument("--docs", type=Path, default=PROJECT / "docs")
+    parser.add_argument("--ref", help="intellij-community branch, tag or commit to check out")
+    args = parser.parse_args()
+    rows, commit = catalog(args.checkout.resolve(), args.docs, args.ref)
     args.docs.mkdir(parents=True, exist_ok=True)
-    write_csv(args.docs / "inspections.csv", rows, columns)
+    write_csv(args.docs / "inspections.csv", rows, COLUMNS)
     write_markdown(args.docs / "inspections.md", rows, commit)
     print(f"{len(rows)} inspections from {commit}", file=sys.stderr)
-
 
 if __name__ == "__main__":
     main()

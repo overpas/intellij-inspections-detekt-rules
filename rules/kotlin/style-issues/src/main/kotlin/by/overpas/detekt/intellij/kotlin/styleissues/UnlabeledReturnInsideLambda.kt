@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -15,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
+@IntellijInspection("UnlabeledReturnInsideLambda")
 class UnlabeledReturnInsideLambda(config: Config) :
     Rule(
         config,

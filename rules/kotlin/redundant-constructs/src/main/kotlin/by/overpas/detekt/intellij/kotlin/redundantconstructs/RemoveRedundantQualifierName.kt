@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -11,6 +12,7 @@ import org.jetbrains.kotlin.analysis.api.components.ShortenOptions
 import org.jetbrains.kotlin.psi.KtFile
 
 @OptIn(KaIdeApi::class)
+@IntellijInspection("RemoveRedundantQualifierName")
 class RemoveRedundantQualifierName(config: Config) :
     Rule(
         config,

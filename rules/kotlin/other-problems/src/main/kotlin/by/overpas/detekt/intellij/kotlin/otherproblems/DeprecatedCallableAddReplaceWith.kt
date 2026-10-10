@@ -1,5 +1,6 @@
 package by.overpas.detekt.intellij.kotlin.otherproblems
 
+import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -9,6 +10,7 @@ import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
+@IntellijInspection("DeprecatedCallableAddReplaceWith")
 class DeprecatedCallableAddReplaceWith(config: Config) :
     Rule(
         config,

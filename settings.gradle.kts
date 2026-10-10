@@ -18,6 +18,7 @@ plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
+include(":annotations")
 include(":rules:kotlin:code-migration")
 include(":rules:kotlin:coroutines")
 include(":rules:kotlin:java-interop")
