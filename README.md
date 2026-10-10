@@ -21,23 +21,17 @@ Each module is one inspection group of the IDE settings (Editor | Inspections | 
 | `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs-<version>.jar` |
 | `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues-<version>.jar` |
 
-## Backlog
+## Use in a project
 
-[docs/inspections.md](docs/inspections.md) lists every Kotlin inspection of IntelliJ IDEA with its
-target module and a verdict on how to port it. Refresh it with:
+Download the jars of a release from
+[GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases) into the
+project, e.g. `config/detekt/plugins/`, and add them to the detekt plugins:
 
-```shell
-python3 scripts/inspection-catalog.py <intellij-community checkout> --ref master
+```kotlin
+dependencies {
+    detektPlugins(fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") })
+}
 ```
-
-The script makes a sparse clone at the given path if it does not exist. Each rule names its
-inspection with `@IntellijInspection`, and each rule set names its inspection group with
-`@IntellijInspectionGroup`. The script reads these annotations.
-
-Every week the [Upstream sync](.github/workflows/upstream-sync.yml) workflow runs
-`scripts/inspection-sync.py`. The script compares the catalog with the `master` branch of
-intellij-community and lists the new inspections, the removed inspections and the changed rules in
-one issue with the `upstream-sync` label. Refresh the catalog to accept the changes.
 
 ## Rules
 
@@ -305,17 +299,23 @@ names are the short names of the IntelliJ inspections.
 ./gradlew ruleJars   # collects the versioned jars into build/releases/<version>/
 ```
 
-## Use in a project
+## Backlog
 
-Download the jars of a release from
-[GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases) into the
-project, e.g. `config/detekt/plugins/`, and add them to the detekt plugins:
+[docs/inspections.md](docs/inspections.md) lists every Kotlin inspection of IntelliJ IDEA with its
+target module and a verdict on how to port it. Refresh it with:
 
-```kotlin
-dependencies {
-    detektPlugins(fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") })
-}
+```shell
+python3 scripts/inspection-catalog.py <intellij-community checkout> --ref master
 ```
+
+The script makes a sparse clone at the given path if it does not exist. Each rule names its
+inspection with `@IntellijInspection`, and each rule set names its inspection group with
+`@IntellijInspectionGroup`. The script reads these annotations.
+
+Every week the [Upstream sync](.github/workflows/upstream-sync.yml) workflow runs
+`scripts/inspection-sync.py`. The script compares the catalog with the `master` branch of
+intellij-community and lists the new inspections, the removed inspections and the changed rules in
+one issue with the `upstream-sync` label. Refresh the catalog to accept the changes.
 
 ## License
 
