@@ -48,10 +48,10 @@ names are the short names of the IntelliJ inspections.
 
 | Rule | Finds |
 |---|---|
-| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. |
-| `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. |
+| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. Opposite of `ConvertFromMultiDollarToRegularString`; enable one of them. |
+| `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. Opposite of `CanConvertToMultiDollarString`; enable one of them. |
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
-| `InfixCallToOrdinary` | An infix call that can be an ordinary call. |
+| `InfixCallToOrdinary` | An infix call that can be an ordinary call. Opposite of `ConvertPairConstructorToToFunction` and `ReplaceToWithInfixForm`; enable one of them. |
 
 ### `intellij-kotlin-coroutines`
 
@@ -174,7 +174,7 @@ names are the short names of the IntelliJ inspections.
 | `CanBePrimaryConstructorProperty` | A property that is initialized from the constructor parameter of the same name and type. |
 | `CanUnescapeDollarLiteral` | An escaped dollar in a string literal that can be a plain `$`. |
 | `ConstantConditionIf` | An `if` whose condition is the constant `true` or `false`. |
-| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. |
+| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. Opposite of `ImplicitThis`; enable one of them. |
 | `IfExpressionWithIdenticalBranches` | An `if` whose `then` and `else` branches are identical. |
 | `KotlinRedundantOverride` | An override that only calls the super implementation with the same arguments. |
 | `NullChecksToSafeCall` | Chained null checks on a receiver and on a call on it that one safe call check can replace. |
@@ -202,7 +202,6 @@ names are the short names of the IntelliJ inspections.
 | `RemoveRedundantSpreadOperator` | A spread operator on an array that is created in place with an `arrayOf`-like call or a `[...]` literal. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
 | `RemoveSingleExpressionStringTemplate` | A string template that only holds one non-null `String` expression. |
-| `ScopeFunctionConversion` | A scope function call that another scope function can replace. |
 | `SimplifyWhenWithBooleanConstantCondition` | A subjectless `when` with a `true` or `false` branch condition. |
 | `SuspiciousCallableReferenceInLambda` | A lambda whose only statement is a callable reference. |
 | `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
@@ -221,23 +220,23 @@ names are the short names of the IntelliJ inspections.
 | `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. |
 | `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. |
 | `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. |
-| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. |
-| `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. |
+| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`; enable one of them. |
+| `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`; enable one of them. |
 | `ConvertReferenceToLambda` | A callable reference that a lambda can replace. |
-| `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters or final members that can be a sealed interface. |
-| `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. |
+| `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters or final members that can be a sealed interface. Opposite of `ConvertSealedInterfaceToSealedClass`; enable one of them. |
+| `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`; enable one of them. |
 | `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. |
-| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. |
+| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Opposite of `RevertExplicitBackingFields`; enable one of them. |
 | `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. |
 | `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. |
-| `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. |
+| `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`; enable one of them. |
 | `CopyWithoutNamedArguments` | A data class `copy` call that passes arguments without names. |
 | `DestructuringDeclaration` | A local variable, loop variable or lambda parameter of a data class or `Map.Entry` type that is only used to read its components. |
 | `FilterIsInstanceCallWithClassLiteralArgument` | A `filterIsInstance(X::class.java)` call that `filterIsInstance<X>()` can replace. |
 | `FoldInitializerAndIfToElvis` | An `if` null or type check that exits right after a variable declaration and can fold into the initializer with `?:`. |
 | `IfThenToElvis` | An `if` that checks a value for `null` or a type and that the elvis operator `?:` can replace. |
 | `IfThenToSafeAccess` | An `if` that checks a value for `null` or a type, returns `null` otherwise, and that `?.` or `as?` can replace. |
-| `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. |
+| `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. Opposite of `ExplicitThis`; enable one of them. |
 | `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. |
 | `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. |
 | `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. |
@@ -276,13 +275,13 @@ names are the short names of the IntelliJ inspections.
 | `ReplaceSubstringWithSubstringBefore` | An `s.substring(0, s.indexOf(x))` call that `s.substringBefore(x)` can replace. |
 | `ReplaceSubstringWithTake` | An `s.substring(0, n)` call that `s.take(n)` can replace. |
 | `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. |
-| `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. |
+| `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. Opposite of `InfixCallToOrdinary`; enable one of them. |
 | `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. |
 | `ReplaceWithCallWithContextCall` | A `with` call whose receiver is only used as a context argument, so a `context` call fits. |
 | `ReplaceWithIgnoreCaseEquals` | An equality check of two identical case conversions that `equals(..., ignoreCase = true)` can replace. |
 | `ReplaceWithImportAlias` | A qualified name that an existing import alias can replace. |
 | `ReplaceWithOperatorAssignment` | An assignment such as `x = x + y` that an operator assignment such as `x += y` can replace. |
-| `RevertExplicitBackingFields` | A property with an explicit backing field that a private backing property can replace. |
+| `RevertExplicitBackingFields` | A property with an explicit backing field that a private backing property can replace. Opposite of `ConvertToExplicitBackingFields`; enable one of them. |
 | `SafeCastWithReturn` | An `x as? T ?: return` statement that an `if (x !is T) return` check can replace. |
 | `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. |
 | `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. |

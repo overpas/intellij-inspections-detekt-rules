@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
 import by.overpas.detekt.intellij.IntellijInspection
+import by.overpas.detekt.intellij.OppositeRule
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -11,6 +12,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
+@OppositeRule("ConvertSealedInterfaceToSealedClass")
 @IntellijInspection("ConvertSealedClassToSealedInterface")
 class ConvertSealedClassToSealedInterface(config: Config) :
     Rule(
