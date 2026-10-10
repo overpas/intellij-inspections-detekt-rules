@@ -36,7 +36,7 @@ internal class CascadeIfCondition(
 }
 
 internal val KtExpression.cascadeIfSubjectText: String
-    get() = text.filterNot { it.isWhitespace() }
+    get() = text.filterNot(Char::isWhitespace)
 
 private val KtExpression.isCascadeIfNameReference: Boolean
     get() = this is KtNameReferenceExpression ||

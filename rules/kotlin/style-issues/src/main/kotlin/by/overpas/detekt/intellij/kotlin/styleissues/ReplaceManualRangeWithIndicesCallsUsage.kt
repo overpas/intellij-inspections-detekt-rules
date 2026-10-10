@@ -34,7 +34,7 @@ internal class ReplaceManualRangeWithIndicesCallsUsage(
         ?.left == access
 
     private val isReceiverMatching = if (explicitReceiver == null) {
-        accessReceiver?.let { KtPsiUtil.safeDeparenthesize(it) } is KtThisExpression
+        accessReceiver?.let(KtPsiUtil::safeDeparenthesize) is KtThisExpression
     } else {
         accessReceiver?.manualRangeText == explicitReceiver.manualRangeText
     }
@@ -43,4 +43,4 @@ internal class ReplaceManualRangeWithIndicesCallsUsage(
 }
 
 private val KtExpression.manualRangeText: String
-    get() = KtPsiUtil.safeDeparenthesize(this).text.filterNot { it.isWhitespace() }
+    get() = KtPsiUtil.safeDeparenthesize(this).text.filterNot(Char::isWhitespace)

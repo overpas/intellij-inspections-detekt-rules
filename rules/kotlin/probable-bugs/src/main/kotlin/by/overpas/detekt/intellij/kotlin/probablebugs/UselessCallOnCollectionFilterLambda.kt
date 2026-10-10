@@ -21,7 +21,7 @@ internal class UselessCallOnCollectionFilterLambda(
         statement.returnedExpression?.takeIf { isReturnFromLambda }
     } else {
         statement
-    }?.let { KtPsiUtil.safeDeparenthesize(it) }
+    }?.let(KtPsiUtil::safeDeparenthesize)
 
     val isTrueConstant: Boolean = KtPsiUtil.isTrueConstant(value)
 

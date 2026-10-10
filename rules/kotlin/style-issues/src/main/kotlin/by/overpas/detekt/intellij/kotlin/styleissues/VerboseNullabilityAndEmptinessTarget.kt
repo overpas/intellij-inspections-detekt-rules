@@ -72,7 +72,7 @@ internal class VerboseNullabilityAndEmptinessTarget(private val chunks: List<KtE
 }
 
 internal fun KtExpression.verboseNullabilityTarget(): VerboseNullabilityAndEmptinessTarget? =
-    verboseNullabilityChunks()?.let { VerboseNullabilityAndEmptinessTarget(it) }
+    verboseNullabilityChunks()?.let(::VerboseNullabilityAndEmptinessTarget)
 
 private fun KtExpression.verboseNullabilityChunks(): List<KtExpression>? =
     when (val expression = KtPsiUtil.safeDeparenthesize(this)) {

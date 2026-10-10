@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -123,6 +124,42 @@ class ReplaceToStringWithStringTemplateTest {
     fun `a string template passes`() {
         val code = $$"""
             fun test(x: Int): String = "$x"
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `two toString calls in one concatenation are reported with a minimum of two`() {
+        val sut = ReplaceToStringWithStringTemplate(TestConfig("minInterpolatedValues" to 2))
+        val code = """
+            fun test(x: Int, y: Int): String = x.toString() + "-" + (y.toString())
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(2, findings.size)
+    }
+
+    @Test
+    fun `one toString call in a concatenation passes with a minimum of two`() {
+        val sut = ReplaceToStringWithStringTemplate(TestConfig("minInterpolatedValues" to 2))
+        val code = """
+            fun test(x: Int, y: Int): String = x.toString() + "-" + y.toString(16)
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a single toString call passes with a minimum of two`() {
+        val sut = ReplaceToStringWithStringTemplate(TestConfig("minInterpolatedValues" to 2))
+        val code = """
+            fun test(x: Int): String = x.toString()
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)

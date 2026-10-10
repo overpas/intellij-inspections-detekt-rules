@@ -313,7 +313,7 @@ intellij-kotlin-style-issues:
   ConvertPairConstructorToToFunction:
     active: true
   ConvertReferenceToLambda:
-    active: true
+    active: false
   ConvertSealedClassToSealedInterface:
     active: true
   ConvertSecondaryConstructorToPrimary:
@@ -414,6 +414,7 @@ intellij-kotlin-style-issues:
     active: true
   ReplaceToStringWithStringTemplate:
     active: true
+    minInterpolatedValues: 2
   ReplaceToWithInfixForm:
     active: true
   ReplaceUntilWithRangeUntil:

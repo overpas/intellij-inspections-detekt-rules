@@ -29,7 +29,7 @@ private val FIRST_OR_NULL_ARRAYS = buildSet {
 
 internal class ReplaceIfExpressionWithFirstOrNullCandidate(private val expression: KtIfExpression) {
 
-    private val condition = expression.condition?.let { ReplaceIfExpressionWithFirstOrNullCondition(it) }
+    private val condition = expression.condition?.let(::ReplaceIfExpressionWithFirstOrNullCondition)
 
     private val isEmptyWhenTrue = condition?.isEmptyWhenTrue
 
@@ -41,7 +41,7 @@ internal class ReplaceIfExpressionWithFirstOrNullCandidate(private val expressio
 
     private val read = valueBranch?.firstOrNullSingleStatement
         ?.takeIf { isEmptyWhenTrue != null && isNullBranch }
-        ?.let { ReplaceIfExpressionWithFirstOrNullRead(it) }
+        ?.let(::ReplaceIfExpressionWithFirstOrNullRead)
 
     private val conditionReceiver = condition?.receiver?.takeIf { it.isFirstOrNullStableReceiver }
 
@@ -88,4 +88,4 @@ private val KtExpression.isFirstOrNullStableReceiver: Boolean
     }
 
 private val KtExpression.firstOrNullText: String
-    get() = KtPsiUtil.safeDeparenthesize(this).text.filterNot { it.isWhitespace() }
+    get() = KtPsiUtil.safeDeparenthesize(this).text.filterNot(Char::isWhitespace)

@@ -49,7 +49,7 @@ internal fun KaSession.hasDerivedProperty(
         parameters.isEmpty() -> returnType
         else -> null
     }
-    val propertyNames = function.nameAsName?.let { propertyNamesByAccessorName(it) }.orEmpty().map { it.asString() }
+    val propertyNames = function.nameAsName?.let(::propertyNamesByAccessorName).orEmpty().map { it.asString() }
     val expectedType = propertyType?.withNullability(false)
     return expectedType != null &&
         function.containingClassOrObject?.declarations.orEmpty()

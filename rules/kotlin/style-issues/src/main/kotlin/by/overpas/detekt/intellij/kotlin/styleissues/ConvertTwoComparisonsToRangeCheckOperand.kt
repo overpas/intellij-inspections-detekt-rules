@@ -26,7 +26,7 @@ internal class ConvertTwoComparisonsToRangeCheckOperand(
                 type.semanticallyEquals(valueType) -> expression.text
 
                 valueKind == FLOATING && kind == SIGNED ->
-                    (expression.evaluate()?.value as? Number)?.run { "${toDouble()}" }
+                    (expression.evaluate()?.value as? Number)?.run { toDouble().toString() }
 
                 valueKind == kind && kind in setOf(SIGNED, UNSIGNED, FLOATING) -> expression.text
 

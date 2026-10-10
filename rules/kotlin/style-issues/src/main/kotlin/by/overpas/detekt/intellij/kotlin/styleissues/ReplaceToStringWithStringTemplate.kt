@@ -2,18 +2,13 @@ package by.overpas.detekt.intellij.kotlin.styleissues
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
-import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
-import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.psi.KtBlockStringTemplateEntry
-import org.jetbrains.kotlin.psi.KtCallExpression
+import dev.detekt.api.config
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtReferenceExpression
 
 @IntellijInspection("ReplaceToStringWithStringTemplate")
 class ReplaceToStringWithStringTemplate(config: Config) :
@@ -23,22 +18,15 @@ class ReplaceToStringWithStringTemplate(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration("The minimum number of `toString()` calls in one string concatenation that the rule reports")
+    private val minInterpolatedValues: Int by config(1)
+
     override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
         super.visitDotQualifiedExpression(expression)
-        val call = expression.selectorExpression as? KtCallExpression ?: return
-        val callee = call.calleeExpression as? KtNameReferenceExpression ?: return
-        val isCandidate = expression.receiverExpression is KtReferenceExpression &&
-            expression.parent !is KtBlockStringTemplateEntry &&
-            call.valueArguments.isEmpty() &&
-            callee.getReferencedName() == "toString"
-        if (isCandidate && call.isStringConversion()) {
+        val isReported = ReplaceToStringWithStringTemplateCall(expression).isConversion() &&
+            ReplaceToStringWithStringTemplateConcatenation(expression).conversionCount() >= minInterpolatedValues
+        if (isReported) {
             report(Finding(Entity.from(expression), "Call of 'toString' could be replaced with string template"))
         }
     }
-
-    private fun KtCallExpression.isStringConversion(): Boolean =
-        analyze(this) {
-            val function = resolveToCall()?.successfulFunctionCallOrNull()?.symbol
-            function != null && function.valueParameters.isEmpty() && function.returnType.isStringType
-        }
 }

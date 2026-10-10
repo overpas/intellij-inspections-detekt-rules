@@ -37,7 +37,7 @@ internal class DestructuringDeclarationUsage(
 
             isModified() -> null
 
-            else -> selectorName()?.let { components[it] }?.let { listOf(it) }
+            else -> selectorName()?.let { components[it] }?.let(::listOf)
         }
 
     private fun isModified(): Boolean {

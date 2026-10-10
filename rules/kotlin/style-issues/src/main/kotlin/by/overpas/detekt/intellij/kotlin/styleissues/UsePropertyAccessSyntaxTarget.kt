@@ -46,7 +46,7 @@ internal class UsePropertyAccessSyntaxTarget(
 
     private companion object {
 
-        val keywords = KtTokens.KEYWORDS.types.map { "$it" }.toSet()
+        val keywords = KtTokens.KEYWORDS.types.map { it.toString() }.toSet()
 
         val javaOrigins = setOf(KaSymbolOrigin.JAVA_SOURCE, KaSymbolOrigin.JAVA_LIBRARY)
 

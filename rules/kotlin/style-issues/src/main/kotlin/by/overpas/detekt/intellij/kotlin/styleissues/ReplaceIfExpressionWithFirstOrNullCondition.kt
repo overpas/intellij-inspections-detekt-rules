@@ -41,7 +41,7 @@ internal class ReplaceIfExpressionWithFirstOrNullCondition(condition: KtExpressi
             call.lambdaArguments.isEmpty()
     }
 
-    private val sizeCheck = (expression as? KtBinaryExpression)?.let { ReplaceIfExpressionWithFirstOrNullSizeCheck(it) }
+    private val sizeCheck = (expression as? KtBinaryExpression)?.let(::ReplaceIfExpressionWithFirstOrNullSizeCheck)
 
     val isEmptyWhenTrue: Boolean? =
         emptinessCall?.let { it.calleeExpression?.text == FIRST_OR_NULL_IS_EMPTY } ?: sizeCheck?.isEmptyWhenTrue

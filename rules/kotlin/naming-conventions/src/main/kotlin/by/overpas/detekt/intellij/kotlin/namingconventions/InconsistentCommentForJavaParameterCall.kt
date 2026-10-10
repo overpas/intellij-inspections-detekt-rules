@@ -20,7 +20,7 @@ internal fun KtValueArgument.javaParameterExpectation(): InconsistentCommentForJ
         ?.let { call -> with(session) { call.resolveToCall()?.successfulFunctionCallOrNull() } }
         ?.takeIf { call -> with(session) { call.symbol.fakeOverrideOriginal.origin } in javaOrigins }
         ?.namedParameterOf(this)
-        ?.let { InconsistentCommentForJavaParameterExpectation(it) }
+        ?.let(::InconsistentCommentForJavaParameterExpectation)
 
 private fun KaFunctionCall<*>.namedParameterOf(argument: KtValueArgument): KaValueParameterSymbol? {
     val isAfterVararg = (argument.parent as? KtValueArgumentList)?.arguments.orEmpty()
