@@ -21,11 +21,19 @@ Each module is one inspection group of the IDE settings (Editor | Inspections | 
 | `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs-<version>.jar` |
 | `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues-<version>.jar` |
 
+Each bundle module puts all rule sets of one language in one jar.
+
+| Module | Rule sets | Jar |
+|---|---|---|
+| `bundles:kotlin` | All `intellij-kotlin-*` rule sets | `intellij-inspections-kotlin-all-<version>.jar` |
+
 ## Use in a project
 
 Download the jars of a release from
 [GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases) into the
-project, e.g. `config/detekt/plugins/`, and add them to the detekt plugins:
+project, e.g. `config/detekt/plugins/`, and add them to the detekt plugins. To get all Kotlin rule
+sets, download only `intellij-inspections-kotlin-all-<version>.jar`. Do not add a bundle jar and
+the rule set jars that it contains together, because detekt then loads the same rule sets twice.
 
 ```kotlin
 dependencies {

@@ -18,6 +18,10 @@ val ruleSets = listOf(
     "kotlin:style-issues",
 )
 
+val bundles = listOf(
+    "kotlin",
+)
+
 val ruleSetJars by configurations.creating {
     isCanBeConsumed = false
     isTransitive = false
@@ -27,6 +31,8 @@ dependencies {
     ruleSets.forEach { kover(project(":rules:$it")) }
 
     ruleSets.forEach { ruleSetJars(project(":rules:$it", "shadowRuntimeElements")) }
+
+    bundles.forEach { ruleSetJars(project(":bundles:$it", "shadowRuntimeElements")) }
 }
 
 kover {
@@ -43,7 +49,7 @@ kover {
 
 tasks.register<Sync>("ruleJars") {
     group = "build"
-    description = "Collects the versioned rule set jars into build/releases/<version>."
+    description = "Collects the versioned rule set and bundle jars into build/releases/<version>."
     from(ruleSetJars)
     into(layout.buildDirectory.dir("releases/$version"))
 }
