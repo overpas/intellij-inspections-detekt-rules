@@ -19,6 +19,7 @@ plugins {
 }
 
 include(":annotations")
+include(":bundles:kotlin")
 include(":rules:kotlin:code-migration")
 include(":rules:kotlin:coroutines")
 include(":rules:kotlin:java-interop")
