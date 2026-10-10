@@ -27,7 +27,7 @@ private val FOLD_INITIALIZER_AND_IF_TO_ELVIS_COMPLEX_EXPRESSIONS = listOf(
 internal class FoldInitializerAndIfToElvisInitializer(private val initializer: KtExpression) {
 
     fun isSimple(): Boolean =
-        !initializer.text.contains('\n') &&
+        '\n' !in initializer.text &&
             !initializer.anyDescendantOfType<KtExpression> { expression ->
                 FOLD_INITIALIZER_AND_IF_TO_ELVIS_COMPLEX_EXPRESSIONS.any { it.isInstance(expression) } ||
                     (expression is KtBinaryExpression && expression.operationToken == KtTokens.ELVIS)

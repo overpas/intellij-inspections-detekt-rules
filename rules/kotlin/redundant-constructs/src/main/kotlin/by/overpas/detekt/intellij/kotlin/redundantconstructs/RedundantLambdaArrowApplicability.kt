@@ -61,7 +61,7 @@ private fun KtLambdaExpression.textWithoutArrow(fullExpression: KtExpression): S
     functionLiteral.bodyExpression?.let { body ->
         val text = fullExpression.text
         val offset = textOffset - fullExpression.textOffset
-        text.substring(0, offset) + "{" + text.substring(offset + body.startOffsetInParent)
+        text.take(offset) + "{" + text.substring(offset + body.startOffsetInParent)
     }
 
 private fun KtElement.resolvedCalls(): List<Any?> =

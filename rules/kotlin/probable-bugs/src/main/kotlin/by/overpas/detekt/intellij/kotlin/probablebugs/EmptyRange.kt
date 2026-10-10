@@ -29,7 +29,6 @@ class EmptyRange(config: Config) :
         expression.reportIfEmpty()
     }
 
-    private fun KtExpression.reportIfEmpty() {
+    private fun KtExpression.reportIfEmpty() =
         EmptyRangeOperator.from(this)?.let { emptyRangeMessage(it) }?.let { report(Finding(Entity.from(this), it)) }
-    }
 }

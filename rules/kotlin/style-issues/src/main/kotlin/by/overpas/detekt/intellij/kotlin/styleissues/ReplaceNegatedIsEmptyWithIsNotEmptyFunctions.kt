@@ -24,10 +24,10 @@ private val REPLACE_NEGATED_IS_EMPTY_OWNERS = listOf(
 )
 
 internal val REPLACE_NEGATED_IS_EMPTY_FUNCTIONS: Map<String, Pair<List<FqName>, String>> = mapOf(
-    "isEmpty" to Pair(REPLACE_NEGATED_IS_EMPTY_OWNERS.map { FqName("$it.isEmpty") }, "isNotEmpty"),
-    "isNotEmpty" to Pair(REPLACE_NEGATED_IS_EMPTY_OWNERS.map { FqName("$it.isNotEmpty") }, "isEmpty"),
-    "isBlank" to Pair(listOf(FqName("kotlin.text.isBlank")), "isNotBlank"),
-    "isNotBlank" to Pair(listOf(FqName("kotlin.text.isNotBlank")), "isBlank"),
+    "isEmpty" to (REPLACE_NEGATED_IS_EMPTY_OWNERS.map { FqName("$it.isEmpty") } to "isNotEmpty"),
+    "isNotEmpty" to (REPLACE_NEGATED_IS_EMPTY_OWNERS.map { FqName("$it.isNotEmpty") } to "isEmpty"),
+    "isBlank" to (listOf(FqName("kotlin.text.isBlank")) to "isNotBlank"),
+    "isNotBlank" to (listOf(FqName("kotlin.text.isNotBlank")) to "isBlank"),
 )
 
 internal fun KtPrefixExpression.negatedEmptinessCall(): KtCallExpression? {

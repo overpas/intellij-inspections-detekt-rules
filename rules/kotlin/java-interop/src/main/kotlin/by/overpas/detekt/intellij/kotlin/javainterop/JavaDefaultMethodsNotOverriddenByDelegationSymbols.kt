@@ -22,7 +22,7 @@ internal fun KtDelegatedSuperTypeEntry.skipsDefaultMethodOverrides(declaration: 
         val interfaceMethods = delegatedInterface?.run { memberScope.callables.map { it.fakeOverrideOriginal }.toSet() }
         val inheritedDefaultMethods = declaration.classSymbol?.run { memberScope.callables }.orEmpty()
             .map { it.fakeOverrideOriginal }
-            .filter { it.isJavaDefaultMethod() && interfaceMethods.orEmpty().contains(it) }
+            .filter { it.isJavaDefaultMethod() && it in interfaceMethods.orEmpty() }
             .toSet()
         val delegateClass = delegateExpression?.expressionType?.symbol as? KaClassSymbol
         val overrides = JavaDefaultMethodsNotOverriddenByDelegationOverrides(session, inheritedDefaultMethods)

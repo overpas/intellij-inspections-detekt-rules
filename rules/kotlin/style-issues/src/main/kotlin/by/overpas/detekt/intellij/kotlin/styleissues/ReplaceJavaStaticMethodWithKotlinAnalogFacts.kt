@@ -8,4 +8,11 @@ internal data class ReplaceJavaStaticMethodWithKotlinAnalogFacts(
     val hasLambdaSecondArgument: Boolean,
     val isFirstArgumentMutableList: Boolean,
     val isFirstArgumentChar: Boolean,
-)
+) {
+
+    val hasTwoNonNullArguments: Boolean
+        get() = argumentCount == 2 && isFirstArgumentNullable == false
+
+    val isPrimitiveToString: Boolean
+        get() = argumentCount == 1 || (hasTwoNonNullArguments && hasValidRadix)
+}
