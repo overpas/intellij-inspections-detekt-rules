@@ -364,6 +364,81 @@ class UnnecessaryOptInAnnotationTest {
     }
 
     @Test
+    fun `an opt-in used by a function call inside a lambda passes`() {
+        val code = """
+            @RequiresOptIn
+            annotation class Marker
+
+            @Marker
+            fun experimentalApi() {}
+
+            fun perform(block: () -> Unit) = block()
+
+            @OptIn(Marker::class)
+            fun foo() {
+                perform { experimentalApi() }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an opt-in used by a member call on the implicit receiver of a lambda passes`() {
+        val code = """
+            @RequiresOptIn
+            annotation class Marker
+
+            interface Scope {
+                @Marker
+                fun pressKey()
+            }
+
+            fun withScope(scope: Scope, block: Scope.() -> Unit) = scope.block()
+
+            @OptIn(Marker::class)
+            fun foo(scope: Scope) {
+                withScope(scope) { pressKey() }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an opt-in used by an extension function call inside a nested lambda passes`() {
+        val code = """
+            @RequiresOptIn
+            annotation class Marker
+
+            class Node
+
+            interface Scope {
+                @Marker
+                fun pressKey()
+            }
+
+            @Marker
+            fun Node.performKeyInput(block: Scope.() -> Unit) {}
+
+            fun perform(block: (Node) -> Unit) = block(Node())
+
+            @OptIn(Marker::class)
+            fun foo() {
+                perform { node -> node.performKeyInput { pressKey() } }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
     fun `an opt-in without arguments passes`() {
         val code = """
             @OptIn
