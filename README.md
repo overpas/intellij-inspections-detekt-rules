@@ -129,7 +129,7 @@ Kotlin is active. detekt uses this default config with `buildUponDefaultConfig =
 
 | Rule | Finds |
 |---|---|
-| `IllegalIdentifier` | A backticked identifier with characters that the dex format does not allow in a simple name, for example a space or a dot. These names fail on Android versions before 11. By default, unit test source sets are excluded (`excludes`). |
+| `IllegalIdentifier` | A backticked identifier with characters that the dex format does not allow in a simple name, for example a space or a dot. These names fail on Android versions before 11. By default, unit test and screenshot test source sets are excluded (`excludes`). |
 
 ### `intellij-android-wear-tile-preview`
 
