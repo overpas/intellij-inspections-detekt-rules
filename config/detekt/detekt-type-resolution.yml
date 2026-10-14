@@ -96,7 +96,7 @@ intellij-android-glance-preview:
 intellij-android-kotlin:
   IllegalIdentifier:
     active: true
-    excludes: ['**/test/**', '**/src/test*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidHostTest/**']
+    excludes: ['**/test/**', '**/src/test*/**', '**/src/screenshotTest*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidHostTest/**']
 
 intellij-android-wear-tile-preview:
   WearTilePreviewComposableAnnotationIsNotSupported:
