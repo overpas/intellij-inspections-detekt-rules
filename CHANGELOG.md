@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.0.5
+
+### Changed options and defaults
+
+- `intellij-android-kotlin`: `IllegalIdentifier`: the default `excludes` now also match screenshot test source sets with `**/src/screenshotTest*/**`. These source sets run on the host JVM and are not compiled to dex. To keep the old behavior, set `excludes` to `['**/test/**', '**/src/test*/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidHostTest/**']`.
+
+### Changed detection
+
+- `intellij-jvm-test-frameworks`: `AssertBetweenInconvertibleTypes`: treats a mutable collection type and its read-only type as one class, as IntelliJ IDEA does. It does not report an AssertJ `isEqualTo` between an `Iterable` and a class that implements `Iterable` by delegation. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-redundant-constructs`: `UnnecessaryVariable`: does not report a copy of a local variable when a variable with the same name is visible in the scope, such as an inherited member or a top-level property. Removing the copy would change the meaning of the code, so no option keeps the old findings.
+- `intellij-kotlin-style-issues`: `FoldInitializerAndIfToElvis`: reports only a `null` check. It does not report a negated type check, such as `if (x !is T) return`, because IntelliJ IDEA does not highlight it. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `ImplicitThis`: does not report a companion object member that is used outside the companion object, because no `this@Label` form can name that receiver. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-style-issues`: `ReplaceAssociateFunction`: does not report an `associate` call whose lambda computes both the key and the value, because IntelliJ IDEA does not highlight it. No option keeps the old findings.
+
+### Changed messages
+
+- `intellij-kotlin-style-issues`: `FoldInitializerAndIfToElvis`: the description no longer mentions type checks.
+
 ## 0.0.4
 
 ### Removed rules
