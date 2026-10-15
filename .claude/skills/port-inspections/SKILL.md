@@ -17,3 +17,4 @@ build. Port an inspection when its rule helps a user in CI, and use judgment in 
    a recommendation, and let the user decide.
 4. **Explain what is not ported.** Give a short reason for each inspection that is not ported, for
    example that the compiler or detekt already reports it, or that detekt does not have the data.
+   Give it to the user, not in the README, which documents only the ported rules.

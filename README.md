@@ -6,7 +6,16 @@
 Multiplatform inspections of IntelliJ IDEA. They give the same hints outside the IDE, e.g. to AI
 agents and CI.
 
-Each module is one inspection group of the IDE settings (Editor | Inspections | Kotlin,
+Each bundle module puts all rule sets of one kind (Android, JVM or Kotlin) in one jar. The
+Gradle and Compose Multiplatform kinds have only one rule set each, so they have no bundle.
+
+| Module | Rule sets | Jar |
+|---|---|---|
+| `bundles:android` | All `intellij-android-*` rule sets | `intellij-inspections-android-all-<version>.jar` |
+| `bundles:jvm` | All `intellij-jvm-*` rule sets | `intellij-inspections-jvm-all-<version>.jar` |
+| `bundles:kotlin` | All `intellij-kotlin-*` rule sets | `intellij-inspections-kotlin-all-<version>.jar` |
+
+Each rule set module is one inspection group of the IDE settings (Editor | Inspections | Kotlin,
 Editor | Inspections | JVM languages, a group of Editor | Inspections | Java, an Android group
 such as Editor | Inspections | Compose preview, a group of Editor | Inspections | Gradle, or
 Editor | Inspections | Compose Multiplatform Preview).
@@ -36,31 +45,23 @@ Editor | Inspections | Compose Multiplatform Preview).
 | `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs-<version>.jar` |
 | `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues-<version>.jar` |
 
-Each bundle module puts all rule sets of one kind (Android, JVM or Kotlin) in one jar. The
-Gradle and Compose Multiplatform kinds have only one rule set each, so they have no bundle.
-
-| Module | Rule sets | Jar |
-|---|---|---|
-| `bundles:android` | All `intellij-android-*` rule sets | `intellij-inspections-android-all-<version>.jar` |
-| `bundles:jvm` | All `intellij-jvm-*` rule sets | `intellij-inspections-jvm-all-<version>.jar` |
-| `bundles:kotlin` | All `intellij-kotlin-*` rule sets | `intellij-inspections-kotlin-all-<version>.jar` |
-
 ## Use in a project
 
 The project must use detekt 2 (Gradle plugin `dev.detekt`).
 
 1. Download the jars from
    [GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases) into
-   `config/detekt/plugins/` of your project. Download one of these:
+   a directory of your project, for example `config/detekt/plugins/`. Download one of these:
    - For all Kotlin rule sets: `intellij-inspections-kotlin-all-<version>.jar`.
    - For all JVM rule sets: `intellij-inspections-jvm-all-<version>.jar`.
    - For all Android rule sets: `intellij-inspections-android-all-<version>.jar`.
-   - For some rule sets only: their jars from the table above.
+   - For some rule sets only: their jars from the tables above.
 
    Do not add a bundle jar and its rule set jars together. Detekt then loads the same rule sets
    two times.
 2. In `build.gradle.kts`, add the jars to the detekt plugins and set
-   `buildUponDefaultConfig = true`:
+   `buildUponDefaultConfig = true`. The example uses `config/detekt/plugins/`. Change the path to
+   your directory:
 
    ```kotlin
    dependencies {
@@ -89,13 +90,15 @@ The project must use detekt 2 (Gradle plugin `dev.detekt`).
    ```
 
    Most rules need type resolution. The plain `detekt` task does not have it, so it skips these
-   rules and does not report this. In a Kotlin Multiplatform project, run the task of each JVM
-   target, for example `detektMainJvm` and `detektTestJvm`.
+   rules and does not report this. In a Kotlin Multiplatform project, run the tasks of all
+   targets, for example `detektMainJvm`, `detektTestJvm`, `detektMainIosArm64` and
+   `detektMainJs`. `./gradlew tasks --all` lists them.
 
 ## Rules
 
-Every rule takes the standard detekt options (`active`, `excludes`, `includes`, ...). The rule
-names are the short names of the IntelliJ inspections.
+Every rule takes the standard detekt options (`active`, `excludes`, `includes`, ...). The Options
+column gives the other options of a rule. The rule names are the short names of the IntelliJ
+inspections.
 
 Each rule set jar contains a default config (`config/config.yml`). The rules that IntelliJ IDEA
 disables by default are inactive, and so are some rules that give noisy findings in CI. Of two opposite rules, only the one that is more idiomatic for
@@ -103,19 +106,19 @@ Kotlin is active. detekt uses this default config with `buildUponDefaultConfig =
 
 ### `intellij-android-compose-preview`
 
-| Rule | Finds |
-|---|---|
-| `ComposePreviewDimensionRespectsLimit` | A `@Preview` whose `widthDp` or `heightDp` is not between 1 and 3000. |
-| `ComposePreviewMustBeTopLevelFunction` | A function with `@Preview` or a MultiPreview annotation that is not top level and is not a non-nested function of a top-level class with a no-parameter constructor. |
-| `ComposePreviewNeedsComposableAnnotation` | A function with `@Preview` or a MultiPreview annotation that is not `@Composable`. |
-| `PreviewAnnotationInFunctionWithParameters` | A function with `@Preview` or a MultiPreview annotation that has a parameter with no default value and no `@PreviewParameter`. |
-| `PreviewApiLevelMustBeValid` | A `@Preview` whose `apiLevel` is outside the supported range (`minApiLevel`, default 22, to `maxApiLevel`, default 37). |
-| `PreviewDeviceShouldUseNewSpec` | A `@Preview` whose `device` is a legacy device spec that starts with `spec:id`, such as the old `Devices.PIXEL_4`. |
-| `PreviewFontScaleMustBeGreaterThanZero` | A `@Preview` whose `fontScale` is zero or negative. |
-| `PreviewMultipleParameterProviders` | A function with `@Preview` or a MultiPreview annotation that has more than one `@PreviewParameter`. |
-| `PreviewParameterProviderOnFirstParameter` | A function with `@Preview` or a MultiPreview annotation that has its first `@PreviewParameter` on a parameter other than the first. |
-| `PreviewShouldNotBeCalledRecursively` | A call inside a function with `@Preview` or a MultiPreview annotation to a function with the same name as that preview. Inactive by default. |
-| `PreviewWrapperUsage` | A `@PreviewWrapper` on a function without both `@Composable` and `@Preview` (or a MultiPreview), a repeated `@PreviewWrapper` on an annotation class, or a composable function or annotation class with more than one `@PreviewWrapper` in its annotation graph. |
+| Rule | Finds | Options |
+|---|---|---|
+| `ComposePreviewDimensionRespectsLimit` | A `@Preview` whose `widthDp` or `heightDp` is not between 1 and 3000. | |
+| `ComposePreviewMustBeTopLevelFunction` | A function with `@Preview` or a MultiPreview annotation that is not top level and is not a non-nested function of a top-level class with a no-parameter constructor. | |
+| `ComposePreviewNeedsComposableAnnotation` | A function with `@Preview` or a MultiPreview annotation that is not `@Composable`. | |
+| `PreviewAnnotationInFunctionWithParameters` | A function with `@Preview` or a MultiPreview annotation that has a parameter with no default value and no `@PreviewParameter`. | |
+| `PreviewApiLevelMustBeValid` | A `@Preview` whose `apiLevel` is outside the supported range. | `minApiLevel` (default `22`): the lowest supported API level.<br>`maxApiLevel` (default `37`): the highest supported API level. |
+| `PreviewDeviceShouldUseNewSpec` | A `@Preview` whose `device` is a legacy device spec that starts with `spec:id`, such as the old `Devices.PIXEL_4`. | |
+| `PreviewFontScaleMustBeGreaterThanZero` | A `@Preview` whose `fontScale` is zero or negative. | |
+| `PreviewMultipleParameterProviders` | A function with `@Preview` or a MultiPreview annotation that has more than one `@PreviewParameter`. | |
+| `PreviewParameterProviderOnFirstParameter` | A function with `@Preview` or a MultiPreview annotation that has its first `@PreviewParameter` on a parameter other than the first. | |
+| `PreviewShouldNotBeCalledRecursively` | A call inside a function with `@Preview` or a MultiPreview annotation to a function with the same name as that preview. Inactive by default. | |
+| `PreviewWrapperUsage` | A `@PreviewWrapper` on a function without both `@Composable` and `@Preview` (or a MultiPreview), a repeated `@PreviewWrapper` on an annotation class, or a composable function or annotation class with more than one `@PreviewWrapper` in its annotation graph. | |
 
 ### `intellij-android-glance-preview`
 
@@ -141,24 +144,6 @@ Kotlin is active. detekt uses this default config with `buildUponDefaultConfig =
 | `WearTilePreviewMethodIsAnnotatedWithTilePreviewAnnotation` | A `Preview` annotation from another package, or a MultiPreview annotation that refers to one, on a function with the Tile preview signature. |
 | `WearTilePreviewShouldBeTopLevelFunction` | A function with a Tile `@Preview` annotation in another function, in a nested class, or in a class without a default constructor. |
 
-### Not ported Android inspections
-
-The Android plugin of IntelliJ IDEA also shows the Android Lint checks as inspections. These are
-not ported, because Android Lint runs them in CI itself.
-
-| Inspection | Reason |
-|---|---|
-| `ComposePreviewNotSupportedInUnitTestFiles`, `GlancePreviewNotSupportedInUnitTestFiles`, `WearTilePreviewNotSupportedInUnitTestFiles` | Need the test source roots of the module. |
-| `PreviewPickerAnnotation`, `WearTilePreviewDeviceSpec` | Check the `device` parameter against the device catalog of the IDE. |
-| `K2TypeParameterFindViewById` | Only a hint to give `findViewById()` a type argument in place of a cast, not a problem in the code. |
-| `AndroidNonConstantResIdsInSwitch` | Checks Java `switch` statements. Kotlin `when` accepts non-constant resource ids. |
-| `AndroidDomInspection`, `AndroidElementNotAllowed`, `AndroidMissingOnClickHandler`, `AndroidUnknownAttribute`, `AndroidUnresolvableTag`, `NavigationFile`, `XmlWrongFileType` | Check Android XML resource files, not Kotlin code. |
-| `AccessibilityTestFramework`, `BottomAppBar`, `BottomNav`, `Bounds`, `ButtonSize`, `LocaleText`, `LongText`, `Overlap`, `SystemUi`, `TextFieldSize`, `WearMargin` | Check the layouts that the layout editor renders. |
-| `ConsumerRulesInspection`, `ExpensiveKeepRuleInspection`, `R8IgnoredFlags`, `ShrinkerArrayType`, `ShrinkerInnerClassSeparator`, `ShrinkerInvalidFlags`, `ShrinkerUnresolvedReference` | Check R8 and ProGuard keep rule files, not Kotlin code. |
-| `AndroidRoomQuestionMarkBindParameter`, `AndroidRoomSqlBooleanLiteral`, `AndroidUnresolvedRoomSqlReference` | Check the SQL in Room `@Query` strings, which needs an SQL parser and the database schema. |
-| `DeclarativeUnresolvedReference` | Checks declarative Gradle build files, not Kotlin code. |
-| `FeatureRequiresHigherWFFVersion`, `InvalidColorIndexWFFExpression`, `InvalidColorIndexXml`, `InvalidComplicationDataSourceLocation`, `UnknownWFFVersion` | Check Watch Face Format XML files, not Kotlin code. |
-
 ### `intellij-compose-multiplatform-preview`
 
 These rules check the Jetpack (`androidx.compose.ui.tooling.preview`) and the Compose Multiplatform
@@ -169,13 +154,6 @@ MultiPreview annotation counts only on a `@Composable` function.
 |---|---|
 | `MultiplatformPreviewAnnotationInFunctionWithParameters` | A preview function that has a parameter with no default value and no `@PreviewParameter`. |
 | `MultiplatformPreviewMultipleParameterProviders` | A preview function that has more than one `@PreviewParameter`. |
-
-### Not ported Compose Multiplatform inspections
-
-| Inspection | Reason |
-|---|---|
-| `ComposableCallWithoutComposePlugin` | Needs the Gradle configuration of the module, to know if the Compose compiler plugin is applied. |
-| `ComposeResourcesImageResource` | Needs the Compose resource files of the module, to know if a drawable is a vector (`.xml` or `.svg`). |
 
 ### `intellij-gradle-best-practices`
 
@@ -194,107 +172,70 @@ the script, because detekt does not have the Gradle model.
 | `RedundantKotlinStdLibDependency` | A `kotlin-stdlib` dependency with the version of the `kotlin("jvm")` plugin, which adds this dependency itself. It does not read `kotlin.stdlib.default.dependency` from `gradle.properties`. |
 | `TaskMissingDescription` | A task that `tasks.register`, `tasks.create`, `tasks.registering` or `tasks.creating` makes without a `description`. |
 
-### Not ported Gradle inspections
-
-| Inspection | Reason |
-|---|---|
-| `ConfigurationAvoidance`, `DependencyNotationArgument`, `DeprecatedConfigurations`, `ForeignDelegate`, `IncorrectPluginDslStructure` | IntelliJ IDEA checks only Groovy build scripts. In Kotlin DSL scripts, the compiler already reports these problems. |
-| `BintrayPublishingPlugin`, `JCenterRepository`, `MultipleRepositoryUrls`, `DifferentKotlinGradleVersion`, `DifferentStdlibGradleVersion` | Check Groovy build scripts only. |
-| `KotlinOptionsToCompilerOptions` | The Kotlin Gradle plugin already reports `kotlinOptions` as deprecated. Since Kotlin 2.2, it is an error. |
-| `LatestMinorVersion` | Checks `gradle-wrapper.properties`, not Kotlin code. |
-| `UnusedVersionCatalogEntry` | Checks TOML version catalogs and searches for usages in all build scripts. |
-
 ### `intellij-jvm-code-maturity`
 
-| Rule | Finds |
-|---|---|
-| `MarkedForRemoval` | A usage of an API that is deprecated with `@Deprecated(forRemoval = true)`, or an override of a method marked for removal. Option `isSameOutermostClassIgnored` (default `true`) does not report the usages in the same outermost class. |
+| Rule | Finds | Options |
+|---|---|---|
+| `MarkedForRemoval` | A usage of an API that is deprecated with `@Deprecated(forRemoval = true)`, or an override of a method marked for removal. | `isSameOutermostClassIgnored` (default `true`): do not report the usages in the same outermost class. |
 
 ### `intellij-jvm-declaration-redundancy`
 
-| Rule | Finds |
-|---|---|
-| `SameParameterValue` | A parameter of a function that gets the same constant value in every call, when all calls are in the same file. Option `highestModifier` (default `protected`) is the highest visibility to check. Option `minimalUsageCount` (default `1`) is the number of calls needed to report. |
-| `SameReturnValue` | A function that cannot be overridden and that always returns the same constant value. |
+| Rule | Finds | Options |
+|---|---|---|
+| `SameParameterValue` | A parameter of a function that gets the same constant value in every call, when all calls are in the same file. | `highestModifier` (default `protected`): the highest visibility to check.<br>`minimalUsageCount` (default `1`): the number of calls needed to report. |
+| `SameReturnValue` | A function that cannot be overridden and that always returns the same constant value. | |
 
 ### `intellij-jvm-general`
 
-| Rule | Finds |
-|---|---|
-| `BlockingMethodInNonBlockingContext` | A possibly blocking call, such as `Thread.sleep()`, a JDK method that throws `IOException` or a method annotated with `@Blocking`, in a non-blocking context such as a suspend function, a coroutine on a non-IO dispatcher or a method annotated with `@NonBlocking`. Option `isUnknownContextBlocking` (default `true`) does not report the calls in contexts that are not known. Option `isSuspendContextNonBlocking` (default `true`) considers suspend functions and suspend lambdas non-blocking. Options `blockingAnnotations` and `nonBlockingAnnotations` add annotations to the default ones. |
-| `MissingDeprecatedAnnotationOnScheduledForRemovalApi` | A declaration marked with `@ApiStatus.ScheduledForRemoval` that is not also marked with `@Deprecated`. |
-| `MustAlreadyBeRemovedApi` | A declaration marked with `@ApiStatus.ScheduledForRemoval` for a version that is not later than the current version. Option `currentVersion` (default empty, which turns the rule off) gives the current version. |
-| `NonExtendableApiUsage` | A class, interface or override that extends, implements or overrides a library API marked with `@ApiStatus.NonExtendable`, or the annotation on a declaration that cannot be extended. |
-| `OverrideOnly` | A call or reference of a library method marked with `@ApiStatus.OverrideOnly` outside a super or delegate call in its override, or the annotation on a declaration that cannot be overridden. |
-| `SerializableHasSerialVersionUIDField` | A `Serializable` class without a `serialVersionUID` field. Option `isAnonymousClassIgnored` (default `false`) does not report anonymous objects. Option `ignoredSuperClasses` (default `java.awt.Component`) does not report the subclasses of these classes that do not implement `Serializable` directly. Inactive by default. |
-| `SuppressionAnnotation` | A `@Suppress` or `@SuppressWarnings` annotation or a `//noinspection` comment that suppresses inspections. Option `allowedSuppressions` lists the suppressed ids to accept. Inactive by default. |
-| `SystemGetProperty` | A `System.getProperty()` call for `file.separator`, `path.separator`, `line.separator` or `file.encoding`, which a dedicated API gives directly. |
-| `ThreadRun` | A call of `run()` on a `Thread`, which runs the code in the current thread instead of starting a new one. |
-| `UnstableApiUsage` | A usage of a library API that an unstable API annotation such as `@ApiStatus.Experimental` or `@ApiStatus.Internal` marks, or whose signature refers to such a type. Option `unstableApiAnnotations` lists the annotations. Option `isInsideImportsIgnored` (default `true`) does not report imports. Option `isApiDeclaredInThisProjectIgnored` (default `true`) reports only compiled library APIs. |
-| `UnstableTypeUsedInSignature` | A public declaration whose signature refers to a type marked with an unstable API annotation, but that does not have the same annotation itself. Option `unstableApiAnnotations` lists the annotations. Inactive by default. |
-| `UrlHashCode` | An `equals()` or `hashCode()` call or an `==` comparison on `java.net.URL`, or a map or set of URLs, which can resolve the host over the network. |
+| Rule | Finds | Options |
+|---|---|---|
+| `BlockingMethodInNonBlockingContext` | A possibly blocking call, such as `Thread.sleep()`, a JDK method that throws `IOException` or a method annotated with `@Blocking`, in a non-blocking context such as a suspend function, a coroutine on a non-IO dispatcher or a method annotated with `@NonBlocking`. | `isUnknownContextBlocking` (default `true`): do not report the calls in contexts that are not known.<br>`isSuspendContextNonBlocking` (default `true`): consider suspend functions and suspend lambdas non-blocking.<br>`blockingAnnotations` (default the `Blocking` annotations of JetBrains, Micronaut and SmallRye): more annotations that mark blocking methods. The rule always uses the default ones.<br>`nonBlockingAnnotations` (default the `NonBlocking` annotations of JetBrains, Micronaut and SmallRye): more annotations that mark non-blocking contexts. The rule always uses the default ones. |
+| `MissingDeprecatedAnnotationOnScheduledForRemovalApi` | A declaration marked with `@ApiStatus.ScheduledForRemoval` that is not also marked with `@Deprecated`. | |
+| `MustAlreadyBeRemovedApi` | A declaration marked with `@ApiStatus.ScheduledForRemoval` for a version that is not later than the current version. | `currentVersion` (default empty, which turns the rule off): the current version. |
+| `NonExtendableApiUsage` | A class, interface or override that extends, implements or overrides a library API marked with `@ApiStatus.NonExtendable`, or the annotation on a declaration that cannot be extended. | |
+| `OverrideOnly` | A call or reference of a library method marked with `@ApiStatus.OverrideOnly` outside a super or delegate call in its override, or the annotation on a declaration that cannot be overridden. | |
+| `SerializableHasSerialVersionUIDField` | A `Serializable` class without a `serialVersionUID` field. Inactive by default. | `isAnonymousClassIgnored` (default `false`): do not report anonymous objects.<br>`ignoredSuperClasses` (default `java.awt.Component`): do not report the subclasses of these classes that do not implement `Serializable` directly. |
+| `SuppressionAnnotation` | A `@Suppress` or `@SuppressWarnings` annotation or a `//noinspection` comment that suppresses inspections. Inactive by default. | `allowedSuppressions` (default empty): the suppressed ids to accept. |
+| `SystemGetProperty` | A `System.getProperty()` call for `file.separator`, `path.separator`, `line.separator` or `file.encoding`, which a dedicated API gives directly. | |
+| `ThreadRun` | A call of `run()` on a `Thread`, which runs the code in the current thread instead of starting a new one. | |
+| `UnstableApiUsage` | A usage of a library API that an unstable API annotation such as `@ApiStatus.Experimental` or `@ApiStatus.Internal` marks, or whose signature refers to such a type. | `unstableApiAnnotations` (default the unstable API annotations of JetBrains, Guava, RxJava, Apache HttpClient and Gradle): the annotations that mark unstable APIs.<br>`isInsideImportsIgnored` (default `true`): do not report imports.<br>`isApiDeclaredInThisProjectIgnored` (default `true`): report only compiled library APIs. |
+| `UnstableTypeUsedInSignature` | A public declaration whose signature refers to a type marked with an unstable API annotation, but that does not have the same annotation itself. Inactive by default. | `unstableApiAnnotations` (default as in `UnstableApiUsage`): the annotations that mark unstable APIs. |
+| `UrlHashCode` | An `equals()` or `hashCode()` call or an `==` comparison on `java.net.URL`, or a map or set of URLs, which can resolve the host over the network. | |
 
 ### `intellij-jvm-junit`
 
-| Rule | Finds |
-|---|---|
-| `AssertEqualsCalledOnArray` | An `assertEquals()` call on two arrays, which compares them by identity and not by content. Inactive by default. |
-| `AssertEqualsMayBeAssertSame` | An `assertEquals()` call on two objects of a final class that does not override `equals()`, where `assertSame()` fits. Inactive by default. |
-| `IgnoredJUnitTest` | A test class or test method that `@Ignore` or `@Disabled` turns off. Option `isReasonAccepted` (default `true`) does not report the ones that give a reason. Inactive by default. |
-| `JUnit3StyleTestMethodInJUnit4Class` | A `test...` method without `@Test` in a JUnit 4 class, which JUnit 4 does not run. |
-| `JUnit5AssertionsConverter` | A JUnit 3 or JUnit 4 assertion or assumption in a JUnit 5 test. |
-| `JUnitMalformedDeclaration` | A JUnit test class, test method, lifecycle method, rule, extension or parameter source with a declaration that JUnit cannot run or rejects. Option `ignorableAnnotations` (default `mockit.Mocked`, `org.junit.jupiter.api.io.TempDir`) lists the parameter annotations to accept. Option `areSuspendFunctionsAllowed` (default `false`) accepts suspend test and lifecycle functions. |
-| `JUnitMixedFramework` | A test class that uses annotations of a JUnit version other than the version of the class. |
-| `Junit4RunWithInspection` | A `@RunWith` on a test class whose superclass already has `@RunWith`. |
-| `MigrateAssertToMatcherAssert` | A JUnit assertion such as `assertEquals()` that a Hamcrest `assertThat()` can replace, when Hamcrest is on the classpath. Inactive by default. |
-| `ParameterizedParametersStaticCollection` | A JUnit 4 `Parameterized` test class with no `@Parameters` method, more than one, or one with a bad signature. Inactive by default. |
-| `SuperTearDownInFinally` | A `super.tearDown()` call in a JUnit 3 `tearDown()` that is not in a `finally` block. Inactive by default. |
-| `UseOfObsoleteAssert` | A call of the JUnit 3 `junit.framework.Assert` or `TestCase` assertions, when JUnit 4 or later is on the classpath. Inactive by default. |
+| Rule | Finds | Options |
+|---|---|---|
+| `AssertEqualsCalledOnArray` | An `assertEquals()` call on two arrays, which compares them by identity and not by content. Inactive by default. | |
+| `AssertEqualsMayBeAssertSame` | An `assertEquals()` call on two objects of a final class that does not override `equals()`, where `assertSame()` fits. Inactive by default. | |
+| `IgnoredJUnitTest` | A test class or test method that `@Ignore` or `@Disabled` turns off. Inactive by default. | `isReasonAccepted` (default `true`): do not report the ones that give a reason. |
+| `JUnit3StyleTestMethodInJUnit4Class` | A `test...` method without `@Test` in a JUnit 4 class, which JUnit 4 does not run. | |
+| `JUnit5AssertionsConverter` | A JUnit 3 or JUnit 4 assertion or assumption in a JUnit 5 test. | |
+| `JUnitMalformedDeclaration` | A JUnit test class, test method, lifecycle method, rule, extension or parameter source with a declaration that JUnit cannot run or rejects. | `ignorableAnnotations` (default `mockit.Mocked`, `org.junit.jupiter.api.io.TempDir`): the parameter annotations to accept.<br>`areSuspendFunctionsAllowed` (default `false`): accept suspend test and lifecycle functions. |
+| `JUnitMixedFramework` | A test class that uses annotations of a JUnit version other than the version of the class. | |
+| `Junit4RunWithInspection` | A `@RunWith` on a test class whose superclass already has `@RunWith`. | |
+| `MigrateAssertToMatcherAssert` | A JUnit assertion such as `assertEquals()` that a Hamcrest `assertThat()` can replace, when Hamcrest is on the classpath. Inactive by default. | |
+| `ParameterizedParametersStaticCollection` | A JUnit 4 `Parameterized` test class with no `@Parameters` method, more than one, or one with a bad signature. Inactive by default. | |
+| `SuperTearDownInFinally` | A `super.tearDown()` call in a JUnit 3 `tearDown()` that is not in a `finally` block. Inactive by default. | |
+| `UseOfObsoleteAssert` | A call of the JUnit 3 `junit.framework.Assert` or `TestCase` assertions, when JUnit 4 or later is on the classpath. Inactive by default. | |
 
 ### `intellij-jvm-logging`
 
-| Rule | Finds |
-|---|---|
-| `LogStatementNotGuardedByLogCondition` | A logging call with computed arguments that a log level condition such as `if (logger.isDebugEnabled)` does not guard. Option `limitLevelType` (default `DEBUG_AND_LOWER`) sets the log levels to check. Option `isUnguardedConstantFlagged` (default `false`) also reports the calls with only constant arguments. Inactive by default. |
-| `LoggingConditionDisagreesWithLogLevelStatement` | A log level condition whose level does not agree with the level of the logging call that it guards. Inactive by default. |
-| `LoggingPlaceholderCountMatchesArgumentCount` | A logging call whose number of placeholders does not match the number of arguments. Option `slf4jToLog4J2Type` (default `AUTO`) tells if SLF4J calls go to Log4j 2 (`AUTO`, `YES` or `NO`). |
-| `LoggingStringTemplateAsArgument` | A logging call that builds its message with a string template or concatenation instead of placeholders. Option `limitLevelType` (default `DEBUG_AND_LOWER`) sets the log levels to check. Option `arePrimitivesSkipped` (default `true`) does not report templates with only primitive values. Option `isOnlyExceptionSkipped` (default `false`) does not report calls whose only other argument is an exception. |
+| Rule | Finds | Options |
+|---|---|---|
+| `LogStatementNotGuardedByLogCondition` | A logging call with computed arguments that a log level condition such as `if (logger.isDebugEnabled)` does not guard. Inactive by default. | `limitLevelType` (default `DEBUG_AND_LOWER`): the log levels to check, `ALL`, `WARN_AND_LOWER`, `INFO_AND_LOWER`, `DEBUG_AND_LOWER` or `TRACE`.<br>`isUnguardedConstantFlagged` (default `false`): also report the calls with only constant arguments. |
+| `LoggingConditionDisagreesWithLogLevelStatement` | A log level condition whose level does not agree with the level of the logging call that it guards. Inactive by default. | |
+| `LoggingPlaceholderCountMatchesArgumentCount` | A logging call whose number of placeholders does not match the number of arguments. | `slf4jToLog4J2Type` (default `AUTO`): tells if SLF4J calls go to Log4j 2, `AUTO`, `YES` or `NO`. |
+| `LoggingStringTemplateAsArgument` | A logging call that builds its message with a string template or concatenation instead of placeholders. | `limitLevelType` (default `DEBUG_AND_LOWER`): the log levels to check, `ALL`, `WARN_AND_LOWER`, `INFO_AND_LOWER`, `DEBUG_AND_LOWER` or `TRACE`.<br>`arePrimitivesSkipped` (default `true`): do not report templates with only primitive values.<br>`isOnlyExceptionSkipped` (default `false`): do not report the calls whose only other argument is an exception. |
 
 ### `intellij-jvm-test-frameworks`
 
-| Rule | Finds |
-|---|---|
-| `AssertBetweenInconvertibleTypes` | A JUnit, TestNG or AssertJ equality or identity assertion between objects of inconvertible types. |
-| `TestCaseWithConstructor` | A test class that does initialization work in a constructor or an `init` block instead of a set-up method. Inactive by default. |
-| `TestCaseWithNoTestMethods` | A test class without test methods. Option `isSupersIgnored` (default `true`) does not report a class when a superclass has test methods. Inactive by default. |
-| `TestMethodWithoutAssertion` | A test method without assertions. Option `assertionMethods` lists the assertion methods as `<class or package>#<method name regex>`. Option `isAssertKeywordAssertion` (default `true`) counts `assert()` as an assertion. Option `isThrowingIgnored` (default `false`) does not report a method with `@Throws`. Inactive by default. |
-
-### Not ported JVM inspections
-
-| Inspection | Reason |
-|---|---|
-| `JUnit5Converter` | Only a hint to migrate from JUnit 4 to JUnit 5, not a problem in the code. |
-| `Junit4Converter` | Only a hint to migrate from JUnit 3 to JUnit 4, not a problem in the code. |
-| `Dependency` | Needs the dependency rules of the IDE project settings. |
-| `Deprecation` | The Kotlin compiler already reports the usages of deprecated APIs. |
-| `DialogTitleCapitalization` | Needs the message bundles of IntelliJ plugin projects. |
-| `EmptyMethod` | Needs a search for overriding methods and usages in the whole project. |
-| `ExpectedExceptionNeverThrown` | Checks the checked exceptions of the test body. Kotlin has no checked exceptions. |
-| `HardCodedStringLiteral` | Needs the internationalization settings of the IDE and `@NonNls` data from the whole project. |
-| `IllegalDependencyOnInternalPackage` | Needs the Java module graph of the project. |
-| `ImplicitSubclassInspection` | Needs framework plugins of the IDE that create subclasses at runtime. |
-| `LoggingGuardedByCondition` | Only a hint that a log level condition is not needed, not a problem in the code. |
-| `LoggingSimilarMessage` | A text similarity heuristic that gives noisy findings and sees only one file. |
-| `MultipleExceptionsDeclaredOnTestMethod` | Checks the Java `throws` clause. Kotlin functions do not declare one. |
-| `ReturnFromFinallyBlock` | The `ReturnFromFinally` rule of detekt already finds this. |
-| `Since15` | Needs the API version data of the JDK and the language level of the module. |
-| `SourceToSinkFlow` | Needs data flow analysis across methods of the whole project. |
-| `SuspiciousPackagePrivateAccess` | Needs the module structure of the project. Kotlin has no package-private visibility. |
-| `TestFailedLine` | Needs the results of a test run in the IDE. |
-| `TestInProductSource` | Needs the test source roots of the module. |
-| `TestOnlyProblems` | Needs the test source roots of the module. |
-| `UnsupportedCharacter` | Checks `.properties` files, not Kotlin code. |
-| `UsagesOfObsoleteApi` | `@ApiStatus.Obsolete` APIs are still safe to use. IntelliJ IDEA only strikes them through. |
+| Rule | Finds | Options |
+|---|---|---|
+| `AssertBetweenInconvertibleTypes` | A JUnit, TestNG or AssertJ equality or identity assertion between objects of inconvertible types. | |
+| `TestCaseWithConstructor` | A test class that does initialization work in a constructor or an `init` block instead of a set-up method. Inactive by default. | |
+| `TestCaseWithNoTestMethods` | A test class without test methods. Inactive by default. | `isSupersIgnored` (default `true`): do not report a class when a superclass has test methods. |
+| `TestMethodWithoutAssertion` | A test method without assertions. Inactive by default. | `assertionMethods` (default the assertions of JUnit, kotlin.test, TestNG, AssertJ, Truth, Hamcrest, Mockito, MockK and JMockit): the assertion methods as `<class or package>#<method name regex>`.<br>`isAssertKeywordAssertion` (default `true`): count `assert()` as an assertion.<br>`isThrowingIgnored` (default `false`): do not report a method with `@Throws`. |
 
 ### `intellij-kotlin-code-migration`
 
@@ -459,88 +400,88 @@ the script, because detekt does not have the Gradle model.
 
 ### `intellij-kotlin-style-issues`
 
-| Rule | Finds |
-|---|---|
-| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. Option `areSuspendFunctionsSkipped` (default `true`) does not report `suspend` functions. |
-| `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. |
-| `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. |
-| `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. |
-| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. |
-| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. |
-| `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. |
-| `ConvertReferenceToLambda` | A callable reference that a lambda can replace. Inactive by default. |
-| `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. |
-| `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`, which is active by default. Inactive by default. |
-| `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. |
-| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Opposite of `RevertExplicitBackingFields`. |
-| `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. |
-| `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. |
-| `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`. |
-| `CopyWithoutNamedArguments` | A data class `copy` call that passes arguments without names. |
-| `DestructuringDeclaration` | A loop variable of a data class or `Map.Entry` type that is only used to read its components. Set `areNonParameterCasesReported` to also report local variables and lambda parameters. `maxDestructuringEntries` (default `3`, as in detekt's `DestructuringDeclarationWithTooManyEntries`) limits the entries of the suggested declaration. |
-| `FilterIsInstanceCallWithClassLiteralArgument` | A `filterIsInstance(X::class.java)` call that `filterIsInstance<X>()` can replace. |
-| `FoldInitializerAndIfToElvis` | An `if` null check that exits right after a variable declaration and can fold into the initializer with `?:`. |
-| `IfThenToElvis` | An `if` that checks a value for `null` or a type and that the elvis operator `?:` can replace. |
-| `IfThenToSafeAccess` | An `if` that checks a value for `null` or a type, returns `null` otherwise, and that `?.` or `as?` can replace. |
-| `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. Opposite of `ExplicitThis`, which is active by default. Inactive by default. |
-| `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. |
-| `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. |
-| `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. |
-| `LiftReturnOrAssignment` | An `if`, `when` or `try` whose branches all end in a return or in an assignment to the same variable. |
-| `MapToForEach` | A `map`-like call whose result is not used and that `forEach` or `forEachIndexed` can replace. |
-| `MoveLambdaOutsideParentheses` | A lambda passed as the last argument inside the parentheses that can be a trailing lambda. |
-| `MoveVariableDeclarationIntoWhen` | A variable declared right before a `when` and used only in it, which can move into the `when` subject. |
-| `NullableHashCode` | An `x?.hashCode() ?: 0` on a nullable receiver that `x.hashCode()` can replace. |
-| `RedundantAsSequence` | An `asSequence()` call on a sequence, or on an iterable followed by one terminal operation. |
-| `RedundantElseInIf` | An `else` branch after `if` branches that all end with a jump such as `return` or `throw`. |
-| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. |
-| `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. |
-| `RemoveEmptyParenthesesFromAnnotationEntry` | Empty parentheses after an annotation that needs no arguments. |
-| `ReplaceAddAllWithMapTo` | An `addAll` or `+=` of a `map` or `filter` result that `mapTo` or `filterTo` can replace. |
-| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. |
-| `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. Inactive by default. |
-| `ReplaceCallWithBinaryOperator` | An explicit call of `equals` or `compareTo` that a binary operator can replace. |
-| `ReplaceCollectionCountWithSize` | A `count()` call without a predicate on a collection, array or map that `size` can replace. Inactive by default. |
-| `ReplaceContains` | A call of an operator `contains` function that the `in` operator can replace. |
-| `ReplaceIfExpressionWithFirstOrNull` | An `if` that returns the first element of a non-empty collection, string or array, else `null`, which `firstOrNull()` can replace. |
-| `ReplaceJavaStaticMethodWithKotlinAnalog` | A call of a Java static method that has a Kotlin standard library counterpart. |
-| `ReplaceManualRangeWithIndicesCalls` | A manual range from `0` to the size or last index that `indices`, a loop over the elements or `withIndex()` can replace. |
-| `ReplaceMapGetOrDefault` | A `map.getOrDefault(key, default)` call on a map with non-null values that `map[key] ?: default` can replace. |
-| `ReplaceMapIndexedWithListGenerator` | A `mapIndexed` call on a collection that ignores the element, where `List(size) { index -> ... }` fits. |
-| `ReplaceMapKeysCallChainWithKeys` | A `map { it.key }.toSet()` call chain on a map that `keys` can replace. |
-| `ReplaceNegatedIsEmptyWithIsNotEmpty` | A negated `isEmpty`, `isNotEmpty`, `isBlank` or `isNotBlank` call that the inverted function can replace. |
-| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. |
-| `ReplaceRangeStartEndInclusiveWithFirstLast` | A `start` or `endInclusive` on a primitive range that the unboxed `first` or `last` can replace. |
-| `ReplaceReadLineWithReadln` | A `readLine()` call that `readln()` or `readlnOrNull()` can replace. |
-| `ReplaceSizeCheckWithIsNotEmpty` | A size, length or count comparison that `isNotEmpty()` can replace. |
-| `ReplaceSizeZeroCheckWithIsEmpty` | A size, length or count zero check that `isEmpty()` can replace. |
-| `ReplaceStringFormatWithLiteral` | A `String.format` call with only `%s` placeholders that a string template can replace. |
-| `ReplaceSubstringWithDropLast` | An `s.substring(0, s.length - n)` call that `s.dropLast(n)` can replace. |
-| `ReplaceSubstringWithIndexingOperation` | A `substring(i, i + 1)` call with constant indices that `s[i]` can replace. |
-| `ReplaceSubstringWithSubstringAfter` | An `s.substring(s.indexOf(x))` call that `s.substringAfter(x)` can replace. |
-| `ReplaceSubstringWithSubstringBefore` | An `s.substring(0, s.indexOf(x))` call that `s.substringBefore(x)` can replace. |
-| `ReplaceSubstringWithTake` | An `s.substring(0, n)` call that `s.take(n)` can replace. |
-| `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. Inactive by default. |
-| `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. Opposite of `InfixCallToOrdinary`. |
-| `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. |
-| `ReplaceWithCallWithContextCall` | A `with` call whose receiver is only used as a context argument, so a `context` call fits. |
-| `ReplaceWithIgnoreCaseEquals` | An equality check of two identical case conversions that `equals(..., ignoreCase = true)` can replace. |
-| `ReplaceWithImportAlias` | A qualified name that an existing import alias can replace. |
-| `ReplaceWithOperatorAssignment` | An assignment such as `x = x + y` that an operator assignment such as `x += y` can replace. |
-| `RevertExplicitBackingFields` | A property with an explicit backing field that a private backing property can replace. Opposite of `ConvertToExplicitBackingFields`, which is active by default. Inactive by default. |
-| `SafeCastWithReturn` | An `x as? T ?: return` statement that an `if (x !is T) return` check can replace. |
-| `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. |
-| `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. |
-| `SimplifyAssertNotNull` | An `assert(x != null)` right after the declaration of `x` that can fold into the initializer. |
-| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. |
-| `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. |
-| `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. |
-| `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. |
-| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. |
-| `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. |
-| `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. Option `areUnitExpressionsSkipped` (default `true`) does not report empty bodies and bodies with one `Unit` expression. |
-| `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. |
-| `VerboseNullabilityAndEmptiness` | A null check followed by an emptiness or blankness check that `isNullOrEmpty()` or `isNullOrBlank()` can replace. |
+| Rule | Finds | Options |
+|---|---|---|
+| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. | `areSuspendFunctionsSkipped` (default `true`): do not report `suspend` functions. |
+| `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. | |
+| `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. | |
+| `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. | |
+| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. | |
+| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. | |
+| `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. | |
+| `ConvertReferenceToLambda` | A callable reference that a lambda can replace. Inactive by default. | |
+| `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |
+| `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`, which is active by default. Inactive by default. | |
+| `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. | |
+| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Opposite of `RevertExplicitBackingFields`. | |
+| `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. | |
+| `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. | |
+| `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`. | |
+| `CopyWithoutNamedArguments` | A data class `copy` call that passes arguments without names. | |
+| `DestructuringDeclaration` | A loop variable of a data class or `Map.Entry` type that is only used to read its components. | `areNonParameterCasesReported` (default `false`): also report local variables and lambda parameters.<br>`maxDestructuringEntries` (default `3`, as in detekt's `DestructuringDeclarationWithTooManyEntries`): the maximum number of entries of the suggested declaration. |
+| `FilterIsInstanceCallWithClassLiteralArgument` | A `filterIsInstance(X::class.java)` call that `filterIsInstance<X>()` can replace. | |
+| `FoldInitializerAndIfToElvis` | An `if` null check that exits right after a variable declaration and can fold into the initializer with `?:`. | |
+| `IfThenToElvis` | An `if` that checks a value for `null` or a type and that the elvis operator `?:` can replace. | |
+| `IfThenToSafeAccess` | An `if` that checks a value for `null` or a type, returns `null` otherwise, and that `?.` or `as?` can replace. | |
+| `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. Opposite of `ExplicitThis`, which is active by default. Inactive by default. | |
+| `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. | |
+| `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. | |
+| `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. | |
+| `LiftReturnOrAssignment` | An `if`, `when` or `try` whose branches all end in a return or in an assignment to the same variable. | |
+| `MapToForEach` | A `map`-like call whose result is not used and that `forEach` or `forEachIndexed` can replace. | |
+| `MoveLambdaOutsideParentheses` | A lambda passed as the last argument inside the parentheses that can be a trailing lambda. | |
+| `MoveVariableDeclarationIntoWhen` | A variable declared right before a `when` and used only in it, which can move into the `when` subject. | |
+| `NullableHashCode` | An `x?.hashCode() ?: 0` on a nullable receiver that `x.hashCode()` can replace. | |
+| `RedundantAsSequence` | An `asSequence()` call on a sequence, or on an iterable followed by one terminal operation. | |
+| `RedundantElseInIf` | An `else` branch after `if` branches that all end with a jump such as `return` or `throw`. | |
+| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. | |
+| `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. | |
+| `RemoveEmptyParenthesesFromAnnotationEntry` | Empty parentheses after an annotation that needs no arguments. | |
+| `ReplaceAddAllWithMapTo` | An `addAll` or `+=` of a `map` or `filter` result that `mapTo` or `filterTo` can replace. | |
+| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. | |
+| `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. Inactive by default. | |
+| `ReplaceCallWithBinaryOperator` | An explicit call of `equals` or `compareTo` that a binary operator can replace. | |
+| `ReplaceCollectionCountWithSize` | A `count()` call without a predicate on a collection, array or map that `size` can replace. Inactive by default. | |
+| `ReplaceContains` | A call of an operator `contains` function that the `in` operator can replace. | |
+| `ReplaceIfExpressionWithFirstOrNull` | An `if` that returns the first element of a non-empty collection, string or array, else `null`, which `firstOrNull()` can replace. | |
+| `ReplaceJavaStaticMethodWithKotlinAnalog` | A call of a Java static method that has a Kotlin standard library counterpart. | |
+| `ReplaceManualRangeWithIndicesCalls` | A manual range from `0` to the size or last index that `indices`, a loop over the elements or `withIndex()` can replace. | |
+| `ReplaceMapGetOrDefault` | A `map.getOrDefault(key, default)` call on a map with non-null values that `map[key] ?: default` can replace. | |
+| `ReplaceMapIndexedWithListGenerator` | A `mapIndexed` call on a collection that ignores the element, where `List(size) { index -> ... }` fits. | |
+| `ReplaceMapKeysCallChainWithKeys` | A `map { it.key }.toSet()` call chain on a map that `keys` can replace. | |
+| `ReplaceNegatedIsEmptyWithIsNotEmpty` | A negated `isEmpty`, `isNotEmpty`, `isBlank` or `isNotBlank` call that the inverted function can replace. | |
+| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. | |
+| `ReplaceRangeStartEndInclusiveWithFirstLast` | A `start` or `endInclusive` on a primitive range that the unboxed `first` or `last` can replace. | |
+| `ReplaceReadLineWithReadln` | A `readLine()` call that `readln()` or `readlnOrNull()` can replace. | |
+| `ReplaceSizeCheckWithIsNotEmpty` | A size, length or count comparison that `isNotEmpty()` can replace. | |
+| `ReplaceSizeZeroCheckWithIsEmpty` | A size, length or count zero check that `isEmpty()` can replace. | |
+| `ReplaceStringFormatWithLiteral` | A `String.format` call with only `%s` placeholders that a string template can replace. | |
+| `ReplaceSubstringWithDropLast` | An `s.substring(0, s.length - n)` call that `s.dropLast(n)` can replace. | |
+| `ReplaceSubstringWithIndexingOperation` | A `substring(i, i + 1)` call with constant indices that `s[i]` can replace. | |
+| `ReplaceSubstringWithSubstringAfter` | An `s.substring(s.indexOf(x))` call that `s.substringAfter(x)` can replace. | |
+| `ReplaceSubstringWithSubstringBefore` | An `s.substring(0, s.indexOf(x))` call that `s.substringBefore(x)` can replace. | |
+| `ReplaceSubstringWithTake` | An `s.substring(0, n)` call that `s.take(n)` can replace. | |
+| `ReplaceToStringWithStringTemplate` | A `toString()` call on a reference that a string template can replace. Inactive by default. | |
+| `ReplaceToWithInfixForm` | A dot call of the infix `to` function that can use the infix form. Opposite of `InfixCallToOrdinary`. | |
+| `ReplaceUntilWithRangeUntil` | An infix `until` call from the standard library that the `..<` operator can replace. | |
+| `ReplaceWithCallWithContextCall` | A `with` call whose receiver is only used as a context argument, so a `context` call fits. | |
+| `ReplaceWithIgnoreCaseEquals` | An equality check of two identical case conversions that `equals(..., ignoreCase = true)` can replace. | |
+| `ReplaceWithImportAlias` | A qualified name that an existing import alias can replace. | |
+| `ReplaceWithOperatorAssignment` | An assignment such as `x = x + y` that an operator assignment such as `x += y` can replace. | |
+| `RevertExplicitBackingFields` | A property with an explicit backing field that a private backing property can replace. Opposite of `ConvertToExplicitBackingFields`, which is active by default. Inactive by default. | |
+| `SafeCastWithReturn` | An `x as? T ?: return` statement that an `if (x !is T) return` check can replace. | |
+| `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. | |
+| `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. | |
+| `SimplifyAssertNotNull` | An `assert(x != null)` right after the declaration of `x` that can fold into the initializer. | |
+| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. | |
+| `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. | |
+| `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. | |
+| `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. | |
+| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. | |
+| `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. | |
+| `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. | `areUnitExpressionsSkipped` (default `true`): do not report empty bodies and bodies with one `Unit` expression. |
+| `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. | |
+| `VerboseNullabilityAndEmptiness` | A null check followed by an emptiness or blankness check that `isNullOrEmpty()` or `isNullOrBlank()` can replace. | |
 
 ## Build
 
@@ -554,12 +495,7 @@ the script, because detekt does not have the Gradle model.
 
 [docs/inspections.md](docs/inspections.md) lists every Kotlin inspection of IntelliJ IDEA with its
 target module and a verdict on how to port it. The JVM, Android, Gradle and Compose Multiplatform
-inspections are not in the catalog; the [not ported JVM inspections](#not-ported-jvm-inspections),
-[not ported Android inspections](#not-ported-android-inspections),
-[not ported Gradle inspections](#not-ported-gradle-inspections) and
-[not ported Compose Multiplatform inspections](#not-ported-compose-multiplatform-inspections) tables
-above give their verdicts.
-Refresh the catalog with:
+inspections are not in the catalog. Refresh the catalog with:
 
 ```shell
 python3 scripts/inspection-catalog.py <intellij-community checkout> --ref master
