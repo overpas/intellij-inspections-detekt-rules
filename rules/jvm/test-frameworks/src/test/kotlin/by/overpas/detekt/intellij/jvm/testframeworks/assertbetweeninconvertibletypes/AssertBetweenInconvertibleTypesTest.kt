@@ -516,4 +516,40 @@ class AssertBetweenInconvertibleTypesTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `an assertj isEqualTo between an iterable and a class that delegates iterable passes`() {
+        val code = """
+            import org.assertj.core.api.Assertions.assertThat
+
+            class Bag(private val values: List<String>) : Iterable<String> by values
+
+            class FooTest {
+                fun test(first: Bag, second: Bag) {
+                    assertThat(first).isEqualTo(second)
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an assertj isEqualTo between a mutable list and a string is reported`() {
+        val code = """
+            import org.assertj.core.api.Assertions.assertThat
+
+            class FooTest {
+                fun test(values: MutableList<String>) {
+                    assertThat(values).isEqualTo("foo")
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
 }

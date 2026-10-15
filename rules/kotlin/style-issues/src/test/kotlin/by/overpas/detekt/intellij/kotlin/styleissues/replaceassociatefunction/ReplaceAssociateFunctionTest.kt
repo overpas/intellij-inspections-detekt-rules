@@ -88,7 +88,7 @@ class ReplaceAssociateFunctionTest {
     }
 
     @Test
-    fun `an associate call with a computed key and value is reported`() {
+    fun `an associate call with a computed key and value passes`() {
         val code = $$"""
             fun getKey(i: Int): Long = 1L
             fun getValue(i: Int): String = ""
@@ -100,7 +100,7 @@ class ReplaceAssociateFunctionTest {
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
+        assertEquals(0, findings.size)
     }
 
     @Test

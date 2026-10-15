@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 class FoldInitializerAndIfToElvis(config: Config) :
     Rule(
         config,
-        "An `if` that only checks the variable declared right before it for `null` or for a type and then exits " +
+        "An `if` that only checks the variable declared right before it for `null` and then exits " +
             "can be folded into the initializer. Use `?:` with the exit statement.",
     ),
     RequiresAnalysisApi {

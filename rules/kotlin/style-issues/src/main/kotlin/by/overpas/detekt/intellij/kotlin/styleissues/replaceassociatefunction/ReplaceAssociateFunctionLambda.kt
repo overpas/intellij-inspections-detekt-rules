@@ -50,7 +50,6 @@ internal class ReplaceAssociateFunctionLambda(
         parameterReferences == null -> null
         parameterReferences.first() -> "associateWith"
         parameterReferences.last() -> "associateBy"
-        statements.size == 1 -> "associateBy"
         else -> null
     }
 }

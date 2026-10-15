@@ -3,12 +3,15 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.unnecessaryvariabl
 import com.intellij.psi.PsiComment
 import com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.components.compositeScope
+import org.jetbrains.kotlin.analysis.api.components.scopeContext
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaVariableSymbol
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -65,7 +68,17 @@ internal class UnnecessaryVariableCopy(
         } == true
         val hasImplicitParameter = name == IMPLICIT_PARAMETER &&
             enclosing?.anyDescendantOfType<KtLambdaExpression> { it.hasImplicitParameter() } == true
-        return hasDeclaration || hasImplicitParameter
+        return hasDeclaration || hasImplicitParameter || hasScopeVariable(name)
+    }
+
+    private fun hasScopeVariable(name: String): Boolean {
+        val context = enclosing ?: return false
+        return with(session) {
+            property.containingKtFile.scopeContext(context).compositeScope()
+                .callables(Name.identifier(name))
+                .filterIsInstance<KaVariableSymbol>()
+                .any { it.psi != source?.psi && !it.isExtension }
+        }
     }
 
     private fun KtLambdaExpression.hasImplicitParameter(): Boolean =

@@ -309,4 +309,42 @@ class UnnecessaryVariableTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `a copy of a local whose name matches an inherited member property passes`() {
+        val code = """
+            open class Base {
+                val height: Int = 0
+            }
+
+            class Layout : Base() {
+                fun measure(h: Int): Int {
+                    val height = h + 1
+                    val width = height
+                    return width + 1
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a copy of a local whose name matches a top level property passes`() {
+        val code = """
+            val height = 0
+
+            fun measure(h: Int): Int {
+                val height = h + 1
+                val width = height
+                return width + 1
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
 }

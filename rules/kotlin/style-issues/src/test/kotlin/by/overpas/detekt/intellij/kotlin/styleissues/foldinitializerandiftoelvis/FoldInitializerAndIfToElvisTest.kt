@@ -97,7 +97,7 @@ class FoldInitializerAndIfToElvisTest {
     }
 
     @Test
-    fun `a negated type check of the same type is reported`() {
+    fun `a negated type check passes`() {
         val code = """
             fun foo(arg: Any?) {
                 val n = arg
@@ -108,34 +108,7 @@ class FoldInitializerAndIfToElvisTest {
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
-    }
-
-    @Test
-    fun `a negated type check of a subtype is reported`() {
-        val code = """
-            open class A
-
-            open class B : A() {
-                fun b() {}
-            }
-
-            open class C : B() {
-                fun c() {}
-            }
-
-            fun test() {
-                val b: B = B()
-                if (b !is C) {
-                    return
-                }
-                b.c()
-            }
-        """.trimIndent()
-
-        val findings = sut.lintWithContext(environment, code)
-
-        assertEquals(1, findings.size)
+        assertEquals(0, findings.size)
     }
 
     @Test
@@ -287,73 +260,6 @@ class FoldInitializerAndIfToElvisTest {
                 if (foo == null) return 0
                 return 1
             }
-        """.trimIndent()
-
-        val findings = sut.lintWithContext(environment, code)
-
-        assertEquals(0, findings.size)
-    }
-
-    @Test
-    fun `a negated type check of a supertype passes`() {
-        val code = """
-            open class A
-
-            open class B : A() {
-                fun b() {}
-            }
-
-            fun test() {
-                val b = B()
-                if (b !is A) {
-                    return
-                }
-                b.b()
-            }
-        """.trimIndent()
-
-        val findings = sut.lintWithContext(environment, code)
-
-        assertEquals(0, findings.size)
-    }
-
-    @Test
-    fun `a negated type check of an unrelated interface passes`() {
-        val code = """
-            interface A
-
-            open class B : A {
-                fun b() {}
-            }
-
-            interface C : A {
-                fun c() {}
-            }
-
-            fun test() {
-                val b = B()
-                if (b !is C) {
-                    return
-                }
-                b.c()
-            }
-        """.trimIndent()
-
-        val findings = sut.lintWithContext(environment, code)
-
-        assertEquals(0, findings.size)
-    }
-
-    @Test
-    fun `a negated type check of a nullable type passes`() {
-        val code = """
-            fun test(): String {
-                val foo = foo()
-                if (foo !is String?) return "0"
-                return "1"
-            }
-
-            fun foo(): Any? = null
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)

@@ -1,6 +1,5 @@
 package by.overpas.detekt.intellij.jvm.testframeworks.assertbetweeninconvertibletypes
 
-import by.overpas.detekt.intellij.jvm.testframeworks.superClassIds
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassSymbol
@@ -12,9 +11,8 @@ private val INTERFACE_CLASS_KINDS = setOf(KaClassKind.INTERFACE, KaClassKind.ANN
 context(session: KaSession)
 internal fun KaClassSymbol.isConvertibleTo(other: KaClassSymbol): Boolean {
     val isRelated = this == other ||
-        (classId != null && classId == other.classId) ||
-        other.classId in superClassIds() ||
-        classId in other.superClassIds()
+        other.readOnlyClassId() in readOnlyClassIds() ||
+        readOnlyClassId() in other.readOnlyClassIds()
     val hasPossibleCommonSubclass = !isFinal() &&
         !other.isFinal() &&
         (classKind in INTERFACE_CLASS_KINDS || other.classKind in INTERFACE_CLASS_KINDS)

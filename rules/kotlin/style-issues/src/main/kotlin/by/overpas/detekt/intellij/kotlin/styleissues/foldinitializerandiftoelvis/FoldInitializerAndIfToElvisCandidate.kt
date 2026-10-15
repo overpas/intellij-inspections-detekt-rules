@@ -7,9 +7,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
-import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
-import org.jetbrains.kotlin.psi.KtNullableType
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -19,19 +17,11 @@ internal class FoldInitializerAndIfToElvisCandidate(private val ifExpression: Kt
 
     private val condition = ifExpression.condition
 
-    private val checkedValue: KtNameReferenceExpression? = when (condition) {
-        is KtBinaryExpression ->
-            listOfNotNull(condition.left, condition.right)
-                .takeIf { operands -> condition.operationToken == KtTokens.EQEQ && operands.size == 2 }
-                ?.singleOrNull { !KtPsiUtil.isNullConstant(it) }
-
-        is KtIsExpression ->
-            condition.leftHandSide.takeIf {
-                condition.isNegated && condition.typeReference?.typeElement !is KtNullableType
-            }
-
-        else -> null
-    } as? KtNameReferenceExpression
+    private val checkedValue = (condition as? KtBinaryExpression)
+        ?.takeIf { it.operationToken == KtTokens.EQEQ }
+        ?.let { listOfNotNull(it.left, it.right) }
+        ?.takeIf { it.size == 2 }
+        ?.singleOrNull { !KtPsiUtil.isNullConstant(it) } as? KtNameReferenceExpression
 
     private val variable = ifExpression.siblings(forward = false, withItself = false)
         .filterIsInstance<KtExpression>()
@@ -52,17 +42,7 @@ internal class FoldInitializerAndIfToElvisCandidate(private val ifExpression: Kt
     context(session: KaSession)
     fun isFoldable(): Boolean =
         with(session) { statement?.expressionType?.isNothingType == true } &&
-            isTypeCheckPossible() &&
             !isVariableUsedInStatement()
-
-    context(session: KaSession)
-    private fun isTypeCheckPossible(): Boolean {
-        val checkedType = (condition as? KtIsExpression)?.typeReference
-        return checkedType == null ||
-            with(session) {
-                variable?.run { FoldInitializerAndIfToElvisTypeCheck(checkedType, returnType).isPossible() }
-            } == true
-    }
 
     context(session: KaSession)
     private fun isVariableUsedInStatement(): Boolean =
