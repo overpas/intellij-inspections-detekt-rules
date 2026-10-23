@@ -413,7 +413,7 @@ the script, because detekt does not have the Gradle model.
 | `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |
 | `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`, which is active by default. Inactive by default. | |
 | `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. | |
-| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Opposite of `RevertExplicitBackingFields`. | |
+| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Only when the language version supports explicit backing fields (Kotlin 2.4 or later). Opposite of `RevertExplicitBackingFields`. | |
 | `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. | |
 | `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. | |
 | `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`. | |
