@@ -449,4 +449,43 @@ class TestMethodWithoutAssertionTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `an assertion with an unresolved argument passes`() {
+        val code = """
+            import kotlin.test.Test
+            import kotlin.test.assertEquals
+
+            class FooTest {
+                @Test
+                fun test() {
+                    val actual = unresolved()
+                    assertEquals(1, actual.value)
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, allowCompilationErrors = true)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a callable reference to an assertion is reported`() {
+        val code = """
+            import org.junit.Assert
+            import org.junit.Test
+
+            class FooTest {
+                @Test
+                fun test() {
+                    true.run(Assert::assertTrue)
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
 }
