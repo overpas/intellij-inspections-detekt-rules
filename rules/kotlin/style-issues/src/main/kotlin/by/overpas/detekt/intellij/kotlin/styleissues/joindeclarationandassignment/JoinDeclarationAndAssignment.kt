@@ -21,7 +21,7 @@ class JoinDeclarationAndAssignment(config: Config) :
         super.visitProperty(property)
         val assignment = property.joinableAssignment() ?: return
         if (analyze(property) { JoinDeclarationAndAssignmentCheck(this, property, assignment).isJoinable() }) {
-            report(Finding(Entity.from(property), "Can be joined with assignment"))
+            report(Finding(Entity.atName(property), "Can be joined with assignment"))
         }
     }
 }
