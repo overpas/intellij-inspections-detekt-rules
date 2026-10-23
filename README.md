@@ -450,7 +450,7 @@ the script, because detekt does not have the Gradle model.
 | `ReplaceMapIndexedWithListGenerator` | A `mapIndexed` call on a collection that ignores the element, where `List(size) { index -> ... }` fits. | |
 | `ReplaceMapKeysCallChainWithKeys` | A `map { it.key }.toSet()` call chain on a map that `keys` can replace. | |
 | `ReplaceNegatedIsEmptyWithIsNotEmpty` | A negated `isEmpty`, `isNotEmpty`, `isBlank` or `isNotBlank` call that the inverted function can replace. | |
-| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. | |
+| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. By default, test source sets are excluded (`excludes`), because there `!!` is an assertion. | |
 | `ReplaceRangeStartEndInclusiveWithFirstLast` | A `start` or `endInclusive` on a primitive range that the unboxed `first` or `last` can replace. | |
 | `ReplaceReadLineWithReadln` | A `readLine()` call that `readln()` or `readlnOrNull()` can replace. | |
 | `ReplaceSizeCheckWithIsNotEmpty` | A size, length or count comparison that `isNotEmpty()` can replace. | |
