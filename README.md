@@ -208,7 +208,7 @@ the script, because detekt does not have the Gradle model.
 |---|---|---|
 | `AssertEqualsCalledOnArray` | An `assertEquals()` call on two arrays, which compares them by identity and not by content. Inactive by default. | |
 | `AssertEqualsMayBeAssertSame` | An `assertEquals()` call on two objects of a final class that does not override `equals()`, where `assertSame()` fits. Inactive by default. | |
-| `IgnoredJUnitTest` | A test class or test method that `@Ignore` or `@Disabled` turns off. Inactive by default. | `isReasonAccepted` (default `true`): do not report the ones that give a reason. |
+| `IgnoredJUnitTest` | A test class or test method that `@Ignore` or `@Disabled` turns off. A typealias from a library or an `actual` typealias, such as `kotlin.test.Ignore`, does not count. Inactive by default. | `isReasonAccepted` (default `true`): do not report the ones that give a reason. |
 | `JUnit3StyleTestMethodInJUnit4Class` | A `test...` method without `@Test` in a JUnit 4 class, which JUnit 4 does not run. | |
 | `JUnit5AssertionsConverter` | A JUnit 3 or JUnit 4 assertion or assumption in a JUnit 5 test. | |
 | `JUnitMalformedDeclaration` | A JUnit test class, test method, lifecycle method, rule, extension or parameter source with a declaration that JUnit cannot run or rejects. | `ignorableAnnotations` (default `mockit.Mocked`, `org.junit.jupiter.api.io.TempDir`): the parameter annotations to accept.<br>`areSuspendFunctionsAllowed` (default `false`): accept suspend test and lifecycle functions. |
