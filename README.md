@@ -148,7 +148,10 @@ Kotlin is active. detekt uses this default config with `buildUponDefaultConfig =
 
 These rules check the Jetpack (`androidx.compose.ui.tooling.preview`) and the Compose Multiplatform
 (`org.jetbrains.compose.ui.tooling.preview`) `@Preview` and `@PreviewParameter` annotations. A
-MultiPreview annotation counts only on a `@Composable` function.
+MultiPreview annotation counts only on a `@Composable` function. If the same rule of
+`intellij-android-compose-preview` (the rule name without `Multiplatform`) is active, these rules
+do not report the problems that the Android rule reports for the Jetpack previews. Thus one problem
+gives one finding. IntelliJ also shows only one of the two inspections in a file.
 
 | Rule | Finds |
 |---|---|

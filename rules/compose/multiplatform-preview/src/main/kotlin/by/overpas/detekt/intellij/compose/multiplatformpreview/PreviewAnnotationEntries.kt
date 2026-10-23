@@ -17,5 +17,9 @@ internal fun KtNamedFunction.previewAnnotationEntries(): List<KtAnnotationEntry>
 }
 
 context(session: KaSession)
+internal fun KtAnnotationEntry.isJetpackPreviewOrMultiPreview(): Boolean =
+    resolvedClassId()?.isJetpackPreviewOrMultiPreview() == true
+
+context(session: KaSession)
 private fun KtNamedFunction.isComposable(): Boolean =
     annotationEntries.any { it.resolvedClassId() == COMPOSABLE }
