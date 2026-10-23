@@ -29,7 +29,7 @@ class ConvertSealedClassToSealedInterface(config: Config) :
         val isConvertible = analyze(klass) {
             val symbol = klass.symbol as? KaNamedClassSymbol
             symbol != null &&
-                !klass.hasSynchronizedFunction() &&
+                !klass.hasNonInterfaceAnnotation() &&
                 symbol.sealedClassInheritors.all { it.psi is KtClassOrObject }
         }
         if (isConvertible) report(Finding(Entity.from(klass), "Sealed class can be converted to sealed interface"))
