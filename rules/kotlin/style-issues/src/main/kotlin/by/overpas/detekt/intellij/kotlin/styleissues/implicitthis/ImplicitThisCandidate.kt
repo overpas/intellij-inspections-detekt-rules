@@ -15,6 +15,9 @@ internal fun KtExpression.implicitThisReference(): KtSimpleNameExpression? =
         else -> null
     }
 
+internal fun KtSimpleNameExpression.isCallee(): Boolean =
+    (parent as? KtCallExpression)?.calleeExpression == this
+
 private fun KtNameReferenceExpression.hasExplicitReceiverPosition(): Boolean {
     val selector = (parent as? KtCallExpression)?.takeIf { it.calleeExpression == this } ?: this
     return parent is KtThisExpression ||
