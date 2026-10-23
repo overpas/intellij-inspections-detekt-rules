@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.introducewhensubject
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -132,7 +133,7 @@ class IntroduceWhenSubjectTest {
     }
 
     @Test
-    fun `a when with guard conditions is reported`() {
+    fun `a when with guard conditions is reported when guards are not ignored`() {
         val code = """
             fun test(a: Any) {
                 when {
@@ -142,10 +143,45 @@ class IntroduceWhenSubjectTest {
                 }
             }
         """.trimIndent()
+        val sut = IntroduceWhenSubject(TestConfig("areWhenGuardsIgnored" to false))
 
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a when with a conjunction inside an equality test is reported`() {
+        val code = """
+            fun test(a: Any) {
+                when {
+                    a == (true && false) -> Unit
+                    a is Int -> Unit
+                    else -> Unit
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a when with guard conditions passes`() {
+        val code = """
+            fun test(a: Any) {
+                when {
+                    a is String && a.isNotEmpty() -> Unit
+                    a is Int -> Unit
+                    else -> Unit
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
     }
 
     @Test
