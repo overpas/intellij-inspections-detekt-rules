@@ -381,7 +381,7 @@ the script, because detekt does not have the Gradle model.
 | `RedundantSamConstructor` | A SAM constructor call in an argument where a plain lambda converts to the same type. |
 | `RedundantSetter` | A setter that is the default one or only assigns the value to the backing field. |
 | `RedundantUpperBound` | A type parameter bound that is `Any?`, the default upper bound. |
-| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. Inactive by default. |
+| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. Skips generated functions, such as the data class `copy`. Inactive by default. |
 | `RedundantWith` | A `with` call whose lambda does not use the receiver. |
 | `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
 | `RemoveExplicitTypeArguments` | Explicit type arguments that the compiler can infer. |

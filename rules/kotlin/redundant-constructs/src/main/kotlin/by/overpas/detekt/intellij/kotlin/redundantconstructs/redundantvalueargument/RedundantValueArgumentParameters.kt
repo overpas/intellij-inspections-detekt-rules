@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.sourcePsiSafe
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.ValueArgument
@@ -13,7 +14,7 @@ import org.jetbrains.kotlin.psi.ValueArgument
 context(session: KaSession)
 internal fun KtValueArgument.matchesDefaultValueOf(parameter: KaValueParameterSymbol): Boolean =
     with(session) {
-        val defaultValue = (parameter.psi as? KtParameter)?.takeIf { !it.isVarArg }?.defaultValue?.evaluate()
+        val defaultValue = parameter.sourcePsiSafe<KtParameter>()?.takeIf { !it.isVarArg }?.defaultValue?.evaluate()
         val value = getArgumentExpression()?.evaluate()
         defaultValue != null && value != null && defaultValue.value == value.value
     }
