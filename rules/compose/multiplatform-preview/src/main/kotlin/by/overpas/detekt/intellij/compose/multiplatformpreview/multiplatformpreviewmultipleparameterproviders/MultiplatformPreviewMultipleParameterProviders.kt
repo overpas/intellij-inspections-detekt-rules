@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.compose.multiplatformpreview.multiplatformpreviewmultipleparameterproviders
 
 import by.overpas.detekt.intellij.IntellijInspection
+import by.overpas.detekt.intellij.compose.multiplatformpreview.hasActiveAndroidCounterpart
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -19,9 +20,14 @@ class MultiplatformPreviewMultipleParameterProviders(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    private val areJetpackPreviewsCoveredByAndroid = hasActiveAndroidCounterpart()
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        analyze(function) { function.secondPreviewParameter() }?.let { annotation ->
+        analyze(function) {
+            function.secondPreviewParameter()
+                ?.takeUnless { areJetpackPreviewsCoveredByAndroid && function.hasJetpackMultipleProviders() }
+        }?.let { annotation ->
             report(Finding(Entity.from(annotation), "Multiple @PreviewParameter are not allowed"))
         }
     }

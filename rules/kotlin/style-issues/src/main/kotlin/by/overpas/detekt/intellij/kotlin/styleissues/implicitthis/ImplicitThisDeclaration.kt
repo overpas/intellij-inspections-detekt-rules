@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.analysis.api.symbols.receiverType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
 
 context(session: KaSession)
-internal fun KaSymbol.implicitThisClass(): KaClassSymbol? =
+internal fun KaSymbol.implicitThisClass(isInvoked: Boolean): KaClassSymbol? =
     with(session) {
         when (val symbol = this@implicitThisClass) {
             is KaNamedFunctionSymbol, is KaPropertySymbol ->
@@ -20,7 +20,8 @@ internal fun KaSymbol.implicitThisClass(): KaClassSymbol? =
                     symbol.containingDeclaration as? KaClassSymbol
                 }
 
-            is KaVariableSymbol -> (symbol.returnType as? KaFunctionType)?.receiverType?.expandedSymbol
+            is KaVariableSymbol ->
+                (symbol.returnType as? KaFunctionType)?.takeIf { isInvoked }?.receiverType?.expandedSymbol
 
             else -> null
         }

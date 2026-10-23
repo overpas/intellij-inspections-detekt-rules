@@ -282,6 +282,123 @@ class ConvertSealedClassToSealedInterfaceTest {
     }
 
     @Test
+    fun `a sealed class with a private inline method is reported`() {
+        val code = """
+            sealed class Either {
+                private inline fun <X> run(block: () -> X): X = block()
+
+                fun describe(): String = run { "either" }
+
+                object Left : Either()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a sealed class with a public inline method passes`() {
+        val code = """
+            sealed class Either<out F, out S> {
+                inline fun <X> fold(onFailure: (F) -> X, onSuccess: (S) -> X): X =
+                    when (this) {
+                        is Success -> onSuccess(value)
+                        is Failure -> onFailure(value)
+                    }
+
+                data class Success<out S>(val value: S) : Either<Nothing, S>()
+
+                data class Failure<out F>(val value: F) : Either<F, Nothing>()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a sealed class with an inline property getter passes`() {
+        val code = """
+            sealed class Shape {
+                val sides: Int
+                    inline get() = 0
+
+                object Circle : Shape()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a sealed class with a tailrec method passes`() {
+        val code = """
+            sealed class Counter {
+                tailrec fun count(n: Int): Int = if (n == 0) 0 else count(n - 1)
+
+                object Zero : Counter()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a sealed class with an external method passes`() {
+        val code = """
+            sealed class Native {
+                external fun call(): Int
+
+                object Impl : Native()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a sealed class with a JvmOverloads method passes`() {
+        val code = """
+            sealed class Task {
+                @JvmOverloads
+                fun run(times: Int = 1) = times
+
+                object Once : Task()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a sealed class with a JvmName property getter passes`() {
+        val code = """
+            sealed class Task {
+                @get:JvmName("title")
+                val name: String
+                    get() = "task"
+
+                object Once : Task()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
     fun `a sealed class with a superclass passes`() {
         val code = """
             open class Base

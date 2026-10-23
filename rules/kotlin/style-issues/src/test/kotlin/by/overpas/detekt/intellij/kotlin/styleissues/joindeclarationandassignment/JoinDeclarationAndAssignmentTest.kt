@@ -28,6 +28,28 @@ class JoinDeclarationAndAssignmentTest {
     }
 
     @Test
+    fun `a property with a doc comment is reported at its name`() {
+        val code = """
+            class Foo {
+                /**
+                 * The text.
+                 */
+                private val text: String
+
+                init {
+                    text = "Hello"
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+        val reportedText = findings.single().entity.location.text
+            .run { code.substring(start, end) }
+
+        assertEquals("text", reportedText)
+    }
+
+    @Test
     fun `a local value assigned after another statement is reported`() {
         val code = """
             fun test(repo: Repository, commitMessage: String): String {

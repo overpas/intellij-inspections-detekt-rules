@@ -116,6 +116,61 @@ class ImplicitThisTest {
     }
 
     @Test
+    fun `a named argument label of a function type with a receiver passes`() {
+        val code = """
+            fun named(content: Int.() -> Unit) = 1.content()
+
+            fun use() {
+                with(1) {
+                    named(content = {})
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a parameter of a function type with a receiver used as a value passes`() {
+        val code = """
+            fun named(content: Int.() -> Unit) = 1.content()
+
+            fun use(content: Int.() -> Unit) {
+                with(1) {
+                    named(content = content)
+                    content.invoke(this)
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `only the invocation of a parameter of a function type with a receiver is reported`() {
+        val code = """
+            fun named(content: Int.() -> Unit) = 1.content()
+
+            fun use(content: Int.() -> Unit) {
+                with(1) {
+                    named(content = content)
+                    content()
+                    content.invoke(this)
+                }
+            }
+        """.trimIndent()
+        val expected = listOf(6)
+
+        val lines = sut.lintWithContext(environment, code).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
     fun `a member of an outer receiver inside a lambda is reported`() {
         val code = """
             class Foo {

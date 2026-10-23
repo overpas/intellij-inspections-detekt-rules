@@ -101,8 +101,8 @@ column gives the other options of a rule. The rule names are the short names of 
 inspections.
 
 Each rule set jar contains a default config (`config/config.yml`). The rules that IntelliJ IDEA
-disables by default are inactive, and so are some rules that give noisy findings in CI. Of two opposite rules, only the one that is more idiomatic for
-Kotlin is active. detekt uses this default config with `buildUponDefaultConfig = true`.
+disables by default are inactive, and so are some rules that give noisy findings in CI. Of two opposite rules, at most one is active: the one that is
+more idiomatic for Kotlin. detekt uses this default config with `buildUponDefaultConfig = true`.
 
 ### `intellij-android-compose-preview`
 
@@ -132,7 +132,7 @@ Kotlin is active. detekt uses this default config with `buildUponDefaultConfig =
 
 | Rule | Finds |
 |---|---|
-| `IllegalIdentifier` | A backticked identifier with characters that the dex format does not allow in a simple name, for example a space or a dot. These names fail on Android versions before 11. By default, unit test and screenshot test source sets are excluded (`excludes`). |
+| `IllegalIdentifier` | A backticked identifier with characters that the dex format does not allow in a simple name, for example a space or a dot. These names fail on Android versions before 11. Files in host test source sets are skipped: a source set under `src/` whose name has the word `test`, for example `test`, `desktopTest` or `screenshotTest`, but not a device test set (`androidTest`, `androidInstrumentedTest`, `androidDeviceTest`). |
 
 ### `intellij-android-wear-tile-preview`
 
@@ -148,7 +148,10 @@ Kotlin is active. detekt uses this default config with `buildUponDefaultConfig =
 
 These rules check the Jetpack (`androidx.compose.ui.tooling.preview`) and the Compose Multiplatform
 (`org.jetbrains.compose.ui.tooling.preview`) `@Preview` and `@PreviewParameter` annotations. A
-MultiPreview annotation counts only on a `@Composable` function.
+MultiPreview annotation counts only on a `@Composable` function. If the same rule of
+`intellij-android-compose-preview` (the rule name without `Multiplatform`) is active, these rules
+do not report the problems that the Android rule reports for the Jetpack previews. Thus one problem
+gives one finding. IntelliJ also shows only one of the two inspections in a file.
 
 | Rule | Finds |
 |---|---|
@@ -208,7 +211,7 @@ the script, because detekt does not have the Gradle model.
 |---|---|---|
 | `AssertEqualsCalledOnArray` | An `assertEquals()` call on two arrays, which compares them by identity and not by content. Inactive by default. | |
 | `AssertEqualsMayBeAssertSame` | An `assertEquals()` call on two objects of a final class that does not override `equals()`, where `assertSame()` fits. Inactive by default. | |
-| `IgnoredJUnitTest` | A test class or test method that `@Ignore` or `@Disabled` turns off. Inactive by default. | `isReasonAccepted` (default `true`): do not report the ones that give a reason. |
+| `IgnoredJUnitTest` | A test class or test method that `@Ignore` or `@Disabled` turns off. A typealias from a library or an `actual` typealias, such as `kotlin.test.Ignore`, does not count. Inactive by default. | `isReasonAccepted` (default `true`): do not report the ones that give a reason. |
 | `JUnit3StyleTestMethodInJUnit4Class` | A `test...` method without `@Test` in a JUnit 4 class, which JUnit 4 does not run. | |
 | `JUnit5AssertionsConverter` | A JUnit 3 or JUnit 4 assertion or assumption in a JUnit 5 test. | |
 | `JUnitMalformedDeclaration` | A JUnit test class, test method, lifecycle method, rule, extension or parameter source with a declaration that JUnit cannot run or rejects. | `ignorableAnnotations` (default `mockit.Mocked`, `org.junit.jupiter.api.io.TempDir`): the parameter annotations to accept.<br>`areSuspendFunctionsAllowed` (default `false`): accept suspend test and lifecycle functions. |
@@ -241,7 +244,7 @@ the script, because detekt does not have the Gradle model.
 
 | Rule | Finds |
 |---|---|
-| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. Opposite of `ConvertFromMultiDollarToRegularString`. |
+| `CanConvertToMultiDollarString` | A string that escapes two or more dollar characters (`\$`), or writes one as `${'$'}`, and can use an interpolation prefix instead. Each escaped dollar is reported. Unlike IntelliJ, a string whose only escape is a single `\$`, such as `"%1\$s"`, is not reported. Opposite of `ConvertFromMultiDollarToRegularString`. |
 | `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. Opposite of `CanConvertToMultiDollarString`, which is active by default. Inactive by default. |
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
 | `InfixCallToOrdinary` | An infix call that can be an ordinary call. Opposite of `ConvertPairConstructorToToFunction` and `ReplaceToWithInfixForm`, which are active by default. Inactive by default. |
@@ -251,7 +254,7 @@ the script, because detekt does not have the Gradle model.
 | Rule | Finds |
 |---|---|
 | `CoroutineContextWithJob` | A `Job` or `NonCancellable` in the context argument of a coroutine builder, which breaks structured concurrency. |
-| `DeferredResultUnused` | A call that returns a `Deferred` whose result is never used. |
+| `DeferredResultUnused` | A call that returns a `Deferred` whose result is never used. Unlike IntelliJ IDEA, a call whose declared return type is a type parameter, such as `map.remove(key)` on a map of `Deferred` values, is skipped. |
 | `ForEachJoinOnCollectionOfJob` | A `forEach { it.join() }` on a collection of jobs that `joinAll()` can replace. |
 | `MapAwaitOnCollectionOfDeferred` | A `map { it.await() }` on a collection of deferred values that `awaitAll()` can replace. |
 | `PreferCurrentCoroutineContextToCoroutineContext` | A use of `kotlin.coroutines.coroutineContext` that `currentCoroutineContext()` should replace. |
@@ -270,7 +273,7 @@ the script, because detekt does not have the Gradle model.
 |---|---|
 | `JavaCollectionWithNullableTypeArgument` | A Java concurrent collection or `PriorityQueue` with a nullable type argument, which does not support `null`. |
 | `JavaCollectionsStaticMethodOnImmutableList` | A `java.util.Collections` mutator call (`reverse`, `sort`, `shuffle`, `fill`) on a read-only Kotlin list. |
-| `JavaDefaultMethodsNotOverriddenByDelegation` | Interface delegation that does not forward the overrides of Java default methods of the delegate. |
+| `JavaDefaultMethodsNotOverriddenByDelegation` | Interface delegation that does not forward the overrides of Java default methods of the delegate. By default, common source sets (`commonMain`, `commonTest`) are excluded (`excludes`), because their interfaces have no Java default methods. |
 
 ### `intellij-kotlin-logging`
 
@@ -321,13 +324,13 @@ the script, because detekt does not have the Gradle model.
 | `FilterIsInstanceResultIsAlwaysEmpty` | A `filterIsInstance` call whose target type no element of the receiver can have. |
 | `ForEachParameterNotUsed` | A `forEach` call whose lambda never uses the implicit `it` parameter. |
 | `ImplicitNullableNothingType` | A `var` or open declaration without an explicit type whose inferred type is `Nothing?`. |
-| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. |
+| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. Inactive by default. |
 | `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. |
 | `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. |
 | `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
 | `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. |
 | `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. |
-| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. |
+| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. By default, test source sets are excluded (`excludes`). |
 | `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. |
 | `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. |
 | `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. |
@@ -361,7 +364,7 @@ the script, because detekt does not have the Gradle model.
 | `CanBePrimaryConstructorProperty` | A property that is initialized from the constructor parameter of the same name and type. |
 | `CanUnescapeDollarLiteral` | An escaped dollar in a string literal that can be a plain `$`. |
 | `ConstantConditionIf` | An `if` whose condition is the constant `true` or `false`. |
-| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. Opposite of `ImplicitThis`. |
+| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. Opposite of `ImplicitThis`. Inactive by default. |
 | `IfExpressionWithIdenticalBranches` | An `if` whose `then` and `else` branches are identical. |
 | `KotlinRedundantOverride` | An override that only calls the super implementation with the same arguments. |
 | `NullChecksToSafeCall` | Chained null checks on a receiver and on a call on it that one safe call check can replace. |
@@ -381,11 +384,11 @@ the script, because detekt does not have the Gradle model.
 | `RedundantSamConstructor` | A SAM constructor call in an argument where a plain lambda converts to the same type. |
 | `RedundantSetter` | A setter that is the default one or only assigns the value to the backing field. |
 | `RedundantUpperBound` | A type parameter bound that is `Any?`, the default upper bound. |
-| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. Inactive by default. |
+| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. Skips generated functions, such as the data class `copy`. Inactive by default. |
 | `RedundantWith` | A `with` call whose lambda does not use the receiver. |
 | `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
 | `RemoveExplicitTypeArguments` | Explicit type arguments that the compiler can infer. |
-| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. |
+| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. Keeps a `kotlin.jvm` or `java.lang` qualifier in a common source set. |
 | `RemoveRedundantSpreadOperator` | A spread operator on an array that is created in place with an `arrayOf`-like call or a `[...]` literal. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
 | `RemoveSingleExpressionStringTemplate` | A string template that only holds one non-null `String` expression. |
@@ -394,7 +397,7 @@ the script, because detekt does not have the Gradle model.
 | `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
 | `UnnecessaryVariable` | A local variable that only copies another local value or parameter. |
 | `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments. |
-| `UnusedReceiverParameter` | An extension receiver that is never used. |
+| `UnusedReceiverParameter` | An extension receiver that is never used. Skips a body with a call that does not resolve. |
 | `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. Inactive by default. |
 
@@ -406,14 +409,14 @@ the script, because detekt does not have the Gradle model.
 | `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. | |
 | `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. | |
 | `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. | |
-| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. | |
+| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. Inactive by default. | |
 | `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. | |
 | `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. | |
 | `ConvertReferenceToLambda` | A callable reference that a lambda can replace. Inactive by default. | |
-| `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |
+| `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Members that an interface cannot have, such as non-private `inline` or `tailrec` functions, `external` members and `@JvmOverloads`, `@JvmName` or `@Synchronized` members, block the conversion. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |
 | `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`, which is active by default. Inactive by default. | |
 | `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. | |
-| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Opposite of `RevertExplicitBackingFields`. | |
+| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Only when the language version supports explicit backing fields (Kotlin 2.4 or later). Opposite of `RevertExplicitBackingFields`. | |
 | `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. | |
 | `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. | |
 | `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`. | |
@@ -434,11 +437,11 @@ the script, because detekt does not have the Gradle model.
 | `NullableHashCode` | An `x?.hashCode() ?: 0` on a nullable receiver that `x.hashCode()` can replace. | |
 | `RedundantAsSequence` | An `asSequence()` call on a sequence, or on an iterable followed by one terminal operation. | |
 | `RedundantElseInIf` | An `else` branch after `if` branches that all end with a jump such as `return` or `throw`. | |
-| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. | |
+| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. Inactive by default. | |
 | `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. | |
 | `RemoveEmptyParenthesesFromAnnotationEntry` | Empty parentheses after an annotation that needs no arguments. | |
 | `ReplaceAddAllWithMapTo` | An `addAll` or `+=` of a `map` or `filter` result that `mapTo` or `filterTo` can replace. | |
-| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. | |
+| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. Unlike IntelliJ IDEA, a check against a `true`, `false` or `null` literal is skipped. | |
 | `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. Inactive by default. | |
 | `ReplaceCallWithBinaryOperator` | An explicit call of `equals` or `compareTo` that a binary operator can replace. | |
 | `ReplaceCollectionCountWithSize` | A `count()` call without a predicate on a collection, array or map that `size` can replace. Inactive by default. | |
@@ -450,7 +453,7 @@ the script, because detekt does not have the Gradle model.
 | `ReplaceMapIndexedWithListGenerator` | A `mapIndexed` call on a collection that ignores the element, where `List(size) { index -> ... }` fits. | |
 | `ReplaceMapKeysCallChainWithKeys` | A `map { it.key }.toSet()` call chain on a map that `keys` can replace. | |
 | `ReplaceNegatedIsEmptyWithIsNotEmpty` | A negated `isEmpty`, `isNotEmpty`, `isBlank` or `isNotBlank` call that the inverted function can replace. | |
-| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. | |
+| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. By default, test source sets are excluded (`excludes`), because there `!!` is an assertion. | |
 | `ReplaceRangeStartEndInclusiveWithFirstLast` | A `start` or `endInclusive` on a primitive range that the unboxed `first` or `last` can replace. | |
 | `ReplaceReadLineWithReadln` | A `readLine()` call that `readln()` or `readlnOrNull()` can replace. | |
 | `ReplaceSizeCheckWithIsNotEmpty` | A size, length or count comparison that `isNotEmpty()` can replace. | |
@@ -473,13 +476,13 @@ the script, because detekt does not have the Gradle model.
 | `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. | |
 | `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. | |
 | `SimplifyAssertNotNull` | An `assert(x != null)` right after the declaration of `x` that can fold into the initializer. | |
-| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. | |
+| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. Unlike IntelliJ IDEA, a constant that refers to a named value, such as a generated build config flag, is not folded. | |
 | `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. | |
 | `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. | |
 | `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. | |
-| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. | |
+| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. Inactive by default. | |
 | `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. | |
-| `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. | `areUnitExpressionsSkipped` (default `true`): do not report empty bodies and bodies with one `Unit` expression. |
+| `UseExpressionBody` | A function or property accessor whose block body holds only a one-line `return`. | |
 | `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. | |
 | `VerboseNullabilityAndEmptiness` | A null check followed by an emptiness or blankness check that `isNullOrEmpty()` or `isNullOrBlank()` can replace. | |
 

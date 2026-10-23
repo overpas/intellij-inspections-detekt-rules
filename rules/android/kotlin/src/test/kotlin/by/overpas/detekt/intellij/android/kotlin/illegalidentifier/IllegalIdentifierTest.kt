@@ -3,12 +3,24 @@ package by.overpas.detekt.intellij.android.kotlin.illegalidentifier
 import dev.detekt.api.Config
 import dev.detekt.test.lint
 import dev.detekt.test.utils.compileContentForTest
+import dev.detekt.test.utils.compileForTest
+import kotlin.io.path.createParentDirectories
+import kotlin.io.path.createTempDirectory
+import kotlin.io.path.writeText
+import kotlin.test.AfterTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class IllegalIdentifierTest {
 
     private val sut = IllegalIdentifier(Config.empty)
+
+    private val dir = createTempDirectory()
+
+    @AfterTest
+    fun deleteDir() {
+        dir.toFile().deleteRecursively()
+    }
 
     @Test
     fun `a backticked function name with a space is reported`() {
@@ -119,5 +131,159 @@ class IllegalIdentifierTest {
         val findings = sut.lint(script)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a desktop test source set passes`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/desktopTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a custom host test source set passes`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/androidTvTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a shared jvm test source set passes`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/jvmSharedTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a unit test source set passes`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/testDebug/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a screenshot test source set passes`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/screenshotTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in an android test source set is reported`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/androidTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in an android instrumented test source set is reported`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/androidInstrumentedTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in an android device test source set is reported`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/androidTvDeviceTest/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a main source set is reported`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/androidMain/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a main package named test is reported`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/main/kotlin/test/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a backticked name in a source set with test inside a word is reported`() {
+        val code = """
+            fun `load the data`() {}
+        """.trimIndent()
+        val path = dir.resolve("src/attestation/kotlin/A.kt").createParentDirectories()
+        path.writeText(code)
+        val file = compileForTest(path)
+
+        val findings = sut.lint(file)
+
+        assertEquals(1, findings.size)
     }
 }

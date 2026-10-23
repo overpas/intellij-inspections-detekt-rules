@@ -17,7 +17,7 @@ class IllegalIdentifier(config: Config) :
     ) {
 
     override fun visitKtFile(file: KtFile) {
-        if (!file.name.endsWith(".kts")) super.visitKtFile(file)
+        if (!file.name.endsWith(".kts") && !file.isInHostTestSourceSet()) super.visitKtFile(file)
     }
 
     override fun visitElement(element: PsiElement) {

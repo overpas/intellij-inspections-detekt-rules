@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.0.6
+
+### Changed options and defaults
+
+- `intellij-android-kotlin`: `IllegalIdentifier`: the rule itself now skips host test source sets, so the default `excludes` list is gone. A source set under `src/` whose name contains the word `test` is skipped, for example `test`, `desktopTest`, `jvmSharedTest` or `screenshotTest`. Device test sets (`androidTest`, `androidInstrumentedTest`, `androidDeviceTest`) are still checked. If you set `excludes` yourself, your list still applies. No option reports the skipped source sets, because they are not compiled to dex.
+- `intellij-kotlin-java-interop`: `JavaDefaultMethodsNotOverriddenByDelegation`: excludes common source sets by default (`excludes: ['**/src/common*/**']`). Detekt analyses common code with the JVM classpath, but in common code the interfaces have no Java default methods. To keep the old behavior, set `excludes: []`.
+- `intellij-kotlin-probable-bugs`: `IncompleteDestructuring`: inactive by default, because IntelliJ IDEA reports it only at INFORMATION level. To keep the old behavior, set `active: true`.
+- `intellij-kotlin-probable-bugs`: `KotlinThrowableNotThrown`: excludes test source sets by default, as IntelliJ IDEA does. To keep the old behavior, set `excludes: []`.
+- `intellij-kotlin-redundant-constructs`: `ExplicitThis`: inactive by default, because IntelliJ IDEA reports it only at INFORMATION level. To keep the old behavior, set `active: true`.
+- `intellij-kotlin-style-issues`: `CollectionConcatenationToBuildCollection`: inactive by default. Most findings joined a few small lists, where `a + b + c` is clearer than `buildList`. To keep the old behavior, set `active: true`.
+- `intellij-kotlin-style-issues`: `RedundantObjectTypeCheck`: inactive by default, because IntelliJ IDEA reports it only at INFORMATION level. To keep the old behavior, set `active: true`.
+- `intellij-kotlin-style-issues`: `ReplaceNotNullAssertionWithElvisReturn`: excludes test source sets by default, because in a test `!!` is an assertion and `?: return` would let a broken test pass. To keep the old behavior, set `excludes: []`.
+- `intellij-kotlin-style-issues`: `UnlabeledReturnInsideLambda`: inactive by default, because IntelliJ IDEA reports it only at INFORMATION level. To keep the old behavior, set `active: true`.
+- `intellij-kotlin-style-issues`: `UseExpressionBody`: the option `areUnitExpressionsSkipped` is removed, because the rule no longer reports `Unit` expressions (see Changed detection). Remove the option from your config.
+
+### Changed detection
+
+- `intellij-compose-multiplatform-preview`: all rules: do not report a problem with a Jetpack `@Preview` when the same rule of `intellij-android-compose-preview` is active, so one problem gives one finding. IntelliJ IDEA also shows only one of the two inspections. To keep the old findings, turn off the Android rule.
+- `intellij-jvm-junit`: `IgnoredJUnitTest`: does not report an annotation written as a library typealias or an `actual` typealias, such as `kotlin.test.Ignore` or an `expect` annotation whose Android `actual` is JUnit's `@Disabled`. The old findings were false positives, so no option keeps them.
+- `intellij-jvm-test-frameworks`: `TestMethodWithoutAssertion`: counts an assertion call whose arguments do not resolve, for example an argument from a compiler plugin such as kotlinx.serialization `serializer()`. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-code-migration`: `CanConvertToMultiDollarString`: reports only a string with two or more escaped dollars (`\$`) or with `${'$'}`, and reports each escaped dollar instead of the whole string. A string with a single `\$`, such as `"%1\$s"`, is not reported. This deviates from IntelliJ IDEA. No option keeps the old findings.
+- `intellij-kotlin-coroutines`: `DeferredResultUnused`: does not report a call whose declared return type is a type parameter, such as `map.remove(key)` on a map of `Deferred` values, or a generic builder such as `runBlocking` that returns a `Deferred`. This deviates from IntelliJ IDEA. No option keeps the old findings.
+- `intellij-kotlin-probable-bugs`: `KotlinMisorderedAssertEqualsArguments`: uses the factory list of IntelliJ IDEA. Empty and mutable collection factories, such as `emptyList()` and `mutableListOf()`, no longer count as expected values, so a collection that a test fills is not taken for a constant. No option keeps the old findings.
+- `intellij-kotlin-probable-bugs`: `UselessCallOnCollection`: reports at the name of the useless call instead of at the start of the receiver, as IntelliJ IDEA does.
+- `intellij-kotlin-redundant-constructs`: `RedundantValueArgument`: does not report arguments of generated functions, such as the data class `copy`, where the default is the current property value. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-redundant-constructs`: `RemoveRedundantQualifierName`: keeps a `kotlin.jvm` or `java.lang` qualifier in a common source set, where the short name does not compile. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-redundant-constructs`: `UnusedReceiverParameter`: does not report when the body has a call that does not resolve, because the call can use the receiver. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `AddVarianceModifier`: counts `protected` members, extension receivers and primary constructor properties as uses, so it does not suggest a variance that does not compile. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-style-issues`: `ConvertSealedClassToSealedInterface`: does not report a class with members that an interface cannot have, such as non-private `inline` or `tailrec` functions, `external` members, or members with `@JvmOverloads`, `@JvmName` or `@Synchronized`. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-style-issues`: `ConvertToExplicitBackingFields`: reports only when the language version supports explicit backing fields (Kotlin 2.4 or later), as IntelliJ IDEA does.
+- `intellij-kotlin-style-issues`: `ImplicitThis`: does not report a variable of an extension function type that is not called, or a named argument label. The old findings were false positives, so no option keeps them.
+- `intellij-kotlin-style-issues`: `JoinDeclarationAndAssignment`: reports at the property name instead of at its KDoc.
+- `intellij-kotlin-style-issues`: `ReplaceAssertBooleanWithAssertEquality`: does not report a check against a `true`, `false` or `null` literal, such as `assertTrue(x == null)`. This deviates from IntelliJ IDEA. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `SimplifiableCallChain`: does not merge a lambda with a `@Composable` call into a call whose lambda is not inline, such as `joinToString`. The suggested code did not compile, so no option keeps the old findings.
+- `intellij-kotlin-style-issues`: `SimplifyBooleanWithConstants`: does not fold a constant that refers to a named value, such as a generated build config flag or a `const val` toggle. Literals such as `x && true` are still reported. This deviates from IntelliJ IDEA. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `UseExpressionBody`: reports only a block body with a one-line `return`, because IntelliJ IDEA does not highlight the other cases. A multi-line `return`, a `return when` and a single `Unit` or `Nothing` expression are not reported. No option keeps the old findings.
+
+### Changed messages
+
+- `intellij-kotlin-code-migration`: `CanConvertToMultiDollarString`: the description says that a single escaped dollar is not reported.
+- `intellij-kotlin-style-issues`: `UseExpressionBody`: the description and the message mention only a one-line `return`.
+
 ## 0.0.5
 
 ### Changed options and defaults

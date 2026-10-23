@@ -223,4 +223,95 @@ class AddVarianceModifierTest {
 
         assertEquals(1, findings.size)
     }
+
+    @Test
+    fun `a type parameter used only in a public constructor property is reported`() {
+        val code = """
+            class Holder<T>(val item: T)
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a type parameter used in an input position of a protected function passes`() {
+        val code = """
+            abstract class Reorderable<T> {
+                val selected: T? = null
+
+                protected open fun find(selected: T) {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a type parameter used as an extension receiver passes`() {
+        val code = """
+            abstract class Engine<D : Any> {
+                fun get(): D = TODO()
+
+                protected abstract fun D.apply()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a type parameter used in a protected constructor property and an input position passes`() {
+        val code = """
+            interface Source<out T> {
+                fun get(): T
+            }
+
+            abstract class Engine<C : Any>(protected val config: Source<C>) {
+                protected abstract fun apply(config: C)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `type parameters used in protected members and extension receivers pass`() {
+        val code = """
+            interface Source<out T> {
+                fun get(): T
+            }
+
+            abstract class Engine<D : Any, C : Any>(protected val config: Source<C>) {
+                protected abstract fun D.apply(config: C)
+
+                protected open fun close(d: D) {}
+
+                fun get(): D = TODO()
+            }
+
+            interface Scope<R> {
+                fun complete(r: R)
+
+                fun current(): R
+            }
+
+            abstract class Searcher<R> {
+                val result: R? = null
+
+                protected abstract fun Scope<R>.impl()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
 }

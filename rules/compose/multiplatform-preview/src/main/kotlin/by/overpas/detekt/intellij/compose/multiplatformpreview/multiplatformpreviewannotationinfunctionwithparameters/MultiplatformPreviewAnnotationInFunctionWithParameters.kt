@@ -1,6 +1,8 @@
 package by.overpas.detekt.intellij.compose.multiplatformpreview.multiplatformpreviewannotationinfunctionwithparameters
 
 import by.overpas.detekt.intellij.IntellijInspection
+import by.overpas.detekt.intellij.compose.multiplatformpreview.hasActiveAndroidCounterpart
+import by.overpas.detekt.intellij.compose.multiplatformpreview.isJetpackPreviewOrMultiPreview
 import dev.detekt.api.Config
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
@@ -20,9 +22,14 @@ class MultiplatformPreviewAnnotationInFunctionWithParameters(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    private val areJetpackPreviewsCoveredByAndroid = hasActiveAndroidCounterpart()
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        analyze(function) { function.unsupportedParameterPreviews() }.forEach { annotation ->
+        analyze(function) {
+            function.unsupportedParameterPreviews()
+                .filterNot { areJetpackPreviewsCoveredByAndroid && it.isJetpackPreviewOrMultiPreview() }
+        }.forEach { annotation ->
             report(
                 Finding(
                     Entity.from(annotation),

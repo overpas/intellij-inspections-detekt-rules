@@ -1,7 +1,7 @@
 package by.overpas.detekt.intellij.jvm.testframeworks.testmethodwithoutassertion
 
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.singleFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaFunctionSymbol
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -19,4 +19,4 @@ internal fun KtElement.isAssertionCall(): Boolean {
 
 context(session: KaSession)
 internal fun KtElement.resolveFunction(): KaFunctionSymbol? =
-    with(session) { resolveToCall()?.successfulFunctionCallOrNull()?.symbol }
+    with(session) { resolveToCall()?.singleFunctionCallOrNull()?.symbol }

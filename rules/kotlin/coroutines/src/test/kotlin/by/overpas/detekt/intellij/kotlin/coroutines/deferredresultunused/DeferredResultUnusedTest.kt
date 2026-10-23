@@ -77,7 +77,7 @@ class DeferredResultUnusedTest {
     }
 
     @Test
-    fun `a generic builder that returns an unused deferred is reported`() {
+    fun `a generic builder that returns an unused deferred passes`() {
         val code = """
             import kotlinx.coroutines.async
             import kotlinx.coroutines.runBlocking
@@ -91,7 +91,38 @@ class DeferredResultUnusedTest {
 
         val findings = sut.lintWithContext(environment, code, coroutines)
 
-        assertEquals(1, findings.size)
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a deferred removed from a map passes`() {
+        val code = """
+            import kotlinx.coroutines.Deferred
+
+            fun test(sessions: MutableMap<String, Deferred<Int>>, key: String) {
+                sessions.remove(key)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a deferred taken from a list passes`() {
+        val code = """
+            import kotlinx.coroutines.Deferred
+
+            fun test(jobs: List<Deferred<Int>>) {
+                jobs.first()
+                jobs.getOrNull(1)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(0, findings.size)
     }
 
     @Test

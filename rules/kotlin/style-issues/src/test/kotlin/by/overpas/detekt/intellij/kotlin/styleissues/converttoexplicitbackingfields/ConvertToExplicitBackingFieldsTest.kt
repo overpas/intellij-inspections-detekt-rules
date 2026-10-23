@@ -3,6 +3,9 @@ package by.overpas.detekt.intellij.kotlin.styleissues.converttoexplicitbackingfi
 import dev.detekt.api.Config
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -276,5 +279,39 @@ class ConvertToExplicitBackingFieldsTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a property passes when the language version does not support explicit backing fields`() {
+        val code = """
+            private val _items = mutableSetOf<Int>()
+            val items: Set<Int>
+                get() = _items
+        """.trimIndent()
+        val languageVersionSettings = LanguageVersionSettingsImpl(
+            languageVersion = LanguageVersion.KOTLIN_2_3,
+            apiVersion = ApiVersion.KOTLIN_2_3,
+        )
+
+        val findings = sut.lintWithContext(environment, code, languageVersionSettings = languageVersionSettings)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a property is reported when the language version supports explicit backing fields`() {
+        val code = """
+            private val _items = mutableSetOf<Int>()
+            val items: Set<Int>
+                get() = _items
+        """.trimIndent()
+        val languageVersionSettings = LanguageVersionSettingsImpl(
+            languageVersion = LanguageVersion.KOTLIN_2_4,
+            apiVersion = ApiVersion.KOTLIN_2_4,
+        )
+
+        val findings = sut.lintWithContext(environment, code, languageVersionSettings = languageVersionSettings)
+
+        assertEquals(1, findings.size)
     }
 }
