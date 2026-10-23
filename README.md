@@ -473,7 +473,7 @@ the script, because detekt does not have the Gradle model.
 | `SimplifiableCall` | A `flatMap`, `filter` or `mapNotNull` call with a trivial lambda that `flatten`, `filterNotNull` or `filterIsInstance` can replace. | |
 | `SimplifiableCallChain` | A collection, sequence or text call chain that one call can replace. | |
 | `SimplifyAssertNotNull` | An `assert(x != null)` right after the declaration of `x` that can fold into the initializer. | |
-| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. | |
+| `SimplifyBooleanWithConstants` | A boolean expression with a constant operand that can be simpler, such as `x && true`. Unlike IntelliJ IDEA, a constant that refers to a named value, such as a generated build config flag, is not folded. | |
 | `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. | |
 | `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. | |
 | `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. | |

@@ -186,6 +186,59 @@ class SimplifyBooleanWithConstantsTest {
     }
 
     @Test
+    fun `a build config constant next to a parameter passes`() {
+        val code = """
+            object BuildKonfig {
+                const val CRASH_ON_FAILED_CHECKS: Boolean = false
+            }
+            fun foo(force: Boolean): Boolean = BuildKonfig.CRASH_ON_FAILED_CHECKS && !force
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a comparison of string constants passes`() {
+        val code = """
+            object BuildKonfig {
+                const val BUILD_TYPE: String = "release"
+            }
+            const val DEV_BUILD_TYPE = "dev"
+            fun foo(): Boolean = BuildKonfig.BUILD_TYPE == DEV_BUILD_TYPE
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a top level constant toggle passes`() {
+        val code = """
+            private const val ENABLE_WATCHDOG = false
+            fun foo(isDebug: Boolean): Boolean = isDebug && ENABLE_WATCHDOG
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a literal next to a constant toggle is reported`() {
+        val code = """
+            private const val ENABLE_WATCHDOG = false
+            fun foo(): Boolean = ENABLE_WATCHDOG || true
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a comparison of positive and negative zero passes`() {
         val code = """
             fun foo(): List<Boolean> = listOf(-0.0 == +0.0, +0.0f == -0.0f)
