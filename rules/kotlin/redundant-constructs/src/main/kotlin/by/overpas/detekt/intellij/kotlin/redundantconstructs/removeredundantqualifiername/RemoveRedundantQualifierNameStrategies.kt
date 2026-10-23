@@ -44,9 +44,10 @@ internal fun KaSession.keepsResolveUnqualified(element: KtElement): Boolean {
         is KtUserType -> element.referenceExpression as? KtNameReferenceExpression
         else -> null
     }
-    val intendedFqName = reference?.resolveSymbol()?.importableFqName
-    return intendedFqName == null ||
-        element.containingKtFile.importDirectives.all { it.aliasName == null || it.importedFqName != intendedFqName }
+    val intendedFqName = reference?.resolveSymbol()?.importableFqName ?: return true
+    val file = element.containingKtFile
+    return file.importDirectives.all { it.aliasName == null || it.importedFqName != intendedFqName } &&
+        !file.reliesOnJvmDefaultImport(intendedFqName)
 }
 
 private fun KaSymbol?.isEnumCompanionIn(owner: KaSymbol?): Boolean =

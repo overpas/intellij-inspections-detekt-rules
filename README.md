@@ -385,7 +385,7 @@ the script, because detekt does not have the Gradle model.
 | `RedundantWith` | A `with` call whose lambda does not use the receiver. |
 | `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
 | `RemoveExplicitTypeArguments` | Explicit type arguments that the compiler can infer. |
-| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. |
+| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. Keeps a `kotlin.jvm` or `java.lang` qualifier in a common source set. |
 | `RemoveRedundantSpreadOperator` | A spread operator on an array that is created in place with an `arrayOf`-like call or a `[...]` literal. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
 | `RemoveSingleExpressionStringTemplate` | A string template that only holds one non-null `String` expression. |
