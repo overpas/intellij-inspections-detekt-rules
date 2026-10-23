@@ -6,6 +6,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 
 @IntellijInspection("UselessCallOnCollection")
@@ -19,6 +20,7 @@ class UselessCallOnCollection(config: Config) :
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)
-        expression.uselessCallOnCollectionMessage()?.let { report(Finding(Entity.from(expression), it)) }
+        val callee = (expression.selectorExpression as? KtCallExpression)?.calleeExpression ?: return
+        expression.uselessCallOnCollectionMessage()?.let { report(Finding(Entity.from(callee), it)) }
     }
 }

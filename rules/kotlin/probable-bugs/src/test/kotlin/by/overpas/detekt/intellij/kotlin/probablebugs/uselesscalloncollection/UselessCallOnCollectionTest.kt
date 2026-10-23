@@ -187,6 +187,21 @@ class UselessCallOnCollectionTest {
     }
 
     @Test
+    fun `a call on a receiver that spans lines is reported at the callee`() {
+        val code = """
+            fun lengths(items: List<String>): List<Int> = items
+                .filter { it.isNotEmpty() }
+                .mapNotNull { it.length }
+        """.trimIndent()
+        val expected = listOf(3 to 6)
+
+        val positions = sut.lintWithContext(environment, code)
+            .map { it.entity.location.source.line to it.entity.location.source.column }
+
+        assertEquals(expected, positions)
+    }
+
+    @Test
     fun `mapNotNull with a reference to a function that returns non-null values is reported`() {
         val code = """
             val x = sequenceOf("1").mapNotNull(String::toInt)
