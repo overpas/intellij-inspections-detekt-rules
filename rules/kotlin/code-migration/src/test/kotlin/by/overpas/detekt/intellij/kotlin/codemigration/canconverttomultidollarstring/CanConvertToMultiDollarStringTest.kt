@@ -13,14 +13,36 @@ class CanConvertToMultiDollarStringTest {
     private val sut = CanConvertToMultiDollarString(Config.empty)
 
     @Test
-    fun `an escaped dollar is reported`() {
-        val code = """
-            fun test() = "\$"
+    fun `a single escaped dollar passes`() {
+        val code = $$"""
+            fun test() = "%1\$s"
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `two escaped dollars are reported`() {
+        val code = $$"""
+            fun test() = "\$a \$b"
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(2, findings.size)
+    }
+
+    @Test
+    fun `an escaped dollar and a dollar char block entry are reported`() {
+        val code = $$"""
+            fun test() = "\$a ${'$'}b"
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(2, findings.size)
     }
 
     @Test

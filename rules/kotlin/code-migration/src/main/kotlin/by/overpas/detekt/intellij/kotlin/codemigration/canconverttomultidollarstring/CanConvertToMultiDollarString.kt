@@ -8,6 +8,7 @@ import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 @OppositeRule(ConvertFromMultiDollarToRegularString::class)
@@ -15,7 +16,8 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 class CanConvertToMultiDollarString(config: Config) :
     Rule(
         config,
-        "A string that escapes dollar characters can use an interpolation prefix instead. " +
+        $$"A string that escapes two or more dollar characters, or writes one as `${'$'}`, can use an " +
+            "interpolation prefix instead. Unlike IntelliJ, a single escaped dollar is not reported. " +
             "Add a prefix such as `$$` and write the dollar characters as they are.",
     ),
     RequiresAnalysisApi {
@@ -29,10 +31,10 @@ class CanConvertToMultiDollarString(config: Config) :
             sequentialDollars = 0,
         )
         val scan = expression.entries.fold(initial) { current, entry -> current.accept(entry) }
-        if (scan.isConvertible()) {
-            expression.entries.filter { it.isEscapedDollar }.forEach {
-                report(Finding(Entity.from(it), "An interpolation prefix can simplify the string"))
-            }
+        val dollars = expression.entries.filter { it.isEscapedDollar }
+        val isSingleBackslashEscape = dollars.singleOrNull() is KtEscapeStringTemplateEntry
+        if (scan.isConvertible() && !isSingleBackslashEscape) {
+            dollars.forEach { report(Finding(Entity.from(it), "An interpolation prefix can simplify the string")) }
         }
     }
 }
