@@ -81,4 +81,86 @@ class IgnoredJUnitTestTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `an expect annotation with an actual typealias to disabled passes`() {
+        val code = """
+            import kotlin.test.Test
+
+            class FooTest {
+                @DisabledOnAndroid
+                @Test
+                fun test() {}
+            }
+        """.trimIndent()
+        val expect = """
+            @OptIn(ExperimentalMultiplatform::class)
+            @OptionalExpectation
+            expect annotation class DisabledOnAndroid()
+        """.trimIndent()
+        val actual = """
+            actual typealias DisabledOnAndroid = org.junit.jupiter.api.Disabled
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, expect, actual)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a typealias to disabled is reported`() {
+        val code = """
+            import org.junit.jupiter.api.Test
+
+            typealias Skip = org.junit.jupiter.api.Disabled
+
+            class FooTest {
+                @Skip
+                @Test
+                fun test() {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `an actual typealias to ignore from a library passes`() {
+        val code = """
+            import kotlin.test.Ignore
+            import kotlin.test.Test
+
+            class FooTest {
+                @Ignore
+                @Test
+                fun test() {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an actual typealias to disabled from another source set passes`() {
+        val code = """
+            import kotlin.test.Test
+
+            class FooTest {
+                @DisabledOnAndroid
+                @Test
+                fun test() {}
+            }
+        """.trimIndent()
+        val actual = """
+            actual typealias DisabledOnAndroid = org.junit.jupiter.api.Disabled
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, actual)
+
+        assertEquals(0, findings.size)
+    }
 }

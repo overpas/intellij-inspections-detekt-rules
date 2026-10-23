@@ -1,9 +1,6 @@
 package by.overpas.detekt.intellij.jvm.junit.ignoredjunittest
 
 import by.overpas.detekt.intellij.IntellijInspection
-import by.overpas.detekt.intellij.jvm.junit.JUPITER_DISABLED
-import by.overpas.detekt.intellij.jvm.junit.ORG_JUNIT_IGNORE
-import by.overpas.detekt.intellij.jvm.junit.findAnnotations
 import dev.detekt.api.Config
 import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
@@ -33,7 +30,7 @@ class IgnoredJUnitTest(config: Config) :
         val annotations = if (klass.annotationEntries.isEmpty()) {
             emptyList()
         } else {
-            analyze(klass) { klass.findAnnotations(ORG_JUNIT_IGNORE, JUPITER_DISABLED) }
+            analyze(klass) { klass.ignoreAnnotations() }
         }
         ignoredMessage(
             annotations,
@@ -45,7 +42,7 @@ class IgnoredJUnitTest(config: Config) :
         val annotations = if (function.annotationEntries.isEmpty()) {
             emptyList()
         } else {
-            analyze(function) { function.findAnnotations(ORG_JUNIT_IGNORE, JUPITER_DISABLED) }
+            analyze(function) { function.ignoreAnnotations() }
         }
         ignoredMessage(annotations)?.let {
             report(Finding(Entity.atName(function), "Test method '${function.name.orEmpty()}()' $it"))
