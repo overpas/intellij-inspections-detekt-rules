@@ -63,7 +63,7 @@ internal class CanConvertToMultiDollarStringScan(
         )
 }
 
-private val KtStringTemplateEntry.isEscapedDollar: Boolean
+internal val KtStringTemplateEntry.isEscapedDollar: Boolean
     get() = when (this) {
         is KtEscapeStringTemplateEntry -> unescapedValue == DOLLAR.toString()
         is KtBlockStringTemplateEntry -> expression?.text in DOLLAR_LITERAL_EXPRESSIONS

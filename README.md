@@ -244,7 +244,7 @@ the script, because detekt does not have the Gradle model.
 
 | Rule | Finds |
 |---|---|
-| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. Opposite of `ConvertFromMultiDollarToRegularString`. |
+| `CanConvertToMultiDollarString` | A string that escapes two or more dollar characters (`\$`), or writes one as `${'$'}`, and can use an interpolation prefix instead. Each escaped dollar is reported. Unlike IntelliJ, a string whose only escape is a single `\$`, such as `"%1\$s"`, is not reported. Opposite of `ConvertFromMultiDollarToRegularString`. |
 | `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. Opposite of `CanConvertToMultiDollarString`, which is active by default. Inactive by default. |
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
 | `InfixCallToOrdinary` | An infix call that can be an ordinary call. Opposite of `ConvertPairConstructorToToFunction` and `ReplaceToWithInfixForm`, which are active by default. Inactive by default. |
@@ -330,7 +330,7 @@ the script, because detekt does not have the Gradle model.
 | `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
 | `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. |
 | `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. |
-| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. |
+| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. By default, test source sets are excluded (`excludes`). |
 | `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. |
 | `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. |
 | `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. |
