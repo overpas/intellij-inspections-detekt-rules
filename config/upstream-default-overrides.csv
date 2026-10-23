@@ -1,10 +1,15 @@
 rule,reason
+CollectionConcatenationToBuildCollection,The maintainer chose to make it opt-in
 ConvertFromMultiDollarToRegularString,IntelliJ IDEA reports it only at INFORMATION level
 ConvertRangeCheckToTwoComparisons,IntelliJ IDEA reports it only at INFORMATION level
 ConvertReferenceToLambda,IntelliJ IDEA reports it only at INFORMATION level
 ConvertSealedInterfaceToSealedClass,IntelliJ IDEA reports it only at INFORMATION level
+ExplicitThis,IntelliJ IDEA reports it only at INFORMATION level
 ImplicitThis,IntelliJ IDEA reports it only at INFORMATION level
+IncompleteDestructuring,IntelliJ IDEA reports it only at INFORMATION level
 InfixCallToOrdinary,IntelliJ IDEA reports it only at INFORMATION level
+RedundantObjectTypeCheck,IntelliJ IDEA reports it only at INFORMATION level
 ReplaceAssociateFunction,The maintainer chose to make it opt-in
 ReplaceToStringWithStringTemplate,IntelliJ IDEA reports it only at INFORMATION level
 RevertExplicitBackingFields,IntelliJ IDEA reports it only at INFORMATION level
+UnlabeledReturnInsideLambda,IntelliJ IDEA reports it only at INFORMATION level

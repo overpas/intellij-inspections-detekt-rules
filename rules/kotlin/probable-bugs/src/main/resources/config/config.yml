@@ -27,7 +27,7 @@ intellij-kotlin-probable-bugs:
   ImplicitNullableNothingType:
     active: true
   IncompleteDestructuring:
-    active: true
+    active: false
   JavaIoSerializableObjectMustHaveReadResolve:
     active: true
   KotlinArrayHashCode:

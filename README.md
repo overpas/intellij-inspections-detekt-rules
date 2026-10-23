@@ -101,8 +101,8 @@ column gives the other options of a rule. The rule names are the short names of 
 inspections.
 
 Each rule set jar contains a default config (`config/config.yml`). The rules that IntelliJ IDEA
-disables by default are inactive, and so are some rules that give noisy findings in CI. Of two opposite rules, only the one that is more idiomatic for
-Kotlin is active. detekt uses this default config with `buildUponDefaultConfig = true`.
+disables by default are inactive, and so are some rules that give noisy findings in CI. Of two opposite rules, at most one is active: the one that is
+more idiomatic for Kotlin. detekt uses this default config with `buildUponDefaultConfig = true`.
 
 ### `intellij-android-compose-preview`
 
@@ -321,7 +321,7 @@ the script, because detekt does not have the Gradle model.
 | `FilterIsInstanceResultIsAlwaysEmpty` | A `filterIsInstance` call whose target type no element of the receiver can have. |
 | `ForEachParameterNotUsed` | A `forEach` call whose lambda never uses the implicit `it` parameter. |
 | `ImplicitNullableNothingType` | A `var` or open declaration without an explicit type whose inferred type is `Nothing?`. |
-| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. |
+| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. Inactive by default. |
 | `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. |
 | `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. |
 | `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
@@ -361,7 +361,7 @@ the script, because detekt does not have the Gradle model.
 | `CanBePrimaryConstructorProperty` | A property that is initialized from the constructor parameter of the same name and type. |
 | `CanUnescapeDollarLiteral` | An escaped dollar in a string literal that can be a plain `$`. |
 | `ConstantConditionIf` | An `if` whose condition is the constant `true` or `false`. |
-| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. Opposite of `ImplicitThis`. |
+| `ExplicitThis` | An explicit `this` receiver that the code resolves the same without. Opposite of `ImplicitThis`. Inactive by default. |
 | `IfExpressionWithIdenticalBranches` | An `if` whose `then` and `else` branches are identical. |
 | `KotlinRedundantOverride` | An override that only calls the super implementation with the same arguments. |
 | `NullChecksToSafeCall` | Chained null checks on a receiver and on a call on it that one safe call check can replace. |
@@ -406,7 +406,7 @@ the script, because detekt does not have the Gradle model.
 | `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. | |
 | `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. | |
 | `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. | |
-| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. | |
+| `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. Inactive by default. | |
 | `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. | |
 | `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. | |
 | `ConvertReferenceToLambda` | A callable reference that a lambda can replace. Inactive by default. | |
@@ -434,7 +434,7 @@ the script, because detekt does not have the Gradle model.
 | `NullableHashCode` | An `x?.hashCode() ?: 0` on a nullable receiver that `x.hashCode()` can replace. | |
 | `RedundantAsSequence` | An `asSequence()` call on a sequence, or on an iterable followed by one terminal operation. | |
 | `RedundantElseInIf` | An `else` branch after `if` branches that all end with a jump such as `return` or `throw`. | |
-| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. | |
+| `RedundantObjectTypeCheck` | An `is` check against a non-data object type that should be `===` or `!==`. Inactive by default. | |
 | `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. | |
 | `RemoveEmptyParenthesesFromAnnotationEntry` | Empty parentheses after an annotation that needs no arguments. | |
 | `ReplaceAddAllWithMapTo` | An `addAll` or `+=` of a `map` or `filter` result that `mapTo` or `filterTo` can replace. | |
@@ -477,7 +477,7 @@ the script, because detekt does not have the Gradle model.
 | `SimplifyNegatedBinaryExpression` | A negated comparison, `is` or `in` check, or boolean literal that the inverted operator can replace. | |
 | `SimplifyNestedEachInScopeFunction` | An `also` or `apply` whose only statement is `forEach` or `onEach` on the receiver, which `onEach` can replace. | |
 | `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. | |
-| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. | |
+| `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. Inactive by default. | |
 | `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. | |
 | `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. | `areUnitExpressionsSkipped` (default `true`): do not report empty bodies and bodies with one `Unit` expression. |
 | `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. | |
