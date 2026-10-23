@@ -9,7 +9,7 @@ intellij-kotlin-redundant-constructs:
   ConstantConditionIf:
     active: true
   ExplicitThis:
-    active: true
+    active: false
   IfExpressionWithIdenticalBranches:
     active: true
   KotlinRedundantOverride:

@@ -117,6 +117,66 @@ class ReplaceAssertBooleanWithAssertEqualityTest {
     }
 
     @Test
+    fun `an equality check with a number literal is reported`() {
+        val code = """
+            import kotlin.test.assertTrue
+
+            fun test(items: List<String>) {
+                assertTrue(items.size == 1)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `an equality check with a null literal passes`() {
+        val code = """
+            import kotlin.test.assertTrue
+
+            fun test(failure: Throwable?) {
+                assertTrue(failure == null, "no failure")
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an equality check with a true literal passes`() {
+        val code = """
+            import kotlin.test.assertTrue
+
+            fun test(args: List<String>?) {
+                assertTrue(args?.contains("-y") == true)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an identity check with a parenthesized false literal passes`() {
+        val code = """
+            import kotlin.test.assertFalse
+
+            fun test(paused: Boolean?) {
+                assertFalse((false) === paused)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
     fun `an assertTrue call with a boolean variable passes`() {
         val code = """
             import kotlin.test.assertTrue

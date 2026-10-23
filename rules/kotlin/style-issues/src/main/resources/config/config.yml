@@ -10,7 +10,7 @@ intellij-kotlin-style-issues:
   CascadeIf:
     active: true
   CollectionConcatenationToBuildCollection:
-    active: true
+    active: false
   ConvertPairConstructorToToFunction:
     active: true
   ConvertRangeCheckToTwoComparisons:
@@ -68,7 +68,7 @@ intellij-kotlin-style-issues:
   RedundantElseInIf:
     active: true
   RedundantObjectTypeCheck:
-    active: true
+    active: false
   RedundantRunCatching:
     active: true
   RemoveEmptyParenthesesFromAnnotationEntry:
@@ -155,7 +155,7 @@ intellij-kotlin-style-issues:
   UnclearPrecedenceOfBinaryExpression:
     active: true
   UnlabeledReturnInsideLambda:
-    active: true
+    active: false
   UnsafeCastWithReturn:
     active: true
   UseExpressionBody:
