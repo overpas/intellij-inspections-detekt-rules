@@ -416,7 +416,7 @@ the script, because detekt does not have the Gradle model.
 | `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |
 | `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`, which is active by default. Inactive by default. | |
 | `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. | |
-| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Opposite of `RevertExplicitBackingFields`. | |
+| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Only when the language version supports explicit backing fields (Kotlin 2.4 or later). Opposite of `RevertExplicitBackingFields`. | |
 | `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. | |
 | `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. | |
 | `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`. | |
@@ -453,7 +453,7 @@ the script, because detekt does not have the Gradle model.
 | `ReplaceMapIndexedWithListGenerator` | A `mapIndexed` call on a collection that ignores the element, where `List(size) { index -> ... }` fits. | |
 | `ReplaceMapKeysCallChainWithKeys` | A `map { it.key }.toSet()` call chain on a map that `keys` can replace. | |
 | `ReplaceNegatedIsEmptyWithIsNotEmpty` | A negated `isEmpty`, `isNotEmpty`, `isBlank` or `isNotBlank` call that the inverted function can replace. | |
-| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. | |
+| `ReplaceNotNullAssertionWithElvisReturn` | A `!!` in a function or labeled lambda that returns `Unit` or a nullable type, where `?: return` fits. Inactive by default. By default, test source sets are excluded (`excludes`), because there `!!` is an assertion. | |
 | `ReplaceRangeStartEndInclusiveWithFirstLast` | A `start` or `endInclusive` on a primitive range that the unboxed `first` or `last` can replace. | |
 | `ReplaceReadLineWithReadln` | A `readLine()` call that `readln()` or `readlnOrNull()` can replace. | |
 | `ReplaceSizeCheckWithIsNotEmpty` | A size, length or count comparison that `isNotEmpty()` can replace. | |
@@ -482,7 +482,7 @@ the script, because detekt does not have the Gradle model.
 | `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. | |
 | `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. | |
 | `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. | |
-| `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. | `areUnitExpressionsSkipped` (default `true`): do not report empty bodies and bodies with one `Unit` expression. |
+| `UseExpressionBody` | A function or property accessor whose block body holds only a one-line `return`. | |
 | `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. | |
 | `VerboseNullabilityAndEmptiness` | A null check followed by an emptiness or blankness check that `isNullOrEmpty()` or `isNullOrBlank()` can replace. | |
 

@@ -101,6 +101,7 @@ intellij-kotlin-style-issues:
     active: true
   ReplaceNotNullAssertionWithElvisReturn:
     active: false
+    excludes: ['**/test/**', '**/src/test*/**', '**/src/*Test*/**']
   ReplaceRangeStartEndInclusiveWithFirstLast:
     active: true
   ReplaceReadLineWithReadln:
@@ -159,7 +160,6 @@ intellij-kotlin-style-issues:
     active: true
   UseExpressionBody:
     active: true
-    areUnitExpressionsSkipped: true
   UsePropertyAccessSyntax:
     active: true
   VerboseNullabilityAndEmptiness:
