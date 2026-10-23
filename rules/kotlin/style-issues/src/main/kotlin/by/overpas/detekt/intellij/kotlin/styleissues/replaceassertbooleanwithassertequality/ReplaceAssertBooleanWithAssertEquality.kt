@@ -33,7 +33,8 @@ class ReplaceAssertBooleanWithAssertEquality(config: Config) :
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression as? KtNameReferenceExpression ?: return
-        val condition = expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtBinaryExpression
+        val condition = (expression.valueArguments.firstOrNull()?.getArgumentExpression() as? KtBinaryExpression)
+            ?.takeUnless { it.hasBooleanOrNullLiteralOperand() }
         val isCandidate = callee.getReferencedName() in replaceAssertBooleanWithAssertEqualityNames &&
             expression.valueArguments.size in 1..2 &&
             condition?.operationToken in replaceAssertBooleanWithAssertEqualityTokens

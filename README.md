@@ -438,7 +438,7 @@ the script, because detekt does not have the Gradle model.
 | `RedundantRunCatching` | A `runCatching { }.getOrThrow()` chain that `run { }` can replace. | |
 | `RemoveEmptyParenthesesFromAnnotationEntry` | Empty parentheses after an annotation that needs no arguments. | |
 | `ReplaceAddAllWithMapTo` | An `addAll` or `+=` of a `map` or `filter` result that `mapTo` or `filterTo` can replace. | |
-| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. | |
+| `ReplaceAssertBooleanWithAssertEquality` | An `assertTrue` or `assertFalse` call with an `==` or `===` check that an equality assertion can replace. Unlike IntelliJ IDEA, a check against a `true`, `false` or `null` literal is skipped. | |
 | `ReplaceAssociateFunction` | An `associate` or `associateTo` call that `associateBy` or `associateWith` can replace. Inactive by default. | |
 | `ReplaceCallWithBinaryOperator` | An explicit call of `equals` or `compareTo` that a binary operator can replace. | |
 | `ReplaceCollectionCountWithSize` | A `count()` call without a predicate on a collection, array or map that `size` can replace. Inactive by default. | |
