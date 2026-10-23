@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.compose.multiplatformpreview.multiplatformpreviewmultipleparameterproviders
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -164,5 +165,165 @@ class MultiplatformPreviewMultipleParameterProvidersTest {
         val findings = sut.lintWithContext(environment, code, tooling)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `jetpack preview parameters are left to the active android rule`() {
+        val config = TestConfig(
+            "intellij-android-compose-preview" to mapOf(
+                "PreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+            "intellij-compose-multiplatform-preview" to mapOf(
+                "MultiplatformPreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+        )
+        val sut = MultiplatformPreviewMultipleParameterProviders(
+            config.subConfig("intellij-compose-multiplatform-preview")
+                .subConfig("MultiplatformPreviewMultipleParameterProviders"),
+        )
+        val code = """
+            import androidx.compose.ui.tooling.preview.Preview
+            import androidx.compose.ui.tooling.preview.PreviewParameter
+
+            @Preview
+            fun MyPreview(
+                @PreviewParameter a: Int,
+                @PreviewParameter b: Int,
+            ) {}
+        """.trimIndent()
+        val tooling = """
+            package androidx.compose.ui.tooling.preview
+
+            annotation class Preview
+
+            annotation class PreviewParameter
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, tooling)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `mixed preview parameters are reported when the android rule is active`() {
+        val config = TestConfig(
+            "intellij-android-compose-preview" to mapOf(
+                "PreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+            "intellij-compose-multiplatform-preview" to mapOf(
+                "MultiplatformPreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+        )
+        val sut = MultiplatformPreviewMultipleParameterProviders(
+            config.subConfig("intellij-compose-multiplatform-preview")
+                .subConfig("MultiplatformPreviewMultipleParameterProviders"),
+        )
+        val code = """
+            import androidx.compose.ui.tooling.preview.Preview
+
+            @Preview
+            fun MyPreview(
+                @androidx.compose.ui.tooling.preview.PreviewParameter a: Int,
+                @org.jetbrains.compose.ui.tooling.preview.PreviewParameter b: Int,
+            ) {}
+        """.trimIndent()
+        val jetpackTooling = """
+            package androidx.compose.ui.tooling.preview
+
+            annotation class Preview
+
+            annotation class PreviewParameter
+        """.trimIndent()
+        val multiplatformTooling = """
+            package org.jetbrains.compose.ui.tooling.preview
+
+            annotation class PreviewParameter
+        """.trimIndent()
+        val expected = listOf(6)
+
+        val lines = sut.lintWithContext(environment, code, jetpackTooling, multiplatformTooling)
+            .map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
+    fun `jetpack preview parameters on a multiplatform preview are reported when the android rule is active`() {
+        val config = TestConfig(
+            "intellij-android-compose-preview" to mapOf(
+                "PreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+            "intellij-compose-multiplatform-preview" to mapOf(
+                "MultiplatformPreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+        )
+        val sut = MultiplatformPreviewMultipleParameterProviders(
+            config.subConfig("intellij-compose-multiplatform-preview")
+                .subConfig("MultiplatformPreviewMultipleParameterProviders"),
+        )
+        val code = """
+            import org.jetbrains.compose.ui.tooling.preview.Preview
+            import androidx.compose.ui.tooling.preview.PreviewParameter
+
+            @Preview
+            fun MyPreview(
+                @PreviewParameter a: Int,
+                @PreviewParameter b: Int,
+            ) {}
+        """.trimIndent()
+        val jetpackTooling = """
+            package androidx.compose.ui.tooling.preview
+
+            annotation class PreviewParameter
+        """.trimIndent()
+        val multiplatformTooling = """
+            package org.jetbrains.compose.ui.tooling.preview
+
+            annotation class Preview
+        """.trimIndent()
+        val expected = listOf(7)
+
+        val lines = sut.lintWithContext(environment, code, jetpackTooling, multiplatformTooling)
+            .map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
+    fun `jetpack preview parameters are reported when the android rule is inactive`() {
+        val config = TestConfig(
+            "intellij-android-compose-preview" to mapOf(
+                "PreviewMultipleParameterProviders" to mapOf("active" to false),
+            ),
+            "intellij-compose-multiplatform-preview" to mapOf(
+                "MultiplatformPreviewMultipleParameterProviders" to mapOf("active" to true),
+            ),
+        )
+        val sut = MultiplatformPreviewMultipleParameterProviders(
+            config.subConfig("intellij-compose-multiplatform-preview")
+                .subConfig("MultiplatformPreviewMultipleParameterProviders"),
+        )
+        val code = """
+            import androidx.compose.ui.tooling.preview.Preview
+            import androidx.compose.ui.tooling.preview.PreviewParameter
+
+            @Preview
+            fun MyPreview(
+                @PreviewParameter a: Int,
+                @PreviewParameter b: Int,
+            ) {}
+        """.trimIndent()
+        val tooling = """
+            package androidx.compose.ui.tooling.preview
+
+            annotation class Preview
+
+            annotation class PreviewParameter
+        """.trimIndent()
+        val expected = listOf(7)
+
+        val lines = sut.lintWithContext(environment, code, tooling).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
     }
 }
