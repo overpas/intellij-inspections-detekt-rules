@@ -394,7 +394,7 @@ the script, because detekt does not have the Gradle model.
 | `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
 | `UnnecessaryVariable` | A local variable that only copies another local value or parameter. |
 | `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments. |
-| `UnusedReceiverParameter` | An extension receiver that is never used. |
+| `UnusedReceiverParameter` | An extension receiver that is never used. Skips a body with a call that does not resolve. |
 | `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. Inactive by default. |
 

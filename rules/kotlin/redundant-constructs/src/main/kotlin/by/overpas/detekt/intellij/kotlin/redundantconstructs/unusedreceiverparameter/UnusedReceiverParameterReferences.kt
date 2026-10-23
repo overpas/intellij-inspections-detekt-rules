@@ -2,6 +2,8 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.unusedreceiverpara
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallResolutionError
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallResolutionSuccess
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaReceiverValue
@@ -62,10 +64,11 @@ internal class UnusedReceiverParameterReferences(
 
     fun usesCall(element: KtElement): Boolean =
         with(session) {
-            val call = (element as? KtResolvableCall)?.resolveCall() as? KaSingleCall<*, *>
-            call != null &&
-                (listOfNotNull(call.dispatchReceiver, call.extensionReceiver) + call.contextArguments)
-                    .any { it.owner() == symbol }
+            when (val attempt = (element as? KtResolvableCall)?.tryResolveCall()) {
+                is KaCallResolutionError -> true
+                is KaCallResolutionSuccess -> attempt.call.receivers().any { it.owner() == symbol }
+                else -> false
+            }
         }
 
     fun usesReifiedType(element: KtElement): Boolean =
@@ -92,6 +95,9 @@ internal class UnusedReceiverParameterReferences(
             val receiverSymbol = receiverType.expandedSymbol
             resolveSymbols().filterIsInstance<KaFunctionSymbol>().any { it.containingDeclaration == receiverSymbol }
         }
+
+    private fun KaSingleCall<*, *>.receivers(): List<KaReceiverValue> =
+        listOfNotNull(dispatchReceiver, extensionReceiver) + contextArguments
 
     private fun KaReceiverValue.owner(): KaSymbol? {
         val value = this

@@ -3,6 +3,10 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.unusedreceiverpara
 import dev.detekt.api.Config
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
+import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageFeature
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -378,6 +382,59 @@ class UnusedReceiverParameterTest {
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a receiver used through an implicit extension property passes`() {
+        val code = """
+            class Holder
+            private val Holder.inner: Int get() = hashCode()
+            val Holder.outer: Int get() = inner
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a receiver used through an invisible member passes`() {
+        val code = """
+            @file:Suppress("INVISIBLE_REFERENCE", "INVISIBLE_MEMBER")
+
+            class Holder {
+                private val secret = 1
+            }
+
+            fun Holder.peek(): Int = secret
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, allowCompilationErrors = true)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a receiver used through an expect extension property passes`() {
+        val code = """
+            class Holder
+            val Holder.files: Int get() = filesImpl
+            internal expect val Holder.filesImpl: Int
+            internal actual val Holder.filesImpl: Int get() = 1
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(
+            environment = environment,
+            content = code,
+            allowCompilationErrors = true,
+            languageVersionSettings = LanguageVersionSettingsImpl(
+                LanguageVersion.LATEST_STABLE,
+                ApiVersion.LATEST_STABLE,
+                specificFeatures = mapOf(LanguageFeature.MultiPlatformProjects to LanguageFeature.State.ENABLED),
+            ),
+        )
 
         assertEquals(0, findings.size)
     }
