@@ -369,7 +369,7 @@ class KotlinMisorderedAssertEqualsArgumentsTest {
     }
 
     @Test
-    fun `an empty list passed as the actual argument is reported`() {
+    fun `an empty list passed as the actual argument passes`() {
         val code = """
             import junit.framework.TestCase
 
@@ -382,7 +382,45 @@ class KotlinMisorderedAssertEqualsArgumentsTest {
 
         val findings = sut.lintWithContext(environment, code, testCase)
 
-        assertEquals(1, findings.size)
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a local mutable list filled by the test passed as the actual argument passes`() {
+        val code = """
+            import junit.framework.TestCase
+
+            class RecorderTest : TestCase() {
+                fun testCalls() {
+                    val calls = mutableListOf<String>()
+                    calls += "a"
+                    assertEquals(listOf("a"), calls)
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, testCase)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a local mutable set filled by the test passed as the actual argument passes`() {
+        val code = """
+            import junit.framework.TestCase
+
+            class RecorderTest : TestCase() {
+                fun testPulses() {
+                    val pulsed = mutableSetOf<Int>()
+                    pulsed += 1
+                    assertEquals(setOf(1), pulsed)
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, testCase)
+
+        assertEquals(0, findings.size)
     }
 
     @Test
