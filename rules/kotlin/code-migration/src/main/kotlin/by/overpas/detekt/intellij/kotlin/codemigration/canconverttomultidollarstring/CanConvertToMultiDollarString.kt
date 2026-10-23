@@ -30,7 +30,9 @@ class CanConvertToMultiDollarString(config: Config) :
         )
         val scan = expression.entries.fold(initial) { current, entry -> current.accept(entry) }
         if (scan.isConvertible()) {
-            report(Finding(Entity.from(expression), "An interpolation prefix can simplify the string"))
+            expression.entries.filter { it.isEscapedDollar }.forEach {
+                report(Finding(Entity.from(it), "An interpolation prefix can simplify the string"))
+            }
         }
     }
 }

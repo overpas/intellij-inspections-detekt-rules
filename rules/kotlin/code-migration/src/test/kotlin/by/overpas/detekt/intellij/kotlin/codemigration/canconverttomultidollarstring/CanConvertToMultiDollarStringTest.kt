@@ -53,7 +53,7 @@ class CanConvertToMultiDollarStringTest {
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
+        assertEquals(8, findings.size)
     }
 
     @Test
@@ -64,7 +64,7 @@ class CanConvertToMultiDollarStringTest {
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
+        assertEquals(7, findings.size)
     }
 
     @Test
@@ -75,7 +75,24 @@ class CanConvertToMultiDollarStringTest {
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
+        assertEquals(3, findings.size)
+    }
+
+    @Test
+    fun `each escaped dollar in a raw string is reported at its own line`() {
+        val code = $$$"""
+            fun test() = ""$$${'"'}
+                echo ${'$'}HOME
+                plain line
+                echo ${'$'}PATH
+            ""$$${'"'}
+        """.trimIndent()
+        val expected = listOf(2 to 10, 4 to 10)
+
+        val positions = sut.lintWithContext(environment, code)
+            .map { it.entity.location.source.line to it.entity.location.source.column }
+
+        assertEquals(expected, positions)
     }
 
     @Test

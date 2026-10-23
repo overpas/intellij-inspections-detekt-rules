@@ -241,7 +241,7 @@ the script, because detekt does not have the Gradle model.
 
 | Rule | Finds |
 |---|---|
-| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. Opposite of `ConvertFromMultiDollarToRegularString`. |
+| `CanConvertToMultiDollarString` | A string that escapes dollar characters and can use an interpolation prefix instead. Each escaped dollar is reported. Opposite of `ConvertFromMultiDollarToRegularString`. |
 | `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. Opposite of `CanConvertToMultiDollarString`, which is active by default. Inactive by default. |
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
 | `InfixCallToOrdinary` | An infix call that can be an ordinary call. Opposite of `ConvertPairConstructorToToFunction` and `ReplaceToWithInfixForm`, which are active by default. Inactive by default. |
