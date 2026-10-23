@@ -159,7 +159,6 @@ intellij-kotlin-style-issues:
     active: true
   UseExpressionBody:
     active: true
-    areUnitExpressionsSkipped: true
   UsePropertyAccessSyntax:
     active: true
   VerboseNullabilityAndEmptiness:

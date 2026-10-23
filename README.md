@@ -479,7 +479,7 @@ the script, because detekt does not have the Gradle model.
 | `UnclearPrecedenceOfBinaryExpression` | An expression that mixes `?:` with equality, comparison, `in`, `is`, arithmetic or infix calls, or `||` in a `when` guard, without parentheses. | |
 | `UnlabeledReturnInsideLambda` | An unlabeled `return` inside an inline lambda that returns from the enclosing function. | |
 | `UnsafeCastWithReturn` | An unsafe cast followed by `?: return` that should be the safe cast `as?`. | |
-| `UseExpressionBody` | A function or property accessor whose block body holds only a `return` or one `Unit` or `Nothing` expression. | `areUnitExpressionsSkipped` (default `true`): do not report empty bodies and bodies with one `Unit` expression. |
+| `UseExpressionBody` | A function or property accessor whose block body holds only a one-line `return`. | |
 | `UsePropertyAccessSyntax` | A call of a Java getter or setter that Kotlin property access syntax can replace. | |
 | `VerboseNullabilityAndEmptiness` | A null check followed by an emptiness or blankness check that `isNullOrEmpty()` or `isNullOrBlank()` can replace. | |
 
