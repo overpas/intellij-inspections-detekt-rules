@@ -2,6 +2,7 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.unusedcontextparam
 
 import org.jetbrains.kotlin.analysis.api.KaExperimentalApi
 import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.components.KaScopeImplicitArgumentValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaExplicitReceiverValue
 import org.jetbrains.kotlin.analysis.api.resolution.KaImplicitReceiverValue
@@ -11,9 +12,11 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaContextParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaLocalVariableSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaValueParameterSymbol
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.name.CallableId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -23,6 +26,7 @@ import org.jetbrains.kotlin.psi.KtEscapeStringTemplateEntry
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -42,6 +46,14 @@ internal class UnusedContextParameterCallArguments(
 
     private val parameters = with(session) { lambda.functionLiteral.symbol.contextParameters }
 
+    private val usages by lazy {
+        lambda.bodyExpression
+            ?.collectDescendantsOfType<KtSimpleNameExpression>()
+            .orEmpty()
+            .flatMap { it.usages() }
+            .groupBy({ it.first }, { it.second })
+    }
+
     fun targetsKotlinContext(): Boolean =
         with(session) {
             call.resolveToCall()?.successfulFunctionCallOrNull()?.run { symbol.callableId } == CONTEXT_CALLABLE_ID
@@ -53,13 +65,17 @@ internal class UnusedContextParameterCallArguments(
     fun areSideEffectFree(): Boolean =
         arguments.all { it.isSideEffectFree() }
 
-    fun hasUnused(): Boolean {
-        val used = lambda.bodyExpression
-            ?.collectDescendantsOfType<KtSimpleNameExpression>()
-            .orEmpty()
-            .flatMap { it.usedSymbols() }
-            .toSet()
-        return !used.containsAll(parameters)
+    fun hasUnused(): Boolean =
+        !usages.keys.containsAll(parameters)
+
+    fun hasArgumentInScope(): Boolean {
+        val values = with(session) { call.containingKtFile.scopeContext(call).implicitValues }
+            .filterIsInstance<KaScopeImplicitArgumentValue>()
+        return parameters.any { parameter ->
+            val types = usages[parameter].orEmpty()
+            val given = with(session) { values.firstOrNull { value -> types.any { value.type.isSubtypeOf(it) } } }
+            given != null && arguments.any { it.refersTo(given.symbol) }
+        }
     }
 
     private fun KtExpression.isSideEffectFree(): Boolean {
@@ -72,7 +88,7 @@ internal class UnusedContextParameterCallArguments(
                     unwrapped.entries.all { it is KtLiteralStringTemplateEntry || it is KtEscapeStringTemplateEntry }
 
                 is KtSimpleNameExpression -> unwrapped.resolveToCall()?.successfulVariableAccessCall()?.symbol.let {
-                    it is KaLocalVariableSymbol || it is KaValueParameterSymbol
+                    it is KaLocalVariableSymbol || it is KaValueParameterSymbol || it is KaContextParameterSymbol
                 }
 
                 else -> false
@@ -80,11 +96,17 @@ internal class UnusedContextParameterCallArguments(
         }
     }
 
-    private fun KtSimpleNameExpression.usedSymbols(): List<KaSymbol> =
-        with(session) {
-            val applied = resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.partiallyAppliedSymbol
-            applied?.run { contextArguments.mapNotNull { it.implicitSymbol() } + symbol }.orEmpty()
-        }
+    private fun KtExpression.refersTo(symbol: KaSymbol): Boolean =
+        this is KtNameReferenceExpression &&
+            with(session) { resolveToCall()?.successfulVariableAccessCall()?.symbol } == symbol
+
+    private fun KtSimpleNameExpression.usages(): List<Pair<KaSymbol, KaType>> {
+        val resolved = with(session) { resolveToCall() }?.successfulCallOrNull<KaCallableMemberCall<*, *>>()
+        val applied = resolved?.partiallyAppliedSymbol ?: return emptyList()
+        val contextUsages = applied.contextArguments.zip(applied.signature.contextParameters)
+            .mapNotNull { (argument, parameter) -> argument.implicitSymbol()?.let { it to parameter.returnType } }
+        return contextUsages + (applied.symbol to applied.signature.returnType)
+    }
 
     private fun KaReceiverValue.implicitSymbol(): KaSymbol? =
         when (this) {

@@ -136,6 +136,79 @@ class UnusedContextParameterCallTest {
     }
 
     @Test
+    fun `a context call that passes an enclosing context parameter is reported`() {
+        val code = """
+            context(p: Int) fun f() {}
+
+            context(p: Int)
+            fun g() {
+                context(p) {
+                    f()
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a context call that passes an enclosing context parameter of a subtype is reported`() {
+        val code = """
+            open class A
+
+            class B : A()
+
+            context(p: A) fun f() {}
+
+            context(p: B)
+            fun g() {
+                context(p) {
+                    f()
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a context call that passes an enclosing context parameter among other arguments is reported`() {
+        val code = """
+            interface A
+            interface B { val name: String }
+            interface C
+
+            class Both(override val name: String) : A, B
+
+            context(a: A)
+            fun useA() {}
+
+            context(b: B)
+            fun useB(): String = b.name
+
+            context(c: C)
+            fun useC() {}
+
+            context(value: Both)
+            fun example(c: C) {
+                context(value, c) {
+                    useA()
+                    useB()
+                    useC()
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a context call whose argument is used passes`() {
         val code = """
             context(s: String) fun usesString() {}
@@ -224,6 +297,30 @@ class UnusedContextParameterCallTest {
             fun test() {
                 context(makeString()) {
                     foo()
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a context call that passes an enclosing context parameter hidden by a closer one passes`() {
+        val code = """
+            open class A
+
+            class B : A()
+
+            context(p: A) fun f() {}
+
+            context(p: B)
+            fun g() {
+                context(A()) {
+                    context(p) {
+                        f()
+                    }
                 }
             }
         """.trimIndent()

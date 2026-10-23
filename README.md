@@ -396,7 +396,7 @@ the script, because detekt does not have the Gradle model.
 | `SuspiciousCallableReferenceInLambda` | A lambda whose only statement is a callable reference. |
 | `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
 | `UnnecessaryVariable` | A local variable that only copies another local value or parameter. |
-| `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments. |
+| `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments, or that passes a context parameter that is already in scope. |
 | `UnusedReceiverParameter` | An extension receiver that is never used. Skips a body with a call that does not resolve. |
 | `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. Inactive by default. |
@@ -427,7 +427,7 @@ the script, because detekt does not have the Gradle model.
 | `IfThenToElvis` | An `if` that checks a value for `null` or a type and that the elvis operator `?:` can replace. | |
 | `IfThenToSafeAccess` | An `if` that checks a value for `null` or a type, returns `null` otherwise, and that `?.` or `as?` can replace. | |
 | `ImplicitThis` | A member access or callable reference that uses an implicit `this` receiver. Opposite of `ExplicitThis`, which is active by default. Inactive by default. | |
-| `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. | |
+| `IntroduceWhenSubject` | A `when` without a subject whose branches all check the same value, which can be the subject. | `areWhenGuardsIgnored` (default `true`): do not report a `when` with a branch condition joined by `&&`, which becomes a guard. |
 | `JavaMapForEach` | A call of the Java `Map.forEach` with a two-parameter lambda instead of the Kotlin `forEach` with a destructured entry. | |
 | `JoinDeclarationAndAssignment` | A property without an initializer that can join its first assignment. | |
 | `LiftReturnOrAssignment` | An `if`, `when` or `try` whose branches all end in a return or in an assignment to the same variable. | |
