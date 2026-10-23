@@ -270,7 +270,7 @@ the script, because detekt does not have the Gradle model.
 |---|---|
 | `JavaCollectionWithNullableTypeArgument` | A Java concurrent collection or `PriorityQueue` with a nullable type argument, which does not support `null`. |
 | `JavaCollectionsStaticMethodOnImmutableList` | A `java.util.Collections` mutator call (`reverse`, `sort`, `shuffle`, `fill`) on a read-only Kotlin list. |
-| `JavaDefaultMethodsNotOverriddenByDelegation` | Interface delegation that does not forward the overrides of Java default methods of the delegate. |
+| `JavaDefaultMethodsNotOverriddenByDelegation` | Interface delegation that does not forward the overrides of Java default methods of the delegate. By default, common source sets (`commonMain`, `commonTest`) are excluded (`excludes`), because their interfaces have no Java default methods. |
 
 ### `intellij-kotlin-logging`
 

@@ -6,3 +6,4 @@ intellij-kotlin-java-interop:
     active: true
   JavaDefaultMethodsNotOverriddenByDelegation:
     active: true
+    excludes: ['**/src/common*/**']
