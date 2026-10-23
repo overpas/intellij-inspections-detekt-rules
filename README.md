@@ -251,7 +251,7 @@ the script, because detekt does not have the Gradle model.
 | Rule | Finds |
 |---|---|
 | `CoroutineContextWithJob` | A `Job` or `NonCancellable` in the context argument of a coroutine builder, which breaks structured concurrency. |
-| `DeferredResultUnused` | A call that returns a `Deferred` whose result is never used. |
+| `DeferredResultUnused` | A call that returns a `Deferred` whose result is never used. Unlike IntelliJ IDEA, a call whose declared return type is a type parameter, such as `map.remove(key)` on a map of `Deferred` values, is skipped. |
 | `ForEachJoinOnCollectionOfJob` | A `forEach { it.join() }` on a collection of jobs that `joinAll()` can replace. |
 | `MapAwaitOnCollectionOfDeferred` | A `map { it.await() }` on a collection of deferred values that `awaitAll()` can replace. |
 | `PreferCurrentCoroutineContextToCoroutineContext` | A use of `kotlin.coroutines.coroutineContext` that `currentCoroutineContext()` should replace. |
