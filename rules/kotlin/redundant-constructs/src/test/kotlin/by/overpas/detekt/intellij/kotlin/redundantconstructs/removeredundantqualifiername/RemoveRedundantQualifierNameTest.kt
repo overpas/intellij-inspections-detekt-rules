@@ -1,8 +1,16 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs.removeredundantqualifiername
 
+import com.intellij.openapi.vfs.StandardFileSystems
+import com.intellij.psi.PsiManager
 import dev.detekt.api.Config
 import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinAnalysisApiEngine
 import dev.detekt.test.utils.createEnvironment
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import org.jetbrains.kotlin.psi.KtFile
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -11,6 +19,9 @@ class RemoveRedundantQualifierNameTest {
     private val environment = createEnvironment()
 
     private val sut = RemoveRedundantQualifierName(Config.empty)
+
+    @get:Rule
+    val temporaryFolder = TemporaryFolder()
 
     @Test
     fun `a package qualifier of a type is reported`() {
@@ -303,6 +314,70 @@ class RemoveRedundantQualifierNameTest {
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a JVM default import qualifier outside a common source set is reported`() {
+        val code = """
+            @kotlin.jvm.JvmInline
+            value class Id(val value: Int)
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a JVM default import qualifier in a common source set passes`() {
+        val path = temporaryFolder.newFolder("src", "commonMain", "kotlin").toPath().resolve("Id.kt")
+        path.writeText(
+            """
+                @kotlin.jvm.JvmInline
+                value class Id(val value: Int)
+            """.trimIndent(),
+        )
+
+        val findings = KotlinAnalysisApiEngine().use { engine ->
+            val project = engine.compile(
+                code = "",
+                javaSourceRoots = listOf(path),
+                jvmClasspathRoots = environment.jvmClasspathRoots,
+                allowCompilationErrors = true,
+            ).project
+            val virtualFile = StandardFileSystems.local().findFileByPath(path.toString())!!
+            val file = PsiManager.getInstance(project).findFile(virtualFile)!! as KtFile
+            sut.visitFile(file, LanguageVersionSettingsImpl.DEFAULT)
+        }
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an imported JVM default import qualifier in a common source set is reported`() {
+        val path = temporaryFolder.newFolder("src", "commonMain", "kotlin").toPath().resolve("Id.kt")
+        path.writeText(
+            """
+                import kotlin.jvm.JvmInline
+
+                @kotlin.jvm.JvmInline
+                value class Id(val value: Int)
+            """.trimIndent(),
+        )
+
+        val findings = KotlinAnalysisApiEngine().use { engine ->
+            val project = engine.compile(
+                code = "",
+                javaSourceRoots = listOf(path),
+                jvmClasspathRoots = environment.jvmClasspathRoots,
+                allowCompilationErrors = true,
+            ).project
+            val virtualFile = StandardFileSystems.local().findFileByPath(path.toString())!!
+            val file = PsiManager.getInstance(project).findFile(virtualFile)!! as KtFile
+            sut.visitFile(file, LanguageVersionSettingsImpl.DEFAULT)
+        }
 
         assertEquals(1, findings.size)
     }

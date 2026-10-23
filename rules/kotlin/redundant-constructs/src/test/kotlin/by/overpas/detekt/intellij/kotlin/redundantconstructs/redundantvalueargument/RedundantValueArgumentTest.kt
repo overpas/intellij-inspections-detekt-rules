@@ -175,4 +175,34 @@ class RedundantValueArgumentTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `an argument of a data class copy equal to the constructor default passes`() {
+        val code = """
+            data class State(val enabled: Boolean = true, val name: String? = null)
+
+            fun test(state: State) {
+                state.copy(enabled = true, name = null)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a data class constructor argument equal to the default value is reported`() {
+        val code = """
+            data class State(val enabled: Boolean = true)
+
+            fun test() {
+                State(enabled = true)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
 }

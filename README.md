@@ -384,11 +384,11 @@ the script, because detekt does not have the Gradle model.
 | `RedundantSamConstructor` | A SAM constructor call in an argument where a plain lambda converts to the same type. |
 | `RedundantSetter` | A setter that is the default one or only assigns the value to the backing field. |
 | `RedundantUpperBound` | A type parameter bound that is `Any?`, the default upper bound. |
-| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. Inactive by default. |
+| `RedundantValueArgument` | An argument whose constant value equals the default value of the parameter. Skips generated functions, such as the data class `copy`. Inactive by default. |
 | `RedundantWith` | A `with` call whose lambda does not use the receiver. |
 | `RemoveExplicitSuperQualifier` | A `super<T>` qualifier that does not change the member that the call resolves to. |
 | `RemoveExplicitTypeArguments` | Explicit type arguments that the compiler can infer. |
-| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. |
+| `RemoveRedundantQualifierName` | A package, class or companion qualifier that the code resolves the same without. Keeps a `kotlin.jvm` or `java.lang` qualifier in a common source set. |
 | `RemoveRedundantSpreadOperator` | A spread operator on an array that is created in place with an `arrayOf`-like call or a `[...]` literal. |
 | `RemoveSetterParameterType` | An explicit type on a setter parameter. |
 | `RemoveSingleExpressionStringTemplate` | A string template that only holds one non-null `String` expression. |
@@ -397,7 +397,7 @@ the script, because detekt does not have the Gradle model.
 | `UnnecessaryOptInAnnotation` | An `@OptIn` annotation or marker that no used API requires. |
 | `UnnecessaryVariable` | A local variable that only copies another local value or parameter. |
 | `UnusedContextParameterCall` | A `context(...)` call whose block does not use all the arguments. |
-| `UnusedReceiverParameter` | An extension receiver that is never used. |
+| `UnusedReceiverParameter` | An extension receiver that is never used. Skips a body with a call that does not resolve. |
 | `VariableInitializerIsRedundant` | A variable initializer that is overwritten before it is read. |
 | `WhenWithOnlyElse` | A `when` with only an `else` branch. Inactive by default. |
 
