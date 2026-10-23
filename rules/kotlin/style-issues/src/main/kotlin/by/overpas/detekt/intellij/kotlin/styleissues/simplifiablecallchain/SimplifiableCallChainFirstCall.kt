@@ -1,15 +1,18 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.simplifiablecallchain
 
 import org.jetbrains.kotlin.analysis.api.KaSession
+import org.jetbrains.kotlin.analysis.api.resolution.KaCallableMemberCall
 import org.jetbrains.kotlin.analysis.api.resolution.KaFunctionCall
-import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
+import org.jetbrains.kotlin.analysis.api.resolution.successfulCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
+import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 import org.jetbrains.kotlin.analysis.api.types.KaFunctionType
+import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.StandardClassIds
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 
@@ -21,6 +24,8 @@ private val SIMPLIFIABLE_CALL_CHAIN_SUM_TYPES =
         StandardClassIds.ULong,
         StandardClassIds.Double,
     )
+
+private val SIMPLIFIABLE_CALL_CHAIN_COMPOSABLE = ClassId.fromString("androidx/compose/runtime/Composable")
 
 internal class SimplifiableCallChainFirstCall(private val call: KaFunctionCall<*>) {
 
@@ -47,15 +52,21 @@ internal class SimplifiableCallChainFirstCall(private val call: KaFunctionCall<*
                 SimplifiableCallChainKind.JOIN ->
                     lambdaReturnType?.isSubtypeOf(StandardClassIds.CharSequence) != false &&
                         call.valueArgumentMapping.keys.none { argument ->
-                            argument.anyDescendantOfType<KtCallExpression> { nested ->
-                                val symbol = nested.resolveToCall()?.successfulFunctionCallOrNull()?.symbol
-                                (symbol as? KaNamedFunctionSymbol)?.isSuspend == true
-                            }
+                            argument.anyDescendantOfType<KtReferenceExpression> { it.isInlineOnlyCall() }
                         }
 
                 SimplifiableCallChainKind.BY -> lambdaResult?.expressionType?.isMarkedNullable != true
 
                 SimplifiableCallChainKind.SUM_OF -> lambdaReturnType == null || isSummable
             }
+        }
+
+    context(session: KaSession)
+    private fun KtReferenceExpression.isInlineOnlyCall(): Boolean =
+        with(session) {
+            val symbol = resolveToCall()?.successfulCallOrNull<KaCallableMemberCall<*, *>>()?.symbol
+            val composable = (symbol as? KaPropertySymbol)?.getter ?: symbol
+            (symbol as? KaNamedFunctionSymbol)?.isSuspend == true ||
+                composable?.run { SIMPLIFIABLE_CALL_CHAIN_COMPOSABLE in annotations } == true
         }
 }

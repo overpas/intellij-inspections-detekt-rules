@@ -13,7 +13,7 @@ internal fun KtSimpleNameExpression.isImplicitThisAccess(): Boolean =
         val symbol = reference.references.filterIsInstance<KtReference>().firstNotNullOfOrNull { it.resolveToSymbol() }
         val receivers = reference.containingKtFile.scopeContext(reference).implicitReceivers
             .filter { it.isDeclaredAround(reference) }
-        symbol?.implicitThisClass()?.canBeReferencedByThisIn(receivers) == true
+        symbol?.implicitThisClass(reference.isCallee())?.canBeReferencedByThisIn(receivers) == true
     }
 
 context(session: KaSession)

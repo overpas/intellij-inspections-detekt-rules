@@ -191,6 +191,71 @@ class SimplifiableCallChainTest {
     }
 
     @Test
+    fun `a map with a composable call followed by joinToString passes`() {
+        val code = """
+            import androidx.compose.runtime.Composable
+
+            @Composable
+            fun label(input: String): String = input
+
+            @Composable
+            fun List<String>.text(): String = map { label(it) }.joinToString(", ")
+        """.trimIndent()
+        val runtime = """
+            package androidx.compose.runtime
+
+            annotation class Composable
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, runtime)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a map with a composable property getter followed by joinToString passes`() {
+        val code = """
+            import androidx.compose.runtime.Composable
+
+            val String.label: String
+                @Composable get() = this
+
+            @Composable
+            fun List<String>.text(): String = map { it.label }.joinToString(", ")
+        """.trimIndent()
+        val runtime = """
+            package androidx.compose.runtime
+
+            annotation class Composable
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, runtime)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a map with a non-composable call in a composable function followed by joinToString is reported`() {
+        val code = """
+            import androidx.compose.runtime.Composable
+
+            fun label(input: String): String = input
+
+            @Composable
+            fun List<String>.text(): String = map { label(it) }.joinToString(", ")
+        """.trimIndent()
+        val runtime = """
+            package androidx.compose.runtime
+
+            annotation class Composable
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, runtime)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a map to floats followed by sum passes`() {
         val code = """
             fun test() {
