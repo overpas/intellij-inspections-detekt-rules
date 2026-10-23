@@ -40,6 +40,7 @@ intellij-kotlin-probable-bugs:
     active: true
   KotlinThrowableNotThrown:
     active: true
+    excludes: ['**/test/**', '**/src/test*/**', '**/src/*Test/**', '**/src/*Test[A-Z]*/**']
   LateinitVarOverridesLateinitVar:
     active: true
   LazyWithoutDelegation:

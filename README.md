@@ -327,7 +327,7 @@ the script, because detekt does not have the Gradle model.
 | `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
 | `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. |
 | `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. |
-| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. |
+| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. By default, test source sets are excluded (`excludes`). |
 | `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. |
 | `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. |
 | `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. |
