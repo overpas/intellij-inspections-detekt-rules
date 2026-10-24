@@ -69,13 +69,16 @@ internal class SimplifiableCallCandidate(private val call: KtCallExpression) {
 
                 isMapReceiver -> null
 
-                name == "mapNotNull" -> castType?.let { "filterIsInstance<${it.text}>()" }
+                name == "mapNotNull" ->
+                    castType
+                        ?.takeIf { it.simplifiableCallReifies() }
+                        ?.let { "filterIsInstance<${it.text}>()" }
 
                 isNotNullCheck -> "filterNotNull()"
 
                 else ->
                     instanceCheck
-                        ?.takeIf { resolved.simplifiableCallAccepts(it) }
+                        ?.takeIf { resolved.simplifiableCallAccepts(it) && it.simplifiableCallReifies() }
                         ?.let { "filterIsInstance<${it.text}>()" }
             }
         }

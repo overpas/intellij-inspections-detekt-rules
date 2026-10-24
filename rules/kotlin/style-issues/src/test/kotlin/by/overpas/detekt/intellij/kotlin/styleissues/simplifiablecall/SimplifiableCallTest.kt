@@ -117,6 +117,21 @@ class SimplifiableCallTest {
     }
 
     @Test
+    fun `a mapNotNull with a safe cast to a type with written type arguments is reported`() {
+        val code = """
+            class Box<T>(val value: T)
+
+            fun test(list: List<Any>) {
+                list.mapNotNull { it as? Box<String> }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a flatMap with an identity lambda on an array of lists passes`() {
         val code = """
             fun test() {
@@ -217,6 +232,40 @@ class SimplifiableCallTest {
 
             fun test() {
                 listOf<A>().mapNotNull { it.l as? X }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a mapNotNull with a safe cast to a generic type without type arguments passes`() {
+        val code = """
+            sealed interface Child<out C : Any, out T : Any> {
+                data class Created<out C : Any, out T : Any>(val configuration: C, val instance: T) : Child<C, T>
+            }
+
+            fun <C : Any, T : Any> test(children: List<Child<C, T>>) {
+                children.mapNotNull { it as? Child.Created }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a filter by a generic type without type arguments passes`() {
+        val code = """
+            sealed interface Child<out C : Any, out T : Any> {
+                data class Created<out C : Any, out T : Any>(val configuration: C, val instance: T) : Child<C, T>
+            }
+
+            fun <C : Any, T : Any> test(children: List<Child<C, T>>) {
+                children.filter { it is Child.Created }
             }
         """.trimIndent()
 
