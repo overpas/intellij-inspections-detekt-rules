@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.0.7
+
+### Changed options and defaults
+
+- `intellij-kotlin-style-issues`: `IntroduceWhenSubject`: new option `areWhenGuardsIgnored` (default `true`). The rule does not report a `when` with a branch condition joined by `&&`, because this condition becomes a guard when the subject is introduced. To keep the old behavior, set `areWhenGuardsIgnored: false`.
+
+### Changed detection
+
+- `intellij-kotlin-redundant-constructs`: `UnusedContextParameterCall`: also reports a `context(...)` call that passes a context parameter that is already in scope, for example `context(p) { ... }` inside a function with `context(p: A)`. A context parameter of a subtype counts. A closer context value of the same type hides the outer one, so this case is not reported. No option keeps the old findings.
+
+### Changed messages
+
+- `intellij-kotlin-redundant-constructs`: `UnusedContextParameterCall`: the rule description now also names the arguments that are already in scope.
+
 ## 0.0.6
 
 ### Changed options and defaults

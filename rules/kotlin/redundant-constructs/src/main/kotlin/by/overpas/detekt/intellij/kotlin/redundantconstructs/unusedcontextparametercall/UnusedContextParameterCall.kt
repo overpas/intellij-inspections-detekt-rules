@@ -16,8 +16,8 @@ private const val CONTEXT = "context"
 class UnusedContextParameterCall(config: Config) :
     Rule(
         config,
-        "A `context` call provides context arguments that its block never uses. Remove the unused arguments " +
-            "or the whole call.",
+        "A `context` call provides context arguments that its block never uses or that are already in scope. " +
+            "Remove these arguments or the whole call.",
     ),
     RequiresAnalysisApi {
 
@@ -31,7 +31,7 @@ class UnusedContextParameterCall(config: Config) :
             arguments.targetsKotlinContext() &&
                 arguments.matchParameters() &&
                 arguments.areSideEffectFree() &&
-                arguments.hasUnused()
+                (arguments.hasUnused() || arguments.hasArgumentInScope())
         }
         if (hasUnused) report(Finding(Entity.from(callee), "Unused context call arguments"))
     }

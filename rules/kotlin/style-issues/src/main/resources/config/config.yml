@@ -49,6 +49,7 @@ intellij-kotlin-style-issues:
     active: false
   IntroduceWhenSubject:
     active: true
+    areWhenGuardsIgnored: true
   JavaMapForEach:
     active: true
   JoinDeclarationAndAssignment:
