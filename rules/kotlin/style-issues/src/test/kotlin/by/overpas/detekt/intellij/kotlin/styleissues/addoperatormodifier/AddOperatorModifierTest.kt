@@ -180,6 +180,60 @@ class AddOperatorModifierTest {
     }
 
     @Test
+    fun `a member set function that returns Unit is reported`() {
+        val code = """
+            class Settings {
+                fun set(key: String, value: Int) {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a member set function that returns a value passes`() {
+        val code = """
+            class Job
+
+            class Settings {
+                fun set(key: String, value: Int): Job = Job()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an extension set function with an inferred non-Unit return type passes`() {
+        val code = """
+            class Settings
+
+            fun <T> Settings.set(key: String, value: T) = listOf(key, value)
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a member get function that returns a value is still reported`() {
+        val code = """
+            class Settings {
+                fun get(key: String): Int = 0
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a non-suspend get function is reported when suspend functions are skipped`() {
         val sut = AddOperatorModifier(TestConfig("areSuspendFunctionsSkipped" to true))
         val code = """
