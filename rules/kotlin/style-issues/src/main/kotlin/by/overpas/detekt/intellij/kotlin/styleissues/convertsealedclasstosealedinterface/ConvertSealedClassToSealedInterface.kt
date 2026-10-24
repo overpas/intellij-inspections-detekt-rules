@@ -32,6 +32,6 @@ class ConvertSealedClassToSealedInterface(config: Config) :
                 !klass.hasNonInterfaceAnnotation() &&
                 symbol.sealedClassInheritors.all { it.psi is KtClassOrObject }
         }
-        if (isConvertible) report(Finding(Entity.from(klass), "Sealed class can be converted to sealed interface"))
+        if (isConvertible) report(Finding(Entity.atName(klass), "Sealed class can be converted to sealed interface"))
     }
 }
