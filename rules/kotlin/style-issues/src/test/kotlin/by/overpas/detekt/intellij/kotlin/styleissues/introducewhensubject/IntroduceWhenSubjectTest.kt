@@ -3,7 +3,14 @@ package by.overpas.detekt.intellij.kotlin.styleissues.introducewhensubject
 import dev.detekt.api.Config
 import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.createEnvironment
+import java.nio.file.FileSystems
+import java.nio.file.Path
+import java.util.jar.JarFile
+import kotlin.io.path.copyTo
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -148,6 +155,31 @@ class IntroduceWhenSubjectTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a when with guard conditions passes when the stdlib does not support guards`() {
+        val code = """
+            fun test(a: Any) {
+                when {
+                    a is String && a.isNotEmpty() -> Unit
+                    a is Int && (a > 0 || a < -10) -> Unit
+                    else -> Unit
+                }
+            }
+        """.trimIndent()
+        val sut = IntroduceWhenSubject(TestConfig("areWhenGuardsIgnored" to false))
+        val stdlib = createTempFile(suffix = ".jar").also { it.toFile().deleteOnExit() }
+        val stdlibLocation = KotlinVersion::class.java.protectionDomain.codeSource.location
+        Path.of(stdlibLocation.toURI()).copyTo(stdlib, overwrite = true)
+        FileSystems.newFileSystem(stdlib).use { jar ->
+            jar.getPath(JarFile.MANIFEST_NAME).writeText("Manifest-Version: 1.0\nKotlin-Version: 2.1\n")
+        }
+        val environment = KotlinEnvironmentContainer(emptyList(), listOf(stdlib))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
     }
 
     @Test

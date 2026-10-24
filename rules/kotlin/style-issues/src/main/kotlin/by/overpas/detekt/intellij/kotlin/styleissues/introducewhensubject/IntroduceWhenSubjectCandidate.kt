@@ -1,7 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.introducewhensubject
 
+import by.overpas.detekt.intellij.kotlin.styleissues.isSupportedByUseSiteModule
 import org.jetbrains.kotlin.analysis.api.KaSession
-import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
 import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtWhenConditionWithExpression
@@ -13,8 +13,7 @@ internal fun KtWhenExpression.whenSubjectToIntroduce(): KtExpression? {
     val conditions = entries.flatMap { it.conditions.asList() }
     val isApplicable = entries.all { it.isElse || it.conditions.isNotEmpty() } &&
         conditions.all { it is KtWhenConditionWithExpression }
-    val areGuardsSupported = (session.useSiteModule as? KaSourceModule)
-        ?.run { languageVersionSettings.supportsFeature(LanguageFeature.WhenGuards) } != false
+    val areGuardsSupported = LanguageFeature.WhenGuards.isSupportedByUseSiteModule != false
     val initialState = if (areGuardsSupported) {
         IntroduceWhenSubjectState.UNCONSTRAINED
     } else {
