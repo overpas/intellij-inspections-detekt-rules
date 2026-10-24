@@ -21,7 +21,7 @@ class DeprecatedCallableAddReplaceWith(config: Config) :
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        val annotation = function.deprecatedAnnotationOrNull() ?: return
+        val annotation = function.takeUnless { it.isDelegateConvention() }?.deprecatedAnnotationOrNull() ?: return
         val isMissingReplaceWith = analyze(function) { function.canSuggestReplaceWith() }
         if (isMissingReplaceWith) report(Finding(Entity.from(annotation), MESSAGE))
     }

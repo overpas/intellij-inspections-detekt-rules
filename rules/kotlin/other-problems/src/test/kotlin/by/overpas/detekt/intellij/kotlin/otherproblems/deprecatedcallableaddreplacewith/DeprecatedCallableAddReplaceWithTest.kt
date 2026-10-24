@@ -119,6 +119,88 @@ class DeprecatedCallableAddReplaceWithTest {
     }
 
     @Test
+    fun `a deprecated operator function that is not a delegate convention is reported`() {
+        val code = """
+            class Box(val value: Int)
+
+            @Deprecated("")
+            operator fun Box.plus(other: Box): Box = Box(value + other.value)
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a deprecated function named getValue without the operator modifier is reported`() {
+        val code = """
+            class Box(val value: Int)
+
+            @Deprecated("")
+            fun Box.getValue(): Int = value
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a deprecated getValue operator passes`() {
+        val code = """
+            import kotlin.reflect.KProperty
+
+            class Box(val value: Int)
+
+            @Deprecated("")
+            operator fun Box.getValue(thisRef: Any?, property: KProperty<*>): Int = value
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a deprecated setValue operator passes`() {
+        val code = """
+            import kotlin.reflect.KProperty
+
+            class Box(var value: Int)
+
+            @Deprecated("")
+            operator fun Box.setValue(thisRef: Any?, property: KProperty<*>, newValue: Int) {
+                update(newValue)
+            }
+
+            fun Box.update(newValue: Int) {
+                value = newValue
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a deprecated provideDelegate operator passes`() {
+        val code = """
+            import kotlin.reflect.KProperty
+
+            class Box(val value: Int)
+
+            @Deprecated("")
+            operator fun Box.provideDelegate(thisRef: Any?, property: KProperty<*>): Box = Box(value)
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
     fun `a deprecated function with a replaceWith argument passes`() {
         val code = """
             @Deprecated("", ReplaceWith("bar()"))
