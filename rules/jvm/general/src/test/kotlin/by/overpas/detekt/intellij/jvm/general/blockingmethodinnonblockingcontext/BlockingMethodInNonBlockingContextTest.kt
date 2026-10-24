@@ -503,6 +503,90 @@ class BlockingMethodInNonBlockingContextTest {
     }
 
     @Test
+    fun `the dispatcher of an explicit coroutine scope decides the context`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.SupervisorJob
+            import kotlinx.coroutines.launch
+
+            fun start() {
+                CoroutineScope(Dispatchers.IO).launch {
+                    Thread.sleep(1)
+                }
+                CoroutineScope(Dispatchers.Default).launch {
+                    Thread.sleep(2)
+                }
+                CoroutineScope(SupervisorJob() + Dispatchers.IO).launch {
+                    Thread.sleep(3)
+                }
+                CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
+                    Thread.sleep(4)
+                }
+            }
+        """.trimIndent()
+        val expected = listOf(11, 17)
+
+        val lines = sut.lintWithContext(environment, code).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
+    fun `the receiver of the dispatcher invoke operator decides the context`() {
+        val code = """
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.invoke
+
+            suspend fun read() {
+                Dispatchers.IO {
+                    Thread.sleep(1)
+                }
+                Dispatchers.Default {
+                    Thread.sleep(2)
+                }
+            }
+        """.trimIndent()
+        val expected = listOf(9)
+
+        val lines = sut.lintWithContext(environment, code).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
+    fun `the dispatcher of a coroutine scope in a local or private value decides the context`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Dispatchers
+            import kotlinx.coroutines.launch
+
+            class Service {
+                private val ioScope = CoroutineScope(Dispatchers.IO)
+                private val defaultScope = CoroutineScope(Dispatchers.Default)
+
+                fun start() {
+                    val localScope = CoroutineScope(Dispatchers.IO)
+                    ioScope.launch {
+                        Thread.sleep(1)
+                    }
+                    defaultScope.launch {
+                        Thread.sleep(2)
+                    }
+                    localScope.launch {
+                        Thread.sleep(3)
+                    }
+                }
+            }
+        """.trimIndent()
+        val expected = listOf(15)
+
+        val lines = sut.lintWithContext(environment, code).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
     fun `annotations mark blocking methods and non-blocking contexts`() {
         val code = """
             import org.jetbrains.annotations.Blocking
