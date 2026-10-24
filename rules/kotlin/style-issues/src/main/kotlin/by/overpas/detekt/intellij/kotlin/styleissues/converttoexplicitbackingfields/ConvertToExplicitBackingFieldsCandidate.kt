@@ -1,7 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.converttoexplicitbackingfields
 
+import by.overpas.detekt.intellij.kotlin.styleissues.isSupportedByUseSiteModule
 import org.jetbrains.kotlin.analysis.api.analyze
-import org.jetbrains.kotlin.analysis.api.projectStructure.KaSourceModule
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassKind
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedClassSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaPropertySymbol
@@ -54,13 +54,11 @@ internal class ConvertToExplicitBackingFieldsCandidate(
                     .filterIsInstance<KtReference>()
                     .firstNotNullOfOrNull { it.resolveToSymbol() } as? KaPropertySymbol
                 val backingType = backing?.takeIf { (it.psi as? KtProperty)?.isPlainPrivateValue == true }?.returnType
-                val isFeatureSupported = (useSiteModule as? KaSourceModule)
-                    ?.run { languageVersionSettings.supportsFeature(LanguageFeature.ExplicitBackingFields) } == true
-                isFeatureSupported &&
-                    isEffectivelyFinal &&
+                isEffectivelyFinal &&
                     backingType != null &&
                     !backingType.semanticallyEquals(symbol.returnType) &&
-                    backingType.isSubtypeOf(symbol.returnType)
+                    backingType.isSubtypeOf(symbol.returnType) &&
+                    LanguageFeature.ExplicitBackingFields.isSupportedByUseSiteModule == true
             }
         }
 }

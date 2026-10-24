@@ -2,10 +2,18 @@ package by.overpas.detekt.intellij.kotlin.styleissues.converttoexplicitbackingfi
 
 import dev.detekt.api.Config
 import dev.detekt.test.lintWithContext
+import dev.detekt.test.utils.KotlinEnvironmentContainer
 import dev.detekt.test.utils.createEnvironment
 import org.jetbrains.kotlin.config.ApiVersion
+import org.jetbrains.kotlin.config.LanguageFeature
 import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
+import java.nio.file.FileSystems
+import java.nio.file.Path
+import java.util.jar.JarFile
+import kotlin.io.path.copyTo
+import kotlin.io.path.createTempFile
+import kotlin.io.path.writeText
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -308,6 +316,51 @@ class ConvertToExplicitBackingFieldsTest {
         val languageVersionSettings = LanguageVersionSettingsImpl(
             languageVersion = LanguageVersion.KOTLIN_2_4,
             apiVersion = ApiVersion.KOTLIN_2_4,
+        )
+
+        val findings = sut.lintWithContext(environment, code, languageVersionSettings = languageVersionSettings)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a property passes when the stdlib does not support explicit backing fields`() {
+        val code = """
+            private val _items = mutableSetOf<Int>()
+            val items: Set<Int>
+                get() = _items
+        """.trimIndent()
+        val stdlib = createTempFile(suffix = ".jar").also { it.toFile().deleteOnExit() }
+        val stdlibLocation = KotlinVersion::class.java.protectionDomain.codeSource.location
+        Path.of(stdlibLocation.toURI()).copyTo(stdlib, overwrite = true)
+        FileSystems.newFileSystem(stdlib).use { jar ->
+            jar.getPath(JarFile.MANIFEST_NAME).writeText("Manifest-Version: 1.0\nKotlin-Version: 2.3\n")
+        }
+        val environment = KotlinEnvironmentContainer(emptyList(), listOf(stdlib))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a property is reported when explicit backing fields are enabled explicitly with an older stdlib`() {
+        val code = """
+            private val _items = mutableSetOf<Int>()
+            val items: Set<Int>
+                get() = _items
+        """.trimIndent()
+        val stdlib = createTempFile(suffix = ".jar").also { it.toFile().deleteOnExit() }
+        val stdlibLocation = KotlinVersion::class.java.protectionDomain.codeSource.location
+        Path.of(stdlibLocation.toURI()).copyTo(stdlib, overwrite = true)
+        FileSystems.newFileSystem(stdlib).use { jar ->
+            jar.getPath(JarFile.MANIFEST_NAME).writeText("Manifest-Version: 1.0\nKotlin-Version: 2.3\n")
+        }
+        val environment = KotlinEnvironmentContainer(emptyList(), listOf(stdlib))
+        val languageVersionSettings = LanguageVersionSettingsImpl(
+            languageVersion = LanguageVersion.KOTLIN_2_3,
+            apiVersion = ApiVersion.KOTLIN_2_3,
+            specificFeatures = mapOf(LanguageFeature.ExplicitBackingFields to LanguageFeature.State.ENABLED),
         )
 
         val findings = sut.lintWithContext(environment, code, languageVersionSettings = languageVersionSettings)
