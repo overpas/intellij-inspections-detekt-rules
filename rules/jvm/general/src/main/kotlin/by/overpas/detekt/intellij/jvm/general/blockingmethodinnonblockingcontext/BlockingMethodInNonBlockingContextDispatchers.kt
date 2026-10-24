@@ -14,6 +14,8 @@ internal class BlockingMethodInNonBlockingContextDispatchers(
         val sources = sequence {
             yield(BlockingMethodInNonBlockingContextArgument(call).dispatcher())
             yield(BlockingMethodInNonBlockingContextScope(callExpression).dispatcher())
+            yield(BlockingMethodInNonBlockingContextReceiver(callExpression).dispatcher())
+            yield(BlockingMethodInNonBlockingContextInvoke(call).dispatcher())
             yield(BlockingMethodInNonBlockingContextFlowOn(call, callExpression).dispatcher())
         }
         val results = sources.runningFold(BlockingMethodInNonBlockingContextDispatcher.NO_INFORMATION, ::maxOf)
