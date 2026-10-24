@@ -67,7 +67,7 @@ class ConvertPairConstructorToToFunctionTest {
     }
 
     @Test
-    fun `a Pair constructor call with named arguments is reported`() {
+    fun `a Pair constructor call with named arguments passes`() {
         val code = """
             fun test() {
                 val p = Pair(second = "foo", first = 1)
@@ -76,7 +76,36 @@ class ConvertPairConstructorToToFunctionTest {
 
         val findings = sut.lintWithContext(environment, code)
 
-        assertEquals(1, findings.size)
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a multi-line Pair constructor call with named arguments in order passes`() {
+        val code = """
+            fun test() {
+                val p = Pair(
+                    first = listOf(1, 2).map { it * 2 },
+                    second = "foo",
+                )
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a Pair constructor call with one named argument passes`() {
+        val code = """
+            fun test() {
+                val p = Pair(1, second = "foo")
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
     }
 
     @Test

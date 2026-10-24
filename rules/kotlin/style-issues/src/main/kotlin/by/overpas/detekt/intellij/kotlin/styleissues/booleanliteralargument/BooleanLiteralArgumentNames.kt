@@ -13,7 +13,10 @@ private val BOOLEAN_LITERAL_ARGUMENT_IGNORED_CLASSES =
     listOf("kotlin.Pair", "kotlin.Triple").map { ClassId.topLevel(FqName(it)) }
 
 context(session: KaSession)
-internal fun KtValueArgument.hasBooleanLiteralStableName(call: KtCallExpression): Boolean =
+internal fun KtValueArgument.hasBooleanLiteralStableName(
+    call: KtCallExpression,
+    ignoredFunctions: List<String>,
+): Boolean =
     with(session) {
         val functionCall = call.resolveToCall()?.successfulFunctionCallOrNull()
         val function = functionCall?.symbol
@@ -27,5 +30,6 @@ internal fun KtValueArgument.hasBooleanLiteralStableName(call: KtCallExpression)
             !parameter.isVararg &&
             !isAmbiguousVararg &&
             function?.hasStableParameterNames == true &&
+            function.callableId?.run { asSingleFqName().asString() } !in ignoredFunctions &&
             (function as? KaConstructorSymbol)?.containingClassId !in BOOLEAN_LITERAL_ARGUMENT_IGNORED_CLASSES
     }
