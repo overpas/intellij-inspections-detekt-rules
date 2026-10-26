@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.booleanliteralargument
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.io.path.Path
@@ -154,5 +155,68 @@ class BooleanLiteralArgumentTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `boolean literal arguments of an ignored member function pass`() {
+        val sut = BooleanLiteralArgument(
+            TestConfig("ignoredFunctions" to listOf("vector.PathBuilder.arcTo")),
+        )
+        val code = """
+            package vector
+
+            class PathBuilder {
+                fun arcTo(radius: Float, isMoreThanHalf: Boolean, isPositiveArc: Boolean) {}
+            }
+
+            fun test(builder: PathBuilder) {
+                builder.arcTo(1.5f, false, true)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `boolean literal arguments of an ignored top-level function pass`() {
+        val sut = BooleanLiteralArgument(TestConfig("ignoredFunctions" to listOf("config.setFlags")))
+        val code = """
+            package config
+
+            fun setFlags(verbose: Boolean, strict: Boolean) {}
+
+            fun test() {
+                setFlags(true, false)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `boolean literal arguments of a function that is not ignored are reported`() {
+        val sut = BooleanLiteralArgument(
+            TestConfig("ignoredFunctions" to listOf("vector.PathBuilder.arcTo")),
+        )
+        val code = """
+            package vector
+
+            class PathBuilder {
+                fun arcTo(radius: Float, isMoreThanHalf: Boolean, isPositiveArc: Boolean) {}
+                fun arcToRelative(radius: Float, isMoreThanHalf: Boolean, isPositiveArc: Boolean) {}
+            }
+
+            fun test(builder: PathBuilder) {
+                builder.arcToRelative(1.5f, false, true)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(2, findings.size)
     }
 }

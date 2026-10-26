@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.1.0
+
+### Changed options and defaults
+
+- `intellij-kotlin-style-issues`: `BooleanLiteralArgument`: new option `ignoredFunctions` (default empty). The rule does not report the arguments of the listed functions, given as fully qualified names, for example `androidx.compose.ui.graphics.vector.PathBuilder.arcTo`. The default keeps the old behavior.
+
+### Changed detection
+
+- `intellij-kotlin-coroutines`: `BlockingMethodInNonBlockingContext`: reads the dispatcher of an explicit `CoroutineScope(...)` receiver, also through a local or private value, and of the `CoroutineDispatcher.invoke` operator, for example `Dispatchers.Default { ... }`. A blocking call in such a coroutine on a non-IO dispatcher is now reported. Before, the context was unknown and not reported. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `AddOperatorModifier`: does not report a `set` function that does not return `Unit`. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `ConvertPairConstructorToToFunction`: does not report a `Pair(...)` call with named arguments. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `ConvertSealedClassToSealedInterface`, `ConvertSealedInterfaceToSealedClass`: report at the class name, not at the whole declaration with its KDoc and annotations. No option keeps the old location.
+- `intellij-kotlin-style-issues`: `ConvertToExplicitBackingFields`, `IntroduceWhenSubject`: a language feature counts as supported only when the Kotlin standard library on the classpath also has its version. Explicit backing fields need 2.4, `when` guards need 2.2. Before, a project on an older Kotlin version got suggestions that did not compile when the detekt task had no `languageVersion`. If the compiler options enable the feature explicitly, the rules still use it.
+- `intellij-kotlin-style-issues`: `SimplifiableCall`: does not suggest `filterIsInstance` for a cast or type check to a generic type without type arguments, for example `it as? Child.Created`, because `filterIsInstance<Child.Created>()` does not compile. No option keeps the old findings.
+
+### Changed messages
+
+- `intellij-kotlin-style-issues`: `AddOperatorModifier`: the rule description now says that a `set` function that does not return `Unit` is not reported.
+- `intellij-kotlin-style-issues`: `ConvertPairConstructorToToFunction`: the rule description now says that calls with named arguments are not reported.
+
 ## 0.0.7
 
 ### Changed options and defaults

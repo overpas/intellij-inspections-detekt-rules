@@ -405,18 +405,18 @@ the script, because detekt does not have the Gradle model.
 
 | Rule | Finds | Options |
 |---|---|---|
-| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. | `areSuspendFunctionsSkipped` (default `true`): do not report `suspend` functions. |
+| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. A `set` function that does not return `Unit` is not reported. | `areSuspendFunctionsSkipped` (default `true`): do not report `suspend` functions. |
 | `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. | |
-| `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. | |
+| `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. | `ignoredFunctions` (default empty): do not report the arguments of these functions, given as fully qualified names, e.g. `androidx.compose.ui.graphics.vector.PathBuilder.arcTo`. |
 | `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. | |
 | `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. Inactive by default. | |
-| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. | |
+| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call without named arguments that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. | |
 | `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. | |
 | `ConvertReferenceToLambda` | A callable reference that a lambda can replace. Inactive by default. | |
 | `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Members that an interface cannot have, such as non-private `inline` or `tailrec` functions, `external` members and `@JvmOverloads`, `@JvmName` or `@Synchronized` members, block the conversion. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |
 | `ConvertSealedInterfaceToSealedClass` | A sealed interface whose inheritors are all plain classes or objects that can extend a sealed class. Opposite of `ConvertSealedClassToSealedInterface`, which is active by default. Inactive by default. | |
 | `ConvertSecondaryConstructorToPrimary` | A secondary constructor that every other constructor delegates to and that can be the primary constructor. | |
-| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Only when the language version supports explicit backing fields (Kotlin 2.4 or later). Opposite of `RevertExplicitBackingFields`. | |
+| `ConvertToExplicitBackingFields` | A property whose getter only returns a private property of a narrower type, which an explicit backing field can replace. Only when the language version and the Kotlin standard library on the classpath are 2.4 or later, or when the compiler options enable explicit backing fields. Opposite of `RevertExplicitBackingFields`. | |
 | `ConvertToStringTemplate` | A `String` concatenation of literals and simple values that a string template can replace. | |
 | `ConvertTryFinallyToUseCall` | A `try`-`finally` that only closes a `Closeable` in `finally`, which `use()` can replace. | |
 | `ConvertTwoComparisonsToRangeCheck` | Two comparisons of one value with a lower and an upper bound that an `in` or `!in` range check can replace. Opposite of `ConvertRangeCheckToTwoComparisons`. | |

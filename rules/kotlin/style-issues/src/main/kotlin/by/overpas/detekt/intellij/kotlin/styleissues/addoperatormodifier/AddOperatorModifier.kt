@@ -14,12 +14,14 @@ import org.jetbrains.kotlin.analysis.api.components.canBeOperator
 import org.jetbrains.kotlin.analysis.api.symbols.KaNamedFunctionSymbol
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.util.OperatorNameConventions
 
 @IntellijInspection("AddOperatorModifier")
 class AddOperatorModifier(config: Config) :
     Rule(
         config,
-        "The function matches an operator convention but has no `operator` modifier. Add the `operator` modifier.",
+        "The function matches an operator convention but has no `operator` modifier. Add the `operator` modifier. " +
+            "A `set` function that does not return `Unit` is not reported.",
     ),
     RequiresAnalysisApi {
 
@@ -32,7 +34,10 @@ class AddOperatorModifier(config: Config) :
         if (function.nameIdentifier == null || function.hasModifier(KtTokens.OPERATOR_KEYWORD)) return
         if (areSuspendFunctionsSkipped && function.hasModifier(KtTokens.SUSPEND_KEYWORD)) return
         val isOperatorCandidate = analyze(function) {
-            (function.symbol as? KaNamedFunctionSymbol)?.run { canBeOperator && !isOperator } == true
+            (function.symbol as? KaNamedFunctionSymbol)?.run {
+                val isNonUnitSet = name == OperatorNameConventions.SET && !returnType.isUnitType
+                canBeOperator && !isOperator && !isNonUnitSet
+            } == true
         }
         if (isOperatorCandidate) report(Finding(Entity.atName(function), "Function should have 'operator' modifier"))
     }

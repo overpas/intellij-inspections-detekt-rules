@@ -237,4 +237,32 @@ class ConvertSealedInterfaceToSealedClassTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `a sealed interface with KDoc is reported at its name`() {
+        val code = """
+            /**
+             * Result of an operation.
+             */
+            sealed interface Result
+        """.trimIndent()
+        val expected = listOf(4)
+
+        val lines = sut.lintWithContext(environment, code).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
+
+    @Test
+    fun `an annotated sealed interface is reported at its name`() {
+        val code = """
+            @Deprecated("old")
+            sealed interface Result
+        """.trimIndent()
+        val expected = listOf(2)
+
+        val lines = sut.lintWithContext(environment, code).map { it.entity.location.source.line }
+
+        assertEquals(expected, lines)
+    }
 }

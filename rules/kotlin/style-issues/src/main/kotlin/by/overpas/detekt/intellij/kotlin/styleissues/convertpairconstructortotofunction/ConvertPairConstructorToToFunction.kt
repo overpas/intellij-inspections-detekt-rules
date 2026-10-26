@@ -22,7 +22,7 @@ class ConvertPairConstructorToToFunction(config: Config) :
     Rule(
         config,
         "An explicit `Pair` constructor call reads better as the infix `to` function. " +
-            "Replace `Pair(a, b)` with `a to b`.",
+            "Replace `Pair(a, b)` with `a to b`. Calls with named arguments are not reported.",
     ),
     RequiresAnalysisApi {
 
@@ -30,7 +30,8 @@ class ConvertPairConstructorToToFunction(config: Config) :
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression ?: return
         val arguments = expression.valueArguments
-        val hasTwoArguments = arguments.size == 2 && arguments.all { it.getArgumentExpression() != null }
+        val hasTwoArguments = arguments.size == 2 &&
+            arguments.all { it.getArgumentExpression() != null && !it.isNamed() }
         if (callee.text != "Pair" || !hasTwoArguments) return
         val isPairConstructor = analyze(expression) {
             val symbol = expression.resolveToCall()?.successfulFunctionCallOrNull()?.symbol

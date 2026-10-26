@@ -30,6 +30,6 @@ class ConvertSealedInterfaceToSealedClass(config: Config) :
             val inheritors = (klass.symbol as? KaNamedClassSymbol)?.sealedClassInheritors.orEmpty()
             inheritors.all { (it.psi as? KtClassOrObject)?.canExtendSealedClass(klass) == true }
         }
-        if (isConvertible) report(Finding(Entity.from(klass), "Sealed interface can be converted to sealed class"))
+        if (isConvertible) report(Finding(Entity.atName(klass), "Sealed interface can be converted to sealed class"))
     }
 }
