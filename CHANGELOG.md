@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.2.0
+
+### Distribution
+
+- All rule set jars and bundle jars are on Maven Central under the group `io.github.overpas`. The artifact id is the jar name without `-<version>.jar`, for example `detektPlugins("io.github.overpas:intellij-inspections-kotlin-all:0.2.0")`. The README setup now shows this way first. The jars are still attached to the GitHub release.
+
 ## 0.1.0
 
 ### Changed options and defaults
