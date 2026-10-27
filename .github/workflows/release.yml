@@ -34,6 +34,22 @@ jobs:
       - run: ./gradlew check koverVerify ruleJars -Pversion="$VERSION"
         env:
           VERSION: ${{ steps.version.outputs.version }}
+      - name: Publish to Maven Central
+        run: ./gradlew publishToMavenCentral -Pversion="$VERSION"
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USER_NAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD }}
+      - name: Upload Maven Central bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: maven-central-bundle
+          path: build/maven-central/maven-central-bundle.zip
+          if-no-files-found: ignore
       - run: .github/scripts/publish-release.sh "$VERSION"
         env:
           VERSION: ${{ steps.version.outputs.version }}

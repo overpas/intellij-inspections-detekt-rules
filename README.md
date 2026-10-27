@@ -1,5 +1,6 @@
 # intellij-inspections-detekt-rules
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.overpas/intellij-inspections-kotlin-all)](https://central.sonatype.com/namespace/io.github.overpas)
 [![Build](https://github.com/overpas/intellij-inspections-detekt-rules/actions/workflows/build.yml/badge.svg)](https://github.com/overpas/intellij-inspections-detekt-rules/actions/workflows/build.yml)
 
 [detekt](https://detekt.dev) rules ported from the Kotlin, JVM, Android, Gradle and Compose
@@ -49,23 +50,21 @@ Editor | Inspections | Compose Multiplatform Preview).
 
 The project must use detekt 2 (Gradle plugin `dev.detekt`).
 
-1. Download the jars from
-   [GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases) into
-   a directory of your project, for example `config/detekt/plugins/`. Download one of these:
-   - For all Kotlin rule sets: `intellij-inspections-kotlin-all-<version>.jar`.
-   - For all JVM rule sets: `intellij-inspections-jvm-all-<version>.jar`.
-   - For all Android rule sets: `intellij-inspections-android-all-<version>.jar`.
-   - For some rule sets only: their jars from the tables above.
+1. Select the artifacts. Each artifact id is a jar name from the tables above without
+   `-<version>.jar`. Select one of these:
+   - For all Kotlin rule sets: `intellij-inspections-kotlin-all`.
+   - For all JVM rule sets: `intellij-inspections-jvm-all`.
+   - For all Android rule sets: `intellij-inspections-android-all`.
+   - For some rule sets only: their artifacts from the tables above.
 
-   Do not add a bundle jar and its rule set jars together. Detekt then loads the same rule sets
-   two times.
-2. In `build.gradle.kts`, add the jars to the detekt plugins and set
-   `buildUponDefaultConfig = true`. The example uses `config/detekt/plugins/`. Change the path to
-   your directory:
+   Do not add a bundle and its rule sets together. Detekt then loads the same rule sets two
+   times.
+2. In `build.gradle.kts`, add the artifacts from Maven Central to the detekt plugins and set
+   `buildUponDefaultConfig = true`:
 
    ```kotlin
    dependencies {
-       detektPlugins(fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") })
+       detektPlugins("io.github.overpas:intellij-inspections-kotlin-all:<version>")
    }
 
    detekt {
@@ -74,6 +73,17 @@ The project must use detekt 2 (Gradle plugin `dev.detekt`).
    ```
 
    Each jar has a default config. Without `buildUponDefaultConfig = true`, detekt does not use it.
+
+   To use the jars from
+   [GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases)
+   instead, download them into a directory of your project, for example `config/detekt/plugins/`,
+   and add the directory:
+
+   ```kotlin
+   dependencies {
+       detektPlugins(fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") })
+   }
+   ```
 3. Optional: to change a rule, write only the change in your detekt config. For example, to
    activate a rule that is "Inactive by default" in [Rules](#rules):
 
