@@ -2,6 +2,7 @@ import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
 
 plugins {
     id("code-coverage")
+    id("maven-central")
 }
 
 val ruleSets = listOf(

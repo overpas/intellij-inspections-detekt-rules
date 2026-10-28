@@ -5,10 +5,21 @@ plugins {
     id("code-coverage")
     id("com.gradleup.shadow")
     id("jvm-lib")
+    id("publish")
     id("static-analysis")
 }
 
 val libs = the<LibrariesForLibs>()
+val ruleSetName = project.path.removePrefix(":rules:").replace(':', '-')
+val artifactName = "intellij-inspections-$ruleSetName"
+
+description = "The intellij-$ruleSetName detekt rule set, ported from the IntelliJ IDEA inspections"
+
+publishing {
+    publications.named<MavenPublication>("maven") {
+        artifactId = artifactName
+    }
+}
 
 dependencies {
     compileOnly(project(":annotations"))
@@ -20,7 +31,7 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveBaseName = "intellij-inspections-${project.path.removePrefix(":rules:").replace(':', '-')}"
+    archiveBaseName = artifactName
     archiveClassifier = ""
     archiveVersion = project.version.toString()
     isPreserveFileTimestamps = false

@@ -3,6 +3,7 @@ import java.util.zip.ZipFile
 plugins {
     java
     id("com.gradleup.shadow")
+    id("publish")
 }
 
 val ruleSetGroup = project.name
@@ -11,6 +12,15 @@ val ruleSetIds = rootProject.subprojects
     .filter { it.parent?.path == ruleSetGroupPath }
     .map { "intellij-$ruleSetGroup-${it.name}" }
     .sorted()
+val artifactName = "intellij-inspections-$ruleSetGroup-all"
+
+description = "All intellij-$ruleSetGroup-* detekt rule sets in one jar, ported from the IntelliJ IDEA inspections"
+
+publishing {
+    publications.named<MavenPublication>("maven") {
+        artifactId = artifactName
+    }
+}
 
 dependencies {
     rootProject.subprojects
@@ -20,7 +30,7 @@ dependencies {
 }
 
 tasks.shadowJar {
-    archiveBaseName = "intellij-inspections-$ruleSetGroup-all"
+    archiveBaseName = artifactName
     archiveClassifier = ""
     archiveVersion = project.version.toString()
     isPreserveFileTimestamps = false
