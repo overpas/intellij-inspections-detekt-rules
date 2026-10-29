@@ -1,0 +1,55 @@
+def jars = new File(System.getenv("BATTLE_JARS")).listFiles().findAll { it.name.endsWith(".jar") }
+def overlay = System.getenv("BATTLE_OVERLAY")
+def skipped = ~/.*(Release|Ios|Macos|Tvos|Watchos|Native|Js(?=[A-Z]|$)|Wasm|Linux|Mingw|Benchmark|Format|AndroidTest|DeviceTest).*/
+def triggers = [
+    "org.jetbrains.kotlin.jvm",
+    "org.jetbrains.kotlin.android",
+    "org.jetbrains.kotlin.multiplatform",
+    "com.android.application",
+    "com.android.library",
+    "com.android.kotlin.multiplatform.library",
+]
+
+def isDetekt = { t -> t.class.name.replace("_Decorated", "") == "dev.detekt.gradle.Detekt" }
+def isTyped = { t -> isDetekt(t) && t.name != "detekt" && !t.name.endsWith("SourceSet") && !(t.name ==~ skipped) }
+def selected = { Collection<String> names ->
+    def debugs = names.findAll { it.contains("Debug") }
+    if (debugs.isEmpty()) {
+        return names
+    }
+    def base = debugs.min { it.length() }
+    debugs.findAll { it.startsWith(base) } + names.findAll { it.endsWith("Jvm") }
+}
+
+gradle.allprojects { Project p ->
+    if (p.gradle.parent != null) {
+        return
+    }
+    triggers.each { id ->
+        p.pluginManager.withPlugin(id) {
+            if (!p.pluginManager.hasPlugin("dev.detekt")) {
+                p.pluginManager.apply("dev.detekt")
+            }
+        }
+    }
+    p.pluginManager.withPlugin("dev.detekt") {
+        p.configurations.named("detektPlugins").configure { c ->
+            c.withDependencies { deps -> deps.removeIf { d -> d.group != null && !d.group.startsWith("dev.detekt") } }
+        }
+        p.dependencies.add("detektPlugins", p.files(jars))
+        p.tasks.matching(isDetekt).configureEach { t ->
+            t.ignoreFailures.set(true)
+            t.allRules.set(true)
+            t.buildUponDefaultConfig.set(true)
+            t.baseline.set((RegularFile) null)
+            t.config.from(overlay)
+            t.parallel.set(false)
+            t.reports.sarif.required.set(true)
+        }
+        if (p.tasks.findByName("battleDetekt") == null) {
+            p.tasks.register("battleDetekt") { b ->
+                b.dependsOn { selected(p.tasks.findAll(isTyped)*.name) }
+            }
+        }
+    }
+}
