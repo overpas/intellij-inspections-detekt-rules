@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [main]
+    branches: [develop, main]
   pull_request:
 
 concurrency:
@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   build:
+    if: github.event_name != 'pull_request' || github.head_ref != 'develop'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -20,6 +21,6 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main' }}
       - run: ./gradlew check koverVerify
       - run: ./gradlew validateMavenCentralBundle -Pversion=0.0.0
