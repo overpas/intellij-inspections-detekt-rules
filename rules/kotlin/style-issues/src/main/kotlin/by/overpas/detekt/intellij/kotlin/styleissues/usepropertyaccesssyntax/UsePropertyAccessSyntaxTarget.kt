@@ -29,6 +29,7 @@ internal class UsePropertyAccessSyntaxTarget(
                     .map { it.symbol }
                     .filterIsInstance<KaSyntheticJavaPropertySymbol>()
                     .firstOrNull { it.name.asString() in accessor.propertyNames && it.name.asString() !in keywords }
+                    ?.takeIf { it.javaGetterSymbol.visibility != KaSymbolVisibility.PRIVATE }
             }
             val overridden = (symbol.allOverriddenSymbols + symbol).toList()
             val isFromJava = overridden.none { it.callableId?.run { asSingleFqName().asString() } in notProperties } &&

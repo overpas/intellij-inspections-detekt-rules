@@ -212,4 +212,32 @@ class ReplaceNotNullAssertionWithElvisReturnTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `a not-null assertion in a default parameter value passes`() {
+        val code = """
+            val current: String? = null
+
+            fun title(text: String = current!!) {}
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a not-null assertion in the body of a function with a default parameter value is reported`() {
+        val code = """
+            val current: String? = null
+
+            fun title(text: String = "") {
+                val x = current!!
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
 }
