@@ -22,7 +22,8 @@ Inputs:
 - The real source files in `<work>/projects`, when the context is not enough.
 
 Do not edit the rules repo. Do not edit the projects, except to prove a finding: apply the
-suggested change, compile the module, then revert with `git checkout -- .`.
+suggested change, compile the module, then revert only that file with
+`git checkout -- <file>`. Other agents and the build patches of the harness share the clone.
 
 Put each rule in exactly one category:
 

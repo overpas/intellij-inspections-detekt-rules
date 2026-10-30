@@ -32,13 +32,17 @@ skill. The `scripts/` and `references/` paths are relative to the directory of t
     - If the project already applies detekt, set its version to the detekt version of this repo.
       Remove its own `tasks.withType<Detekt>` settings that turn off SARIF, set `parallel` or call
       `setSource`, because they override the init script.
-    - Write `sdk.dir=<ANDROID_HOME>` to `local.properties`.
+    - Write `sdk.dir=<ANDROID_HOME>` to `local.properties`. Use the SDK directory that contains
+      `platforms`: the environment variable can point to a subdirectory.
+    - If the build asks for a JDK toolchain that is not installed, lower it to 21 in the clone. The
+      analysis does not depend on the JVM target.
 2. Do a dry run: `scripts/run.sh <work> <project dir> dry-<name> battleDetekt --dry-run`. Make sure
    that the task list has only type-resolution tasks: one debug variant per Android module and the
    `*Jvm` tasks of multiplatform modules. Fix configuration errors in the log first. A missing
    native or generated dependency can need a stub jar, for example in `app/libs`.
 3. Run `scripts/run.sh <work> <project dir> <name> battleDetekt` in the background, one project at
-   a time. A large project takes more than 10 minutes.
+   a time. A large project takes more than 10 minutes. Run a copy of `scripts/` in `<work>/bin`:
+   zsh reads a script while it runs, so an edit to the skill breaks a running loop.
 4. Read the log. A rule exception stops the detekt task and the task writes no report. Each crash
    is a BUG.
 

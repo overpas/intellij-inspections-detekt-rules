@@ -8,11 +8,12 @@ shift 3
 
 export JAVA_HOME=${BATTLE_JAVA_HOME:-$(find $HOME/.gradle/jdks -maxdepth 4 -type d -path '*-21-*' -name Home | head -1)}
 export ANDROID_HOME=${ANDROID_HOME:-$HOME/Library/Android/sdk}
+[[ -d $ANDROID_HOME/platforms ]] || export ANDROID_HOME=$HOME/Library/Android/sdk
 export BATTLE_JARS=$work/jars
 export BATTLE_OVERLAY=$work/overlay.yml
 
 mkdir -p $work/logs
-[[ -f $BATTLE_OVERLAY ]] || printf 'config:\n  validation: false\n' > $BATTLE_OVERLAY
+[[ -f $BATTLE_OVERLAY ]] || printf 'config:\n  validation: false\nconsole-reports:\n  active: false\n' > $BATTLE_OVERLAY
 
 cd $project && ./gradlew \
   --init-script $here/battle.init.gradle \
