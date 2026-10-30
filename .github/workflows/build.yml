@@ -2,7 +2,7 @@ name: Build
 
 on:
   push:
-    branches: [develop, main]
+    branches: [main]
   pull_request:
 
 concurrency:
@@ -20,6 +20,6 @@ jobs:
           java-version: 21
       - uses: gradle/actions/setup-gradle@v5
         with:
-          cache-read-only: ${{ github.ref != 'refs/heads/develop' && github.ref != 'refs/heads/main' }}
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
       - run: ./gradlew check koverVerify
       - run: ./gradlew validateMavenCentralBundle -Pversion=0.0.0
