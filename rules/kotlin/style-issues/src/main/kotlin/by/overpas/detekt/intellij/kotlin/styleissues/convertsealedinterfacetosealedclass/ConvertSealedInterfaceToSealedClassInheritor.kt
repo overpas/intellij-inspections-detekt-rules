@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 context(session: KaSession)
 internal fun KtClassOrObject.canExtendSealedClass(sealedInterface: KtClass): Boolean {
     val isPlainClass = this !is KtClass ||
-        (!isInterface() && !isEnum() && (primaryConstructor != null || secondaryConstructors.isEmpty()))
+        (!isInterface() && !isEnum() && !isValue() && (primaryConstructor != null || secondaryConstructors.isEmpty()))
     val superTypeTargets = superTypeListEntries.map { entry ->
         val type = with(session) { entry.typeReference?.run { type.fullyExpandedType } }
         entry to (type as? KaClassType)?.run { symbol.psi }

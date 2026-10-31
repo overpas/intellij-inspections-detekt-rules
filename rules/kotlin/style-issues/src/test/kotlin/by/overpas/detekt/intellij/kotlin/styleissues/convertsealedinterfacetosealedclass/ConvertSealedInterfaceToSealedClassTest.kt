@@ -265,4 +265,20 @@ class ConvertSealedInterfaceToSealedClassTest {
 
         assertEquals(expected, lines)
     }
+
+    @Test
+    fun `a sealed interface with a value class inheritor passes`() {
+        val code = """
+            sealed interface A {
+                data object N : A
+
+                @JvmInline
+                value class S(val v: String) : A
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
 }
