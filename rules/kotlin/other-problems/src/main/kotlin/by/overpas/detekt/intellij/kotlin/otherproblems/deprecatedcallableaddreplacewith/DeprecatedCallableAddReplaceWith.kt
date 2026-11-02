@@ -2,11 +2,14 @@ package by.overpas.detekt.intellij.kotlin.otherproblems.deprecatedcallableaddrep
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.analyze
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
@@ -19,8 +22,12 @@ class DeprecatedCallableAddReplaceWith(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration("Do not report `override` functions and properties.")
+    private val areOverridesSkipped: Boolean by config(false)
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
+        if (areOverridesSkipped && function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
         val annotation = function.deprecatedAnnotationOrNull() ?: return
         val isMissingReplaceWith = analyze(function) { function.canSuggestReplaceWith() }
         if (isMissingReplaceWith) report(Finding(Entity.from(annotation), MESSAGE))
@@ -28,6 +35,7 @@ class DeprecatedCallableAddReplaceWith(config: Config) :
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
+        if (areOverridesSkipped && property.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
         val annotation = property.takeUnless { it.isVar }?.deprecatedAnnotationOrNull() ?: return
         val isMissingReplaceWith = analyze(property) { property.canSuggestReplaceWith() }
         if (isMissingReplaceWith) report(Finding(Entity.from(annotation), MESSAGE))

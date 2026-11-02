@@ -23,6 +23,17 @@ private val DEFAULT_NON_BLOCKING_ANNOTATIONS = listOf(
     "io.smallrye.common.annotation.NonBlocking",
 )
 
+private val DEFAULT_BLOCKING_LAMBDA_FUNCTIONS = listOf(
+    "kotlinx.coroutines.runBlocking",
+    "org.mockito.kotlin.KStubbing.on",
+    "org.mockito.kotlin.KStubbing.onBlocking",
+    "org.mockito.kotlin.verifyBlocking",
+    "io.mockk.coEvery",
+    "io.mockk.coVerify",
+    "dev.mokkery.everySuspend",
+    "dev.mokkery.verifySuspend",
+)
+
 @IntellijInspection("BlockingMethodInNonBlockingContext")
 class BlockingMethodInNonBlockingContext(config: Config) :
     Rule(
@@ -45,6 +56,12 @@ class BlockingMethodInNonBlockingContext(config: Config) :
     @Configuration("The annotations of non-blocking methods and non-blocking classes.")
     private val nonBlockingAnnotations: List<String> by config(DEFAULT_NON_BLOCKING_ANNOTATIONS)
 
+    @Configuration(
+        "Functions whose lambda arguments run in a blocking context, given as fully qualified names, " +
+            "e.g. `kotlinx.coroutines.runBlocking`.",
+    )
+    private val blockingLambdaFunctions: List<String> by config(DEFAULT_BLOCKING_LAMBDA_FUNCTIONS)
+
     private val annotations by lazy {
         BlockingMethodInNonBlockingContextAnnotations(
             (blockingAnnotations + DEFAULT_BLOCKING_ANNOTATIONS).toSet(),
@@ -56,8 +73,12 @@ class BlockingMethodInNonBlockingContext(config: Config) :
         super.visitCallExpression(expression)
         val callee = expression.calleeExpression ?: return
         val isReported = analyze(expression) {
-            val context =
-                BlockingMethodInNonBlockingContextContext(expression, annotations, isSuspendContextNonBlocking).type()
+            val context = BlockingMethodInNonBlockingContextContext(
+                expression = expression,
+                annotations = annotations,
+                isSuspendContextNonBlocking = isSuspendContextNonBlocking,
+                blockingLambdaFunctions = blockingLambdaFunctions,
+            ).type()
             val isReportedContext = context == BlockingMethodInNonBlockingContextType.NON_BLOCKING ||
                 (context == BlockingMethodInNonBlockingContextType.UNSURE && !isUnknownContextBlocking)
             isReportedContext && BlockingMethodInNonBlockingContextMethod(annotations).isBlocking(expression)

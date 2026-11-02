@@ -89,3 +89,4 @@ intellij-kotlin-probable-bugs:
     active: true
   WrapUnaryOperator:
     active: true
+    ignoredSelectors: []
