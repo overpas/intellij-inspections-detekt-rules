@@ -13,11 +13,16 @@ internal class BlockingMethodInNonBlockingContextContext(
     private val expression: KtCallExpression,
     private val annotations: BlockingMethodInNonBlockingContextAnnotations,
     private val isSuspendContextNonBlocking: Boolean,
+    private val blockingLambdaFunctions: List<String>,
 ) {
 
     context(session: KaSession)
     fun type(): BlockingMethodInNonBlockingContextType {
-        val coroutine = BlockingMethodInNonBlockingContextCoroutine(expression, isSuspendContextNonBlocking).type()
+        val coroutine = BlockingMethodInNonBlockingContextCoroutine(
+            expression,
+            isSuspendContextNonBlocking,
+            blockingLambdaFunctions,
+        ).type()
         return if (coroutine == BlockingMethodInNonBlockingContextType.NON_BLOCKING) {
             coroutine
         } else {

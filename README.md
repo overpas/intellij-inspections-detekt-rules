@@ -202,7 +202,7 @@ the script, because detekt does not have the Gradle model.
 
 | Rule | Finds | Options |
 |---|---|---|
-| `BlockingMethodInNonBlockingContext` | A possibly blocking call, such as `Thread.sleep()`, a JDK method that throws `IOException` or a method annotated with `@Blocking`, in a non-blocking context such as a suspend function, a coroutine on a non-IO dispatcher or a method annotated with `@NonBlocking`. | `isUnknownContextBlocking` (default `true`): do not report the calls in contexts that are not known.<br>`isSuspendContextNonBlocking` (default `true`): consider suspend functions and suspend lambdas non-blocking.<br>`blockingAnnotations` (default the `Blocking` annotations of JetBrains, Micronaut and SmallRye): more annotations that mark blocking methods. The rule always uses the default ones.<br>`nonBlockingAnnotations` (default the `NonBlocking` annotations of JetBrains, Micronaut and SmallRye): more annotations that mark non-blocking contexts. The rule always uses the default ones. |
+| `BlockingMethodInNonBlockingContext` | A possibly blocking call, such as `Thread.sleep()`, a JDK method that throws `IOException` or a method annotated with `@Blocking`, in a non-blocking context such as a suspend function, a coroutine on a non-IO dispatcher or a method annotated with `@NonBlocking`. | `isUnknownContextBlocking` (default `true`): do not report the calls in contexts that are not known.<br>`isSuspendContextNonBlocking` (default `true`): consider suspend functions and suspend lambdas non-blocking.<br>`blockingAnnotations` (default the `Blocking` annotations of JetBrains, Micronaut and SmallRye): more annotations that mark blocking methods. The rule always uses the default ones.<br>`nonBlockingAnnotations` (default the `NonBlocking` annotations of JetBrains, Micronaut and SmallRye): more annotations that mark non-blocking contexts. The rule always uses the default ones.<br>`blockingLambdaFunctions` (default `runBlocking` and the suspend stubbing and verification functions of mockito-kotlin, MockK and Mokkery): functions whose lambda arguments run in a blocking context, given as fully qualified names. |
 | `MissingDeprecatedAnnotationOnScheduledForRemovalApi` | A declaration marked with `@ApiStatus.ScheduledForRemoval` that is not also marked with `@Deprecated`. | |
 | `MustAlreadyBeRemovedApi` | A declaration marked with `@ApiStatus.ScheduledForRemoval` for a version that is not later than the current version. | `currentVersion` (default empty, which turns the rule off): the current version. |
 | `NonExtendableApiUsage` | A class, interface or override that extends, implements or overrides a library API marked with `@ApiStatus.NonExtendable`, or the annotation on a declaration that cannot be extended. | |
@@ -246,9 +246,9 @@ the script, because detekt does not have the Gradle model.
 | Rule | Finds | Options |
 |---|---|---|
 | `AssertBetweenInconvertibleTypes` | A JUnit, TestNG or AssertJ equality or identity assertion between objects of inconvertible types. | |
-| `TestCaseWithConstructor` | A test class that does initialization work in a constructor or an `init` block instead of a set-up method. Inactive by default. | |
+| `TestCaseWithConstructor` | A test class that does initialization work in a constructor or an `init` block instead of a set-up method. IntelliJ has the same check for initializers, but turns it off until its UAST highlighting supports them. The rule keeps it, because an `init` block holds the constructor logic of a Kotlin class. Inactive by default. | |
 | `TestCaseWithNoTestMethods` | A test class without test methods. Inactive by default. | `isSupersIgnored` (default `true`): do not report a class when a superclass has test methods. |
-| `TestMethodWithoutAssertion` | A test method without assertions. Inactive by default. | `assertionMethods` (default the assertions of JUnit, kotlin.test, TestNG, AssertJ, Truth, Hamcrest, Mockito, MockK and JMockit): the assertion methods as `<class or package>#<method name regex>`.<br>`isAssertKeywordAssertion` (default `true`): count `assert()` as an assertion.<br>`isThrowingIgnored` (default `false`): do not report a method with `@Throws`. |
+| `TestMethodWithoutAssertion` | A test method without assertions. Inactive by default. | `assertionMethods` (default the assertions of JUnit, kotlin.test, TestNG, AssertJ, Truth, Hamcrest, Mockito, MockK, JMockit, assertk, Mokkery, mockito-kotlin, Compose UI test, Turbine, Koin and Kotest): the assertion methods as `<class or package>#<method name regex>`.<br>`isAssertKeywordAssertion` (default `true`): count `assert()` as an assertion.<br>`isThrowingIgnored` (default `false`): do not report a method with `@Throws`. |
 
 ### `intellij-kotlin-code-migration`
 
@@ -257,7 +257,7 @@ the script, because detekt does not have the Gradle model.
 | `CanConvertToMultiDollarString` | A string that escapes two or more dollar characters (`\$`), or writes one as `${'$'}`, and can use an interpolation prefix instead. Each escaped dollar is reported. Unlike IntelliJ, a string whose only escape is a single `\$`, such as `"%1\$s"`, is not reported. Opposite of `ConvertFromMultiDollarToRegularString`. |
 | `ConvertFromMultiDollarToRegularString` | A string with an interpolation prefix that can be a regular string. Opposite of `CanConvertToMultiDollarString`, which is active by default. Inactive by default. |
 | `ConvertLongToDuration` | A kotlinx.coroutines call that uses the `Long` milliseconds overload instead of `Duration`. |
-| `InfixCallToOrdinary` | An infix call that can be an ordinary call. Opposite of `ConvertPairConstructorToToFunction` and `ReplaceToWithInfixForm`, which are active by default. Inactive by default. |
+| `InfixCallToOrdinary` | An infix call that can be an ordinary call. Opposite of `ConvertPairConstructorToToFunction` and `ReplaceToWithInfixForm`, of which `ReplaceToWithInfixForm` is active by default. Inactive by default. |
 
 ### `intellij-kotlin-coroutines`
 
@@ -306,65 +306,65 @@ the script, because detekt does not have the Gradle model.
 
 ### `intellij-kotlin-other-problems`
 
-| Rule | Finds |
-|---|---|
-| `ConvertArgumentToSet` | A collection argument of `minus`, `intersect`, `subtract`, `removeAll` or `retainAll` that should be a `Set`. |
-| `DeprecatedCallableAddReplaceWith` | A `@Deprecated` callable with a simple body but no `replaceWith` argument. |
-| `EnumValuesSoftDeprecate` | A `values()` call of an enum class that `entries` can replace. |
-| `EnumValuesTopLevelFunctionSoftDeprecate` | An `enumValues<T>()` call that `enumEntries<T>()` can replace. |
-| `FloatingPointLiteralPrecision` | A floating-point literal with more digits than its type can hold. |
-| `MigrateDiagnosticSuppression` | An old diagnostic name in `@Suppress` that has a new name. |
-| `ReplaceWithEnumMap` | A `HashMap` with enum keys that an `EnumMap` can replace. |
-| `ReplaceWithStringBuilderAppendRange` | An `append(CharArray, Int, Int)` call that `appendRange` can replace. |
+| Rule | Finds | Options |
+|---|---|---|
+| `ConvertArgumentToSet` | A collection argument of `minus`, `intersect`, `subtract`, `removeAll` or `retainAll` that should be a `Set`. | |
+| `DeprecatedCallableAddReplaceWith` | A `@Deprecated` callable with a simple body but no `replaceWith` argument. | `areOverridesSkipped` (default `false`): do not report `override` functions and properties. |
+| `EnumValuesSoftDeprecate` | A `values()` call of an enum class that `entries` can replace. | |
+| `EnumValuesTopLevelFunctionSoftDeprecate` | An `enumValues<T>()` call that `enumEntries<T>()` can replace. | |
+| `FloatingPointLiteralPrecision` | A floating-point literal with more digits than its type can hold. | |
+| `MigrateDiagnosticSuppression` | An old diagnostic name in `@Suppress` that has a new name. | |
+| `ReplaceWithEnumMap` | A `HashMap` with enum keys that an `EnumMap` can replace. | |
+| `ReplaceWithStringBuilderAppendRange` | An `append(CharArray, Int, Int)` call that `appendRange` can replace. | |
 
 ### `intellij-kotlin-probable-bugs`
 
-| Rule | Finds |
-|---|---|
-| `AmbiguousNonLocalJump` | An unlabeled `break` or `continue` in an inline lambda inside a loop. |
-| `ArrayInDataClass` | An array property in a data or value class that does not override `equals()` and `hashCode()`. |
-| `AssignedValueIsNeverRead` | An assignment to a local variable whose value is never read. |
-| `CanSealedSubClassBeObject` | A subclass of a sealed class that has no state and no `equals()` and can be an object. |
-| `ConflictingExtensionProperty` | An extension property that a synthetic Java property of the receiver shadows. |
-| `ConvertNaNEquality` | An equality check with `Double.NaN` or `Float.NaN` that should use `isNaN()`. |
-| `DataClassPrivateConstructor` | A private primary constructor of a data class that the generated `copy()` exposes. |
-| `DelegationToVarProperty` | Class delegation to a `var` constructor property that the class never reassigns. |
-| `DuplicateArgumentsInSetOfAndMapOfFunctions` | A duplicate constant element in a `setOf` call or a duplicate constant key in a `mapOf` call. |
-| `EmptyRange` | A range whose constant start is past its end in the direction of the operator. |
-| `FilterIsInstanceResultIsAlwaysEmpty` | A `filterIsInstance` call whose target type no element of the receiver can have. |
-| `ForEachParameterNotUsed` | A `forEach` call whose lambda never uses the implicit `it` parameter. |
-| `ImplicitNullableNothingType` | A `var` or open declaration without an explicit type whose inferred type is `Nothing?`. |
-| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. Inactive by default. |
-| `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. |
-| `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. |
-| `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. |
-| `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. |
-| `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. |
-| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. By default, test source sets are excluded (`excludes`). |
-| `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. |
-| `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. |
-| `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. |
-| `RecursiveEqualsCall` | An `equals` implementation that compares `this` with its parameter through `==`, `!=` or `equals`. |
-| `RecursivePropertyAccessor` | A property accessor or a synthetic Java accessor override that accesses its own property. |
-| `RedundantLabel` | A label on an expression that no `break`, `continue` or `return` can reference. |
-| `SelfAssignment` | An assignment of a variable or property to itself. |
-| `SelfReferenceConstructorParameter` | A primary constructor with a non-null parameter of its own class type, which no code can call. |
-| `SetterBackingFieldAssignment` | A setter that never assigns the backing field, so the new value is lost. |
-| `SuspiciousCallOnCollectionToAddOrRemovePath` | A `plus` or `minus` call that iterates over a self-iterable argument such as a `Path` instead of using it as one element. |
-| `SuspiciousCascadingIf` | An operator or call after the last `else` block of a cascading `if` that applies only to the nested `if`. |
-| `SuspiciousCollectionReassignment` | A `+=` or `-=` on a `var` of a read-only collection that creates a new collection each time. |
-| `SuspiciousEqualsCombination` | A condition that compares the same variable with both `==` and `===`. |
-| `SuspiciousGetterForMutableObject` | A getter that creates a new mutable collection or coroutine object on each access. |
-| `SuspiciousJavaClassCallableReference` | A `::javaClass` callable reference that was meant to be `.javaClass` or `::class.java`. |
-| `SuspiciousVarProperty` | A `var` property whose getter never reads the backing field, so the setter has no visible effect. |
-| `UnusedDataClassCopyResult` | A data class `copy` call whose result is not used. |
-| `UnusedEquals` | An `==` expression or `equals` call whose result is not used. |
-| `UnusedExpression` | An expression whose value is not used and that has no effect. |
-| `UnusedLambdaExpression` | A lambda expression that is a statement and is never called. |
-| `UnusedLambdaExpressionBody` | An unused call of a function whose expression body is a lambda, so the lambda never runs. |
-| `UselessCallOnCollection` | A `filterNotNull`, `filterIsInstance`, constant `filter` or `mapNotNull`-like call on a collection or sequence that does nothing or can be simpler. |
-| `VariableNeverRead` | A local variable that gets values but is never read. |
-| `WrapUnaryOperator` | A unary minus or plus before a number literal with a call, where the operator applies to the call result. |
+| Rule | Finds | Options |
+|---|---|---|
+| `AmbiguousNonLocalJump` | An unlabeled `break` or `continue` in an inline lambda inside a loop. | |
+| `ArrayInDataClass` | An array property in a data or value class that does not override `equals()` and `hashCode()`. | |
+| `AssignedValueIsNeverRead` | An assignment to a local variable whose value is never read. | |
+| `CanSealedSubClassBeObject` | A subclass of a sealed class that has no state and no `equals()` and can be an object. | |
+| `ConflictingExtensionProperty` | An extension property that a synthetic Java property of the receiver shadows. | |
+| `ConvertNaNEquality` | An equality check with `Double.NaN` or `Float.NaN` that should use `isNaN()`. | |
+| `DataClassPrivateConstructor` | A private primary constructor of a data class that the generated `copy()` exposes. | |
+| `DelegationToVarProperty` | Class delegation to a `var` constructor property that the class never reassigns. | |
+| `DuplicateArgumentsInSetOfAndMapOfFunctions` | A duplicate constant element in a `setOf` call or a duplicate constant key in a `mapOf` call. | |
+| `EmptyRange` | A range whose constant start is past its end in the direction of the operator. | |
+| `FilterIsInstanceResultIsAlwaysEmpty` | A `filterIsInstance` call whose target type no element of the receiver can have. | |
+| `ForEachParameterNotUsed` | A `forEach` call whose lambda never uses the implicit `it` parameter. | |
+| `ImplicitNullableNothingType` | A `var` or open declaration without an explicit type whose inferred type is `Nothing?`. | |
+| `IncompleteDestructuring` | A destructuring declaration of a data class that omits some of its components. Inactive by default. | |
+| `JavaIoSerializableObjectMustHaveReadResolve` | A `java.io.Serializable` object without `readResolve`. | |
+| `KotlinArrayHashCode` | A `hashCode()` call on an array that should be `contentHashCode()`. | |
+| `KotlinArrayToString` | An explicit or implicit `toString()` call on an array that should be `contentToString()`. | |
+| `KotlinEqualsBetweenInconvertibleTypes` | An `equals()` call between primitives, strings or enums of different types, which always returns false. | |
+| `KotlinMisorderedAssertEqualsArguments` | An `assertEquals()`-like call that passes the constant as the actual value and the tested value as the expected one. | |
+| `KotlinThrowableNotThrown` | A `Throwable` that a call creates or returns and that is never thrown, returned or used. By default, test source sets are excluded (`excludes`). | |
+| `LateinitVarOverridesLateinitVar` | A `lateinit var` that overrides a `lateinit var`. | |
+| `LazyWithoutDelegation` | A private or local property that holds a `Lazy` and reads it only through `value`, where `by` delegation fits. | |
+| `MainFunctionReturnUnit` | A `main` function that would be an entry point but does not return `Unit`. | |
+| `RecursiveEqualsCall` | An `equals` implementation that compares `this` with its parameter through `==`, `!=` or `equals`. | |
+| `RecursivePropertyAccessor` | A property accessor or a synthetic Java accessor override that accesses its own property. | |
+| `RedundantLabel` | A label on an expression that no `break`, `continue` or `return` can reference. | |
+| `SelfAssignment` | An assignment of a variable or property to itself. | |
+| `SelfReferenceConstructorParameter` | A primary constructor with a non-null parameter of its own class type, which no code can call. | |
+| `SetterBackingFieldAssignment` | A setter that never assigns the backing field, so the new value is lost. | |
+| `SuspiciousCallOnCollectionToAddOrRemovePath` | A `plus` or `minus` call that iterates over a self-iterable argument such as a `Path` instead of using it as one element. | |
+| `SuspiciousCascadingIf` | An operator or call after the last `else` block of a cascading `if` that applies only to the nested `if`. | |
+| `SuspiciousCollectionReassignment` | A `+=` or `-=` on a `var` of a read-only collection that creates a new collection each time. | |
+| `SuspiciousEqualsCombination` | A condition that compares the same variable with both `==` and `===`. | |
+| `SuspiciousGetterForMutableObject` | A getter that creates a new mutable collection or coroutine object on each access. | |
+| `SuspiciousJavaClassCallableReference` | A `::javaClass` callable reference that was meant to be `.javaClass` or `::class.java`. | |
+| `SuspiciousVarProperty` | A `var` property whose getter never reads the backing field, so the setter has no visible effect. | |
+| `UnusedDataClassCopyResult` | A data class `copy` call whose result is not used. | |
+| `UnusedEquals` | An `==` expression or `equals` call whose result is not used. | |
+| `UnusedExpression` | An expression whose value is not used and that has no effect. | |
+| `UnusedLambdaExpression` | A lambda expression that is a statement and is never called. | |
+| `UnusedLambdaExpressionBody` | An unused call of a function whose expression body is a lambda, so the lambda never runs. | |
+| `UselessCallOnCollection` | A `filterNotNull`, `filterIsInstance`, constant `filter` or `mapNotNull`-like call on a collection or sequence that does nothing or can be simpler. | |
+| `VariableNeverRead` | A local variable that gets values but is never read. | |
+| `WrapUnaryOperator` | A unary minus or plus before a number literal with a call, where the operator applies to the call result. | `ignoredSelectors` (default empty): do not report these properties and functions after the literal, given as fully qualified names, e.g. `androidx.compose.ui.unit.dp`. |
 
 ### `intellij-kotlin-redundant-constructs`
 
@@ -415,12 +415,12 @@ the script, because detekt does not have the Gradle model.
 
 | Rule | Finds | Options |
 |---|---|---|
-| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. A `set` function that does not return `Unit` is not reported. | `areSuspendFunctionsSkipped` (default `true`): do not report `suspend` functions. |
-| `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. | |
+| `AddOperatorModifier` | A function that matches an operator convention but has no `operator` modifier. A `set` function that does not return `Unit` is not reported. Inactive by default. | `areSuspendFunctionsSkipped` (default `true`): do not report `suspend` functions. |
+| `AddVarianceModifier` | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. Inactive by default. | |
 | `BooleanLiteralArgument` | Adjacent `true` or `false` arguments without parameter names. | `ignoredFunctions` (default empty): do not report the arguments of these functions, given as fully qualified names, e.g. `androidx.compose.ui.graphics.vector.PathBuilder.arcTo`. |
 | `CascadeIf` | An `if`-`else if` chain on one subject that `when` can replace. | |
 | `CollectionConcatenationToBuildCollection` | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. Inactive by default. | |
-| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call without named arguments that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. | |
+| `ConvertPairConstructorToToFunction` | An explicit `Pair(a, b)` constructor call without named arguments that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. Inactive by default. | |
 | `ConvertRangeCheckToTwoComparisons` | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. | |
 | `ConvertReferenceToLambda` | A callable reference that a lambda can replace. Inactive by default. | |
 | `ConvertSealedClassToSealedInterface` | A sealed class without state, constructor parameters, final, `internal` or `protected` members that can be a sealed interface. Members that an interface cannot have, such as non-private `inline` or `tailrec` functions, `external` members and `@JvmOverloads`, `@JvmName` or `@Synchronized` members, block the conversion. Opposite of `ConvertSealedInterfaceToSealedClass`. Overlaps detekt's `AbstractClassCanBeInterface` when its `ignoreSealedClasses` is `false`. | |

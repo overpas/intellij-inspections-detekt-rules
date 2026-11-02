@@ -327,6 +327,162 @@ class TestMethodWithoutAssertionTest {
     }
 
     @Test
+    fun `kotlin test library assertions pass`() {
+        val code = """
+            import androidx.compose.ui.test.SemanticsNodeInteraction
+            import androidx.compose.ui.test.SemanticsNodeInteractionCollection
+            import androidx.compose.ui.test.assertIsDisplayed
+            import app.cash.turbine.ReceiveTurbine
+            import app.cash.turbine.test
+            import assertk.assertThat
+            import dev.mokkery.verify
+            import io.kotest.assertions.throwables.shouldThrow
+            import io.kotest.matchers.shouldBe
+            import org.junit.Test
+            import org.koin.test.check.checkModules
+            import org.koin.test.verify.Module
+            import org.koin.test.verify.verify
+
+            class FooTest {
+                @Test
+                fun assertk() {
+                    assertThat(1)
+                }
+
+                @Test
+                fun mokkery() {
+                    verify { }
+                }
+
+                @Test
+                fun mockitoKotlin() {
+                    org.mockito.kotlin.verify(Any())
+                }
+
+                @Test
+                fun composeExtension(node: SemanticsNodeInteraction) {
+                    node.assertIsDisplayed()
+                }
+
+                @Test
+                fun composeNode(node: SemanticsNodeInteraction) {
+                    node.assertExists()
+                }
+
+                @Test
+                fun composeNodes(nodes: SemanticsNodeInteractionCollection) {
+                    nodes.assertAll()
+                }
+
+                @Test
+                fun turbineTest() {
+                    listOf(1).test { }
+                }
+
+                @Test
+                suspend fun turbineAwait(turbine: ReceiveTurbine<Int>) {
+                    turbine.awaitItem()
+                }
+
+                @Test
+                fun koinVerify(module: Module) {
+                    module.verify()
+                }
+
+                @Test
+                fun koinCheck() {
+                    checkModules()
+                }
+
+                @Test
+                fun kotestMatcher() {
+                    1 shouldBe 1
+                }
+
+                @Test
+                fun kotestThrowable() {
+                    shouldThrow { }
+                }
+            }
+        """.trimIndent()
+        val assertk = """
+            package assertk
+
+            fun <T> assertThat(actual: T): T = actual
+        """.trimIndent()
+        val mokkery = """
+            package dev.mokkery
+
+            fun verify(block: () -> Unit) {}
+        """.trimIndent()
+        val mockitoKotlin = """
+            package org.mockito.kotlin
+
+            fun <T> verify(mock: T): T = mock
+        """.trimIndent()
+        val compose = """
+            package androidx.compose.ui.test
+
+            class SemanticsNodeInteraction {
+                fun assertExists(): SemanticsNodeInteraction = this
+            }
+
+            class SemanticsNodeInteractionCollection {
+                fun assertAll(): SemanticsNodeInteractionCollection = this
+            }
+
+            fun SemanticsNodeInteraction.assertIsDisplayed(): SemanticsNodeInteraction = this
+        """.trimIndent()
+        val turbine = """
+            package app.cash.turbine
+
+            interface ReceiveTurbine<T> {
+                suspend fun awaitItem(): T
+            }
+
+            fun <T> Iterable<T>.test(block: ReceiveTurbine<T>.() -> Unit) {}
+        """.trimIndent()
+        val koinVerify = """
+            package org.koin.test.verify
+
+            class Module
+
+            fun Module.verify() {}
+        """.trimIndent()
+        val koinCheck = """
+            package org.koin.test.check
+
+            fun checkModules() {}
+        """.trimIndent()
+        val kotestMatchers = """
+            package io.kotest.matchers
+
+            infix fun <T> T.shouldBe(expected: T) {}
+        """.trimIndent()
+        val kotestThrowables = """
+            package io.kotest.assertions.throwables
+
+            fun shouldThrow(block: () -> Unit) {}
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(
+            environment,
+            code,
+            assertk,
+            mokkery,
+            mockitoKotlin,
+            compose,
+            turbine,
+            koinVerify,
+            koinCheck,
+            kotestMatchers,
+            kotestThrowables,
+        )
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
     fun `a testng assertion passes`() {
         val code = """
             import org.testng.Assert
