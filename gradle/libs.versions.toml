@@ -13,7 +13,7 @@ log4j = "1.2.17"
 log4j2 = "2.24.3"
 shadow = "9.6.1"
 slf4j = "2.0.17"
-testng = "7.11.0"
+testng = "7.12.0"
 
 [libraries]
 assertj-core = { module = "org.assertj:assertj-core", version.ref = "assertj" }
