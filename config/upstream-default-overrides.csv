@@ -1,6 +1,9 @@
 rule,reason
+AddOperatorModifier,IntelliJ IDEA reports it only at INFORMATION level
+AddVarianceModifier,IntelliJ IDEA reports it only at INFORMATION level
 CollectionConcatenationToBuildCollection,The maintainer chose to make it opt-in
 ConvertFromMultiDollarToRegularString,IntelliJ IDEA reports it only at INFORMATION level
+ConvertPairConstructorToToFunction,IntelliJ IDEA reports it only at INFORMATION level
 ConvertRangeCheckToTwoComparisons,IntelliJ IDEA reports it only at INFORMATION level
 ConvertReferenceToLambda,IntelliJ IDEA reports it only at INFORMATION level
 ConvertSealedInterfaceToSealedClass,IntelliJ IDEA reports it only at INFORMATION level
