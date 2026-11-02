@@ -12,6 +12,15 @@ intellij-jvm-general:
       - 'org.jetbrains.annotations.NonBlocking'
       - 'io.micronaut.core.annotation.NonBlocking'
       - 'io.smallrye.common.annotation.NonBlocking'
+    blockingLambdaFunctions:
+      - 'kotlinx.coroutines.runBlocking'
+      - 'org.mockito.kotlin.KStubbing.on'
+      - 'org.mockito.kotlin.KStubbing.onBlocking'
+      - 'org.mockito.kotlin.verifyBlocking'
+      - 'io.mockk.coEvery'
+      - 'io.mockk.coVerify'
+      - 'dev.mokkery.everySuspend'
+      - 'dev.mokkery.verifySuspend'
   MissingDeprecatedAnnotationOnScheduledForRemovalApi:
     active: true
   MustAlreadyBeRemovedApi:

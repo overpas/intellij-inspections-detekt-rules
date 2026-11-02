@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.probablebugs.wrapunaryoperator
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -169,5 +170,49 @@ class WrapUnaryOperatorTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an ignored extension property after the literal passes`() {
+        val code = """
+            package unit
+
+            class Dp(val value: Int) {
+                operator fun unaryMinus() = Dp(-value)
+            }
+
+            val Int.dp: Dp get() = Dp(this)
+
+            val x = -7.dp
+        """.trimIndent()
+        val sut = WrapUnaryOperator(TestConfig("ignoredSelectors" to listOf("unit.dp")))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an ignored function after the literal passes`() {
+        val code = """
+            val x = -1.inc()
+        """.trimIndent()
+        val sut = WrapUnaryOperator(TestConfig("ignoredSelectors" to listOf("kotlin.Int.inc")))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a selector that is not ignored is reported`() {
+        val code = """
+            val x = -1.coerceAtLeast(0)
+        """.trimIndent()
+        val sut = WrapUnaryOperator(TestConfig("ignoredSelectors" to listOf("kotlin.Int.inc")))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }

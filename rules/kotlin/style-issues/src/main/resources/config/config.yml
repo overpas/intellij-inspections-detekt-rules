@@ -1,10 +1,10 @@
 intellij-kotlin-style-issues:
   active: true
   AddOperatorModifier:
-    active: true
+    active: false
     areSuspendFunctionsSkipped: true
   AddVarianceModifier:
-    active: true
+    active: false
   BooleanLiteralArgument:
     active: true
     ignoredFunctions: []
@@ -13,7 +13,7 @@ intellij-kotlin-style-issues:
   CollectionConcatenationToBuildCollection:
     active: false
   ConvertPairConstructorToToFunction:
-    active: true
+    active: false
   ConvertRangeCheckToTwoComparisons:
     active: false
   ConvertReferenceToLambda:
