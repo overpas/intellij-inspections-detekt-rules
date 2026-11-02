@@ -4,6 +4,7 @@ intellij-kotlin-other-problems:
     active: true
   DeprecatedCallableAddReplaceWith:
     active: true
+    areOverridesSkipped: false
   EnumValuesSoftDeprecate:
     active: true
   EnumValuesTopLevelFunctionSoftDeprecate:

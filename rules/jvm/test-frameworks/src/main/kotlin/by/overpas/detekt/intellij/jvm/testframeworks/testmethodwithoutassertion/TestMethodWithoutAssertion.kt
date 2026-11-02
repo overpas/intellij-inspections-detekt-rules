@@ -69,6 +69,18 @@ class TestMethodWithoutAssertion(config: Config) :
             "kotlin.test#assert.*|fail.*|expect",
             "org.testng.Assert#assert.*|fail.*|expect.*",
             "org.testng.AssertJUnit#assert.*|fail.*",
+            "assertk#assert.*|fail",
+            "dev.mokkery#verify.*",
+            "org.mockito.kotlin#verify.*",
+            "androidx.compose.ui.test#assert.*",
+            "androidx.compose.ui.test.SemanticsNodeInteraction#assert.*",
+            "androidx.compose.ui.test.SemanticsNodeInteractionCollection#assert.*",
+            "app.cash.turbine#test",
+            "app.cash.turbine.ReceiveTurbine#await.*|expect.*|ensureAllEventsConsumed",
+            "org.koin.test.verify#verify.*",
+            "org.koin.test.check#checkModules",
+            "io.kotest.matchers#should.*",
+            "io.kotest.assertions.throwables#shouldThrow.*|shouldNotThrow.*",
         )
     }
 }

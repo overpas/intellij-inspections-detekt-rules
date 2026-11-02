@@ -681,4 +681,57 @@ class BlockingMethodInNonBlockingContextTest {
 
         assertEquals(2, findings.size)
     }
+
+    @Test
+    fun `a blocking call in a runBlocking body passes`() {
+        val code = """
+            import kotlinx.coroutines.runBlocking
+
+            fun example() = runBlocking {
+                Thread.sleep(1)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a blocking call in a runBlocking body is reported when no lambda functions are blocking`() {
+        val code = """
+            import kotlinx.coroutines.runBlocking
+
+            fun example() = runBlocking {
+                Thread.sleep(1)
+            }
+        """.trimIndent()
+        val sut = BlockingMethodInNonBlockingContext(TestConfig("blockingLambdaFunctions" to emptyList<String>()))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a blocking call in a suspend stubbing lambda of a member function passes`() {
+        val code = """
+            import org.mockito.kotlin.KStubbing
+
+            fun example(stubbing: KStubbing<Any>) {
+                stubbing.on { Thread.sleep(1) }
+            }
+        """.trimIndent()
+        val mockitoKotlin = """
+            package org.mockito.kotlin
+
+            class KStubbing<T> {
+                fun <R> on(methodCall: suspend T.() -> R) {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, mockitoKotlin)
+
+        assertEquals(0, findings.size)
+    }
 }

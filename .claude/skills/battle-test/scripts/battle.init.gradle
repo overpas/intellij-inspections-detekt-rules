@@ -45,6 +45,9 @@ gradle.allprojects { Project p ->
             t.config.from(overlay)
             t.parallel.set(false)
             t.reports.sarif.required.set(true)
+            t.reports.markdown.required.set(false)
+            t.reports.html.required.set(false)
+            t.reports.checkstyle.required.set(false)
         }
         if (p.tasks.findByName("battleDetekt") == null) {
             p.tasks.register("battleDetekt") { b ->

@@ -33,7 +33,7 @@ class RemoveRedundantQualifierName(config: Config) :
                 val qualifiers = shortenings.listOfQualifierToShortenInfo.mapNotNull { it.qualifierToShorten.element }
                 val types = shortenings.listOfTypeToShortenInfo.mapNotNull { it.typeToShorten.element }
                 qualifiers + types
-            }.filter { keepsResolveUnqualified(it) }
+            }.filter { keepsResolveUnqualified(it) && keepsCallTargetUnqualified(it) }
         }
         elements.forEach { report(Finding(Entity.from(it), "Redundant qualifier name")) }
     }

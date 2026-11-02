@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.3.0
+
+### Changed options and defaults
+
+- `intellij-jvm-general`: `BlockingMethodInNonBlockingContext`: new option `blockingLambdaFunctions`. A lambda argument of a listed function, given as a fully qualified name, is a blocking context. The default lists `kotlinx.coroutines.runBlocking` and the suspend stubbing and verification functions of Mockito-Kotlin, MockK and Mokkery, so a blocking call in their lambdas is not reported. To keep the old behavior, set `blockingLambdaFunctions: []`.
+- `intellij-jvm-test-frameworks`: `TestMethodWithoutAssertion`: the default `assertionMethods` now also lists the assertions of AssertK, Kotest, Compose UI tests, Turbine and Koin, and the `verify` functions of Mokkery and Mockito-Kotlin. A test that calls only these functions is not reported. To keep the old behavior, set `assertionMethods` to the list of 0.2.0.
+- `intellij-kotlin-other-problems`: `DeprecatedCallableAddReplaceWith`: new option `areOverridesSkipped` (default `false`). When `true`, the rule does not report `override` functions and properties. The default keeps the old behavior.
+- `intellij-kotlin-probable-bugs`: `WrapUnaryOperator`: new option `ignoredSelectors` (default empty). The rule does not report a number literal followed by a listed property or function, given as a fully qualified name, for example `-1.dp` with `androidx.compose.ui.unit.dp`. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `AddOperatorModifier`, `AddVarianceModifier`, `ConvertPairConstructorToToFunction`: inactive by default, because IntelliJ IDEA reports them only at INFORMATION level. To keep the old behavior, set `active: true`.
+
+### Changed detection
+
+- `intellij-kotlin-coroutines`: `SuspiciousImplicitCoroutineScopeReceiverAccess`: reports a call at the callee name, for example `launch`, not at the whole call with its lambda. No option keeps the old location.
+- `intellij-kotlin-redundant-constructs`: `RemoveRedundantQualifierName`: does not report a qualifier when the call without it resolves to another function, for example a package qualifier that avoids a member of an outer DSL scope. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `ConvertSealedInterfaceToSealedClass`: does not report a sealed interface with a value class inheritor, because a value class cannot extend a class. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `ReplaceNotNullAssertionWithElvisReturn`: does not report a `!!` in a default parameter value, where `return` is not allowed. No option keeps the old findings.
+- `intellij-kotlin-style-issues`: `UsePropertyAccessSyntax`: does not report a Java setter call when the getter is private, because the property syntax does not compile. No option keeps the old findings.
+
 ## 0.2.0
 
 ### Distribution

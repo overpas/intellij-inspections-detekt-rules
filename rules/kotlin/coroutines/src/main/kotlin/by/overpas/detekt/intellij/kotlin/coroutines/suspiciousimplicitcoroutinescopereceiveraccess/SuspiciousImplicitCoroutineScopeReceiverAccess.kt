@@ -23,15 +23,15 @@ class SuspiciousImplicitCoroutineScopeReceiverAccess(config: Config) :
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        expression.reportIfSuspicious()
+        expression.reportIfSuspicious(expression.calleeExpression ?: expression)
     }
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
         super.visitSimpleNameExpression(expression)
-        if (expression.parent !is KtCallExpression) expression.reportIfSuspicious()
+        if (expression.parent !is KtCallExpression) expression.reportIfSuspicious(expression)
     }
 
-    private fun KtExpression.reportIfSuspicious() {
+    private fun KtExpression.reportIfSuspicious(highlighted: KtExpression) {
         if (getQualifiedExpressionForSelector() != null) return
         val access = this
         val isSuspicious = analyze(access) {
@@ -40,7 +40,7 @@ class SuspiciousImplicitCoroutineScopeReceiverAccess(config: Config) :
         if (isSuspicious) {
             report(
                 Finding(
-                    Entity.from(access),
+                    Entity.from(highlighted),
                     "Suspicious implicit 'CoroutineScope' receiver access in suspending context",
                 ),
             )

@@ -390,4 +390,17 @@ class UsePropertyAccessSyntaxTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `a Java setter with a private getter passes`() {
+        val code = """
+            fun test(builder: Signed) {
+                builder.setSignature("x")
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
 }

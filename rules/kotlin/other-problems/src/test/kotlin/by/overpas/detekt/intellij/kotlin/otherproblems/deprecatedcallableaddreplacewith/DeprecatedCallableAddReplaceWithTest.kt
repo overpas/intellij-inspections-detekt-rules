@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.otherproblems.deprecatedcallableaddreplacewith
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -257,6 +258,66 @@ class DeprecatedCallableAddReplaceWithTest {
 
             fun bar() {}
         """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a deprecated override function is reported by default`() {
+        val code = """
+            interface Settings {
+                @Deprecated("Use config instead")
+                fun settings(): String
+            }
+
+            class FakeSettings : Settings {
+                @Deprecated("Use config instead")
+                override fun settings(): String = error("Not implemented")
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a deprecated override function passes when overrides are skipped`() {
+        val code = """
+            interface Settings {
+                @Deprecated("Use config instead")
+                fun settings(): String
+            }
+
+            class FakeSettings : Settings {
+                @Deprecated("Use config instead")
+                override fun settings(): String = error("Not implemented")
+            }
+        """.trimIndent()
+        val sut = DeprecatedCallableAddReplaceWith(TestConfig("areOverridesSkipped" to true))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a deprecated override property passes when overrides are skipped`() {
+        val code = """
+            interface Settings {
+                @Deprecated("Use config instead")
+                val settings: String
+            }
+
+            class FakeSettings : Settings {
+                @Deprecated("Use config instead")
+                override val settings: String
+                    get() = error("Not implemented")
+            }
+        """.trimIndent()
+        val sut = DeprecatedCallableAddReplaceWith(TestConfig("areOverridesSkipped" to true))
 
         val findings = sut.lintWithContext(environment, code)
 

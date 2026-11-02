@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.getOutermostParenthesizerOrThis
@@ -33,7 +34,12 @@ class ReplaceNotNullAssertionWithElvisReturn(config: Config) :
         val operation = expression.operationReference
         if (expression.baseExpression == null || operation.getReferencedNameElementType() != KtTokens.EXCLEXCL) return
         if (expression.getOutermostParenthesizerOrThis().parent is KtReturnExpression) return
-        val owner = expression.getParentOfTypes(true, KtLambdaExpression::class.java, KtNamedFunction::class.java)
+        val owner = expression.getParentOfTypes(
+            true,
+            KtLambdaExpression::class.java,
+            KtNamedFunction::class.java,
+            KtParameter::class.java,
+        )
         val isReplaceable = owner != null && owner.hasElvisReturnLabel() && analyze(expression) {
             expression.directDiagnostics(KaDiagnosticCheckerFilter.ONLY_COMMON_CHECKERS)
                 .none { it is KaFirDiagnostic.UnnecessaryNotNullAssertion } &&

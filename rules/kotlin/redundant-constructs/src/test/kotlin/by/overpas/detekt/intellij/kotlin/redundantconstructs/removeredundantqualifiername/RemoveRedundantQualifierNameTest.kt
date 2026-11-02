@@ -276,6 +276,76 @@ class RemoveRedundantQualifierNameTest {
     }
 
     @Test
+    fun `a package qualifier needed to avoid a DSL scope violation passes`() {
+        val code = """
+            package p
+
+            @DslMarker
+            annotation class Ui
+
+            @Ui
+            interface OuterScope
+
+            @Ui
+            interface InnerScope
+
+            fun outer(content: OuterScope.() -> Unit) {}
+
+            fun inner(content: InnerScope.() -> Unit) {}
+
+            fun OuterScope.AnimatedVisibility(visible: Boolean, content: () -> Unit) {}
+
+            fun AnimatedVisibility(visible: Boolean, content: () -> Unit) {}
+
+            fun main() {
+                outer {
+                    inner {
+                        p.AnimatedVisibility(true) {}
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a package qualifier of a call inside a DSL scope is reported`() {
+        val code = """
+            package p
+
+            @DslMarker
+            annotation class Ui
+
+            @Ui
+            interface OuterScope
+
+            @Ui
+            interface InnerScope
+
+            fun outer(content: OuterScope.() -> Unit) {}
+
+            fun inner(content: InnerScope.() -> Unit) {}
+
+            fun AnimatedVisibility(visible: Boolean, content: () -> Unit) {}
+
+            fun main() {
+                outer {
+                    inner {
+                        p.AnimatedVisibility(true) {}
+                    }
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `an unqualified name passes`() {
         val code = """
             class Foo

@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.coroutines.suspiciousimplicitcoroutinescopereceiveraccess
 
 import dev.detekt.api.Config
+import dev.detekt.api.SourceLocation
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -256,6 +257,85 @@ class SuspiciousImplicitCoroutineScopeReceiverAccessTest {
         val findings = sut.lintWithContext(environment, code, coroutines)
 
         assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a multi-line launch call on the outer scope is reported at the callee name`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.launch
+
+            private suspend fun suspendWrapper(action: suspend () -> Unit) {
+                action()
+            }
+
+            suspend fun CoroutineScope.test() {
+                suspendWrapper {
+                    launch {
+                        println()
+                    }
+                }
+            }
+        """.trimIndent()
+        val coroutines = """
+            package kotlinx.coroutines
+
+            import kotlin.coroutines.CoroutineContext
+
+            interface CoroutineScope {
+                val coroutineContext: CoroutineContext
+            }
+
+            fun CoroutineScope.launch(block: suspend CoroutineScope.() -> Unit) {}
+        """.trimIndent()
+        val expected = listOf(Triple(SourceLocation(10, 9), SourceLocation(10, 15), "launch"))
+
+        val locations = sut.lintWithContext(environment, code, coroutines).map { finding ->
+            Triple(
+                finding.entity.location.source,
+                finding.entity.location.endSource,
+                code.substring(finding.entity.location.text.start, finding.entity.location.text.end),
+            )
+        }
+
+        assertEquals(expected, locations)
+    }
+
+    @Test
+    fun `a property of the outer scope is reported at the property name`() {
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+
+            private suspend fun suspendWrapper(action: suspend () -> Unit) {
+                action()
+            }
+
+            suspend fun CoroutineScope.test() {
+                suspendWrapper {
+                    println(coroutineContext)
+                }
+            }
+        """.trimIndent()
+        val coroutines = """
+            package kotlinx.coroutines
+
+            import kotlin.coroutines.CoroutineContext
+
+            interface CoroutineScope {
+                val coroutineContext: CoroutineContext
+            }
+        """.trimIndent()
+        val expected = listOf(Triple(SourceLocation(9, 17), SourceLocation(9, 33), "coroutineContext"))
+
+        val locations = sut.lintWithContext(environment, code, coroutines).map { finding ->
+            Triple(
+                finding.entity.location.source,
+                finding.entity.location.endSource,
+                code.substring(finding.entity.location.text.start, finding.entity.location.text.end),
+            )
+        }
+
+        assertEquals(expected, locations)
     }
 
     @Test
