@@ -130,6 +130,53 @@ class CollectionConcatenationToBuildCollectionTest {
     }
 
     @Test
+    fun `a concatenation compared with equality is reported`() {
+        val code = """
+            fun test(a: Set<Int>, b: Set<Int>, c: Set<Int>, expected: Set<Int>): Boolean = a + b + c == expected
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a concatenation as the operand of in is reported`() {
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>): Boolean = 5 in a + b + c
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a concatenation in an assignment is reported`() {
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>) {
+                var x: List<Int> = emptyList()
+                x = a + b + c
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a concatenation as the receiver of an operand of an Int sum is reported`() {
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>): Int = 1 + (a + b + c).size
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a single concatenation passes`() {
         val code = """
             fun test(set1: Set<String>, set2: Set<String>) {

@@ -35,10 +35,14 @@ internal class CollectionConcatenationToBuildCollectionChain(private val root: K
         with(session) { (root.expressionType as? KaClassType)?.classId in RESULT_TYPES } &&
             operators.all { it.isStdlibOperation() }
 
-    private fun isTopmost(): Boolean =
-        generateSequence(root.parent) { it.parent }
-            .takeWhile { it is KtParenthesizedExpression || it is KtQualifiedExpression || it is KtBinaryExpression }
-            .none { it is KtBinaryExpression }
+    private fun isTopmost(): Boolean {
+        val wrappers = generateSequence(root.parent) { it.parent }
+            .takeWhile { it is KtParenthesizedExpression || it is KtQualifiedExpression }
+        val enclosing = (wrappers.lastOrNull() ?: root).parent as? KtBinaryExpression
+        return enclosing == null ||
+            enclosing.operationToken !in OPERATOR_TOKENS ||
+            wrappers.any { it is KtQualifiedExpression }
+    }
 
     context(session: KaSession)
     private fun KtBinaryExpression.isStdlibOperation(): Boolean =
