@@ -26,7 +26,7 @@ dependencies {
 }
 
 detekt {
-    buildUponDefaultConfig = true // required: applies the default config of each jar
+    buildUponDefaultConfig = true // needed with your own config file, else the rules are inactive
 }
 ```
 
