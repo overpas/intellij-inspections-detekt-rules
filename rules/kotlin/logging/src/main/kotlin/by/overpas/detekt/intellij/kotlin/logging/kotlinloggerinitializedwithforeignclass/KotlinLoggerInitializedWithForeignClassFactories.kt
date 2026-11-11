@@ -3,21 +3,22 @@ package by.overpas.detekt.intellij.kotlin.logging.kotlinloggerinitializedwithfor
 import org.jetbrains.kotlin.analysis.api.KaSession
 import org.jetbrains.kotlin.analysis.api.resolution.successfulFunctionCallOrNull
 import org.jetbrains.kotlin.analysis.api.resolution.symbol
-import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtCallExpression
 
-private val KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_FACTORIES = setOf(
-    FqName("java.util.logging.Logger.getLogger"),
-    FqName("org.slf4j.LoggerFactory.getLogger"),
-    FqName("org.apache.commons.logging.LogFactory.getLog"),
-    FqName("org.apache.log4j.Logger.getLogger"),
-    FqName("org.apache.logging.log4j.LogManager.getLogger"),
+internal val KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_FACTORIES = listOf(
+    "java.util.logging.Logger.getLogger",
+    "org.slf4j.LoggerFactory.getLogger",
+    "org.apache.commons.logging.LogFactory.getLog",
+    "org.apache.log4j.Logger.getLogger",
+    "org.apache.logging.log4j.LogManager.getLogger",
 )
 
-internal val KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_METHOD_NAMES =
-    KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_FACTORIES.map { it.shortName().asString() }.toSet()
+internal class KotlinLoggerInitializedWithForeignClassFactories(private val fqNames: Set<String>) {
 
-context(session: KaSession)
-internal fun KtCallExpression.isLoggerFactoryCall(): Boolean =
-    with(session) { resolveToCall()?.successfulFunctionCallOrNull()?.run { symbol.callableId } }
-        ?.asSingleFqName() in KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_FACTORIES
+    val methodNames = fqNames.map { it.substringAfterLast('.') }.toSet()
+
+    context(session: KaSession)
+    fun isFactoryCall(call: KtCallExpression): Boolean =
+        with(session) { call.resolveToCall()?.successfulFunctionCallOrNull()?.run { symbol.callableId } }
+            ?.run { asSingleFqName().asString() } in fqNames
+}

@@ -2,10 +2,12 @@ package by.overpas.detekt.intellij.kotlin.logging.kotlinloggerinitializedwithfor
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtCallExpression
 
@@ -18,10 +20,18 @@ class KotlinLoggerInitializedWithForeignClass(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration(
+        "The methods that create a logger, given as fully qualified names, " +
+            "e.g. `org.slf4j.LoggerFactory.getLogger`.",
+    )
+    private val loggerFactories: List<String> by config(KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_FACTORIES)
+
+    private val factories by lazy { KotlinLoggerInitializedWithForeignClassFactories(loggerFactories.toSet()) }
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        val classLiteral = expression.foreignLoggerClassLiteral() ?: return
-        if (analyze(expression) { expression.isLoggerFactoryCall() }) {
+        val classLiteral = expression.foreignLoggerClassLiteral(factories.methodNames) ?: return
+        if (analyze(expression) { factories.isFactoryCall(expression) }) {
             report(
                 Finding(
                     Entity.from(classLiteral),
