@@ -7,102 +7,91 @@
 Multiplatform inspections of IntelliJ IDEA. They give the same hints outside the IDE, e.g. to AI
 agents and CI.
 
-Each bundle module puts all rule sets of one kind (Android, JVM or Kotlin) in one jar. The
-Gradle and Compose Multiplatform kinds have only one rule set each, so they have no bundle.
-
-| Module | Rule sets | Jar |
-|---|---|---|
-| `bundles:android` | All `intellij-android-*` rule sets | `intellij-inspections-android-all-<version>.jar` |
-| `bundles:jvm` | All `intellij-jvm-*` rule sets | `intellij-inspections-jvm-all-<version>.jar` |
-| `bundles:kotlin` | All `intellij-kotlin-*` rule sets | `intellij-inspections-kotlin-all-<version>.jar` |
-
-Each rule set module is one inspection group of the IDE settings (Editor | Inspections | Kotlin,
-Editor | Inspections | JVM languages, a group of Editor | Inspections | Java, an Android group
-such as Editor | Inspections | Compose preview, a group of Editor | Inspections | Gradle, or
-Editor | Inspections | Compose Multiplatform Preview).
-
-| Module | Rule set id | Jar |
-|---|---|---|
-| `rules:android:compose-preview` | `intellij-android-compose-preview` | `intellij-inspections-android-compose-preview-<version>.jar` |
-| `rules:android:glance-preview` | `intellij-android-glance-preview` | `intellij-inspections-android-glance-preview-<version>.jar` |
-| `rules:android:kotlin` | `intellij-android-kotlin` | `intellij-inspections-android-kotlin-<version>.jar` |
-| `rules:android:wear-tile-preview` | `intellij-android-wear-tile-preview` | `intellij-inspections-android-wear-tile-preview-<version>.jar` |
-| `rules:compose:multiplatform-preview` | `intellij-compose-multiplatform-preview` | `intellij-inspections-compose-multiplatform-preview-<version>.jar` |
-| `rules:gradle:best-practices` | `intellij-gradle-best-practices` | `intellij-inspections-gradle-best-practices-<version>.jar` |
-| `rules:jvm:code-maturity` | `intellij-jvm-code-maturity` | `intellij-inspections-jvm-code-maturity-<version>.jar` |
-| `rules:jvm:declaration-redundancy` | `intellij-jvm-declaration-redundancy` | `intellij-inspections-jvm-declaration-redundancy-<version>.jar` |
-| `rules:jvm:general` | `intellij-jvm-general` | `intellij-inspections-jvm-general-<version>.jar` |
-| `rules:jvm:junit` | `intellij-jvm-junit` | `intellij-inspections-jvm-junit-<version>.jar` |
-| `rules:jvm:logging` | `intellij-jvm-logging` | `intellij-inspections-jvm-logging-<version>.jar` |
-| `rules:jvm:test-frameworks` | `intellij-jvm-test-frameworks` | `intellij-inspections-jvm-test-frameworks-<version>.jar` |
-| `rules:kotlin:code-migration` | `intellij-kotlin-code-migration` | `intellij-inspections-kotlin-code-migration-<version>.jar` |
-| `rules:kotlin:coroutines` | `intellij-kotlin-coroutines` | `intellij-inspections-kotlin-coroutines-<version>.jar` |
-| `rules:kotlin:java-interop` | `intellij-kotlin-java-interop` | `intellij-inspections-kotlin-java-interop-<version>.jar` |
-| `rules:kotlin:logging` | `intellij-kotlin-logging` | `intellij-inspections-kotlin-logging-<version>.jar` |
-| `rules:kotlin:naming-conventions` | `intellij-kotlin-naming-conventions` | `intellij-inspections-kotlin-naming-conventions-<version>.jar` |
-| `rules:kotlin:numeric-issues` | `intellij-kotlin-numeric-issues` | `intellij-inspections-kotlin-numeric-issues-<version>.jar` |
-| `rules:kotlin:other-problems` | `intellij-kotlin-other-problems` | `intellij-inspections-kotlin-other-problems-<version>.jar` |
-| `rules:kotlin:probable-bugs` | `intellij-kotlin-probable-bugs` | `intellij-inspections-kotlin-probable-bugs-<version>.jar` |
-| `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs-<version>.jar` |
-| `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues-<version>.jar` |
-
 ## Use in a project
 
-The project must use detekt 2 (Gradle plugin `dev.detekt`).
+> [!IMPORTANT]
+> Requires **detekt 2** (Gradle plugin `dev.detekt`).
 
-1. Select the artifacts. Each artifact id is a jar name from the tables above without
-   `-<version>.jar`. Select one of these:
-   - For all Kotlin rule sets: `intellij-inspections-kotlin-all`.
-   - For all JVM rule sets: `intellij-inspections-jvm-all`.
-   - For all Android rule sets: `intellij-inspections-android-all`.
-   - For some rule sets only: their artifacts from the tables above.
+`build.gradle.kts`:
 
-   Do not add a bundle and its rule sets together. Detekt then loads the same rule sets two
-   times.
-2. In `build.gradle.kts`, add the artifacts from Maven Central to the detekt plugins and set
-   `buildUponDefaultConfig = true`:
+```kotlin
+dependencies {
+    val intellijInspections = "<version>"
+    detektPlugins("io.github.overpas:intellij-inspections-kotlin-all:$intellijInspections")
+    detektPlugins("io.github.overpas:intellij-inspections-jvm-all:$intellijInspections")
+    detektPlugins("io.github.overpas:intellij-inspections-android-all:$intellijInspections")
+    detektPlugins("io.github.overpas:intellij-inspections-gradle-best-practices:$intellijInspections")
+    detektPlugins("io.github.overpas:intellij-inspections-compose-multiplatform-preview:$intellijInspections")
+    // Or only some rule sets (see Artifacts), but not together with their bundle
+}
 
-   ```kotlin
-   dependencies {
-       detektPlugins("io.github.overpas:intellij-inspections-kotlin-all:<version>")
-   }
+detekt {
+    buildUponDefaultConfig = true // needed with your own config file, else the rules are inactive
+}
+```
 
-   detekt {
-       buildUponDefaultConfig = true
-   }
-   ```
+```shell
+./gradlew detektMain detektTest
+```
 
-   Each jar has a default config. Without `buildUponDefaultConfig = true`, detekt does not use it.
+> [!WARNING]
+> **Most rules need type resolution.** The plain `detekt` task skips them silently. In Kotlin
+> Multiplatform, run the tasks of all targets, e.g. `detektMainJvm`, `detektMainIosArm64`.
 
-   To use the jars from
-   [GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases)
-   instead, download them into a directory of your project, for example `config/detekt/plugins/`,
-   and add the directory:
+Optional: in the detekt config, write only the changes to the defaults.
 
-   ```kotlin
-   dependencies {
-       detektPlugins(fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") })
-   }
-   ```
-3. Optional: to change a rule, write only the change in your detekt config. For example, to
-   activate a rule that is "Inactive by default" in [Rules](#rules):
+```yaml
+intellij-kotlin-numeric-issues:
+  KotlinBigDecimalEquals:
+    active: true # inactive by default
+```
 
-   ```yaml
-   intellij-kotlin-numeric-issues:
-     KotlinBigDecimalEquals:
-       active: true
-   ```
+### Alternative: local jars (special cases only, e.g. no access to Maven Central)
 
-4. Run the detekt tasks with type resolution:
+Put the jars from [GitHub Releases](https://github.com/overpas/intellij-inspections-detekt-rules/releases)
+into `config/detekt/plugins/`:
 
-   ```shell
-   ./gradlew detektMain detektTest
-   ```
+```kotlin
+dependencies {
+    detektPlugins(fileTree(rootProject.layout.projectDirectory.dir("config/detekt/plugins")) { include("*.jar") })
+}
+```
 
-   Most rules need type resolution. The plain `detekt` task does not have it, so it skips these
-   rules and does not report this. In a Kotlin Multiplatform project, run the tasks of all
-   targets, for example `detektMainJvm`, `detektTestJvm`, `detektMainIosArm64` and
-   `detektMainJs`. `./gradlew tasks --all` lists them.
+## Artifacts
+
+Group id `io.github.overpas`, jar `<artifact id>-<version>.jar`. Gradle and Compose Multiplatform
+have one rule set each, so they have no bundle.
+
+| Module | Rule sets | Artifact id |
+|---|---|---|
+| `bundles:android` | All `intellij-android-*` rule sets | `intellij-inspections-android-all` |
+| `bundles:jvm` | All `intellij-jvm-*` rule sets | `intellij-inspections-jvm-all` |
+| `bundles:kotlin` | All `intellij-kotlin-*` rule sets | `intellij-inspections-kotlin-all` |
+
+| Module | Rule set id | Artifact id |
+|---|---|---|
+| `rules:android:compose-preview` | `intellij-android-compose-preview` | `intellij-inspections-android-compose-preview` |
+| `rules:android:glance-preview` | `intellij-android-glance-preview` | `intellij-inspections-android-glance-preview` |
+| `rules:android:kotlin` | `intellij-android-kotlin` | `intellij-inspections-android-kotlin` |
+| `rules:android:wear-tile-preview` | `intellij-android-wear-tile-preview` | `intellij-inspections-android-wear-tile-preview` |
+| `rules:compose:multiplatform-preview` | `intellij-compose-multiplatform-preview` | `intellij-inspections-compose-multiplatform-preview` |
+| `rules:gradle:best-practices` | `intellij-gradle-best-practices` | `intellij-inspections-gradle-best-practices` |
+| `rules:jvm:code-maturity` | `intellij-jvm-code-maturity` | `intellij-inspections-jvm-code-maturity` |
+| `rules:jvm:declaration-redundancy` | `intellij-jvm-declaration-redundancy` | `intellij-inspections-jvm-declaration-redundancy` |
+| `rules:jvm:general` | `intellij-jvm-general` | `intellij-inspections-jvm-general` |
+| `rules:jvm:junit` | `intellij-jvm-junit` | `intellij-inspections-jvm-junit` |
+| `rules:jvm:logging` | `intellij-jvm-logging` | `intellij-inspections-jvm-logging` |
+| `rules:jvm:test-frameworks` | `intellij-jvm-test-frameworks` | `intellij-inspections-jvm-test-frameworks` |
+| `rules:kotlin:code-migration` | `intellij-kotlin-code-migration` | `intellij-inspections-kotlin-code-migration` |
+| `rules:kotlin:coroutines` | `intellij-kotlin-coroutines` | `intellij-inspections-kotlin-coroutines` |
+| `rules:kotlin:java-interop` | `intellij-kotlin-java-interop` | `intellij-inspections-kotlin-java-interop` |
+| `rules:kotlin:logging` | `intellij-kotlin-logging` | `intellij-inspections-kotlin-logging` |
+| `rules:kotlin:naming-conventions` | `intellij-kotlin-naming-conventions` | `intellij-inspections-kotlin-naming-conventions` |
+| `rules:kotlin:numeric-issues` | `intellij-kotlin-numeric-issues` | `intellij-inspections-kotlin-numeric-issues` |
+| `rules:kotlin:other-problems` | `intellij-kotlin-other-problems` | `intellij-inspections-kotlin-other-problems` |
+| `rules:kotlin:probable-bugs` | `intellij-kotlin-probable-bugs` | `intellij-inspections-kotlin-probable-bugs` |
+| `rules:kotlin:redundant-constructs` | `intellij-kotlin-redundant-constructs` | `intellij-inspections-kotlin-redundant-constructs` |
+| `rules:kotlin:style-issues` | `intellij-kotlin-style-issues` | `intellij-inspections-kotlin-style-issues` |
 
 ## Rules
 
@@ -113,8 +102,8 @@ inspections. The IntelliJ level column gives the default level of the inspection
 `INFORMATION` inspection, it only offers its quick fix at the caret.
 
 Each rule set jar contains a default config (`config/config.yml`). The rules that IntelliJ IDEA
-disables by default are inactive, and so are some rules that give noisy findings in CI. Of two opposite rules, at most one is active: the one that is
-more idiomatic for Kotlin. detekt uses this default config with `buildUponDefaultConfig = true`.
+disables by default are inactive, and so are some rules that give noisy findings in CI. Of two
+opposite rules, at most one is active: the one that is more idiomatic for Kotlin.
 
 ### `intellij-android-compose-preview`
 
