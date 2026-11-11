@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs.unusedreceiverparameter
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import org.jetbrains.kotlin.config.ApiVersion
@@ -437,5 +438,37 @@ class UnusedReceiverParameterTest {
         )
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an unused receiver of an allowed type passes`() {
+        val sut = UnusedReceiverParameter(TestConfig("allowedReceiverTypes" to listOf("layout.RowScope")))
+        val code = """
+            package layout
+
+            interface RowScope
+
+            fun RowScope.badge(text: String) = text.length
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an unused receiver of a type that is not allowed is reported`() {
+        val sut = UnusedReceiverParameter(TestConfig("allowedReceiverTypes" to listOf("layout.RowScope")))
+        val code = """
+            package layout
+
+            interface ColumnScope
+
+            fun ColumnScope.badge(text: String) = text.length
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }

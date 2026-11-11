@@ -799,4 +799,56 @@ class BlockingMethodInNonBlockingContextTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `a default blocking annotation passes when the blocking annotations are replaced`() {
+        val code = """
+            import org.jetbrains.annotations.Blocking
+
+            @Blocking
+            fun slowWork() {}
+
+            suspend fun example() {
+                slowWork()
+            }
+        """.trimIndent()
+        val sut = BlockingMethodInNonBlockingContext(TestConfig("blockingAnnotations" to listOf("test.Slow")))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a default non-blocking annotation passes when the non-blocking annotations are replaced`() {
+        val code = """
+            import org.jetbrains.annotations.NonBlocking
+
+            @NonBlocking
+            fun onEvent() {
+                Thread.sleep(1)
+            }
+        """.trimIndent()
+        val sut = BlockingMethodInNonBlockingContext(TestConfig("nonBlockingAnnotations" to listOf("test.EventLoop")))
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a default non-blocking annotation is reported with the default config`() {
+        val code = """
+            import org.jetbrains.annotations.NonBlocking
+
+            @NonBlocking
+            fun onEvent() {
+                Thread.sleep(1)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
 }

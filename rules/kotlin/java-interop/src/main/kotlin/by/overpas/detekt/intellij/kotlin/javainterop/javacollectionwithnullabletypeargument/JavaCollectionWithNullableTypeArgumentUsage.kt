@@ -2,7 +2,7 @@ package by.overpas.detekt.intellij.kotlin.javainterop.javacollectionwithnullable
 
 import org.jetbrains.kotlin.name.ClassId
 
-private val javaCollectionsWithoutNullSupport = setOf(
+internal val JAVA_COLLECTIONS_WITHOUT_NULL_SUPPORT = setOf(
     "java.util.concurrent.ConcurrentHashMap",
     "java.util.concurrent.ConcurrentSkipListMap",
     "java.util.concurrent.ConcurrentSkipListSet",
@@ -34,6 +34,7 @@ internal class JavaCollectionWithNullableTypeArgumentUsage(
 
 internal fun ClassId.toNullableJavaCollectionUsage(
     nullableTypeArgumentCount: Int,
+    collections: Set<String>,
 ): JavaCollectionWithNullableTypeArgumentUsage? =
-    takeIf { asSingleFqName().asString() in javaCollectionsWithoutNullSupport }
+    takeIf { asSingleFqName().asString() in collections }
         ?.run { JavaCollectionWithNullableTypeArgumentUsage(shortClassName.asString(), nullableTypeArgumentCount) }

@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.cascadeif
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -227,6 +228,44 @@ class CascadeIfTest {
                         println("*")
                     }
                 }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an if with only one else if is reported with a lower minimum branch count`() {
+        val sut = CascadeIf(TestConfig("minBranchCount" to 2))
+        val code = """
+            fun test(i: Int) {
+                if (i == 1) {
+                    println("a")
+                }
+                else if (i == 2) {
+                    println("b")
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a cascade of four branches passes with a higher minimum branch count`() {
+        val sut = CascadeIf(TestConfig("minBranchCount" to 5))
+        val code = """
+            fun test(i: Int) {
+                if (i == 1) {
+                    println("a")
+                }
+                else if (i == 2) println("b")
+                else if (i in listOf(3, 4, 5)) println("c")
+                else println("none")
             }
         """.trimIndent()
 

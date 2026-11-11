@@ -2,6 +2,7 @@ package by.overpas.detekt.intellij.kotlin.coroutines.suspiciousimplicitcoroutine
 
 import dev.detekt.api.Config
 import dev.detekt.api.SourceLocation
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -615,6 +616,70 @@ class SuspiciousImplicitCoroutineScopeReceiverAccessTest {
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code, coroutines, selects)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an extension call on a scope subtype receiver is reported when subtypes are reported`() {
+        val sut = SuspiciousImplicitCoroutineScopeReceiverAccess(
+            TestConfig("areCoroutineScopeSubtypesReported" to true),
+        )
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+
+            fun CoroutineScope.doStuff() {}
+
+            abstract class MyCoroutineScopeBase : CoroutineScope {
+                suspend fun foo() {
+                    doStuff()
+                }
+            }
+        """.trimIndent()
+        val coroutines = """
+            package kotlinx.coroutines
+
+            import kotlin.coroutines.CoroutineContext
+
+            interface CoroutineScope {
+                val coroutineContext: CoroutineContext
+            }
+
+            suspend fun <R> coroutineScope(block: suspend CoroutineScope.() -> R): R = TODO()
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `an extension call directly in a scope subtype extension function passes when subtypes are reported`() {
+        val sut = SuspiciousImplicitCoroutineScopeReceiverAccess(
+            TestConfig("areCoroutineScopeSubtypesReported" to true),
+        )
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+
+            fun CoroutineScope.doStuff() {}
+
+            abstract class MyCoroutineScopeBase : CoroutineScope
+
+            fun MyCoroutineScopeBase.foo() {
+                doStuff()
+            }
+        """.trimIndent()
+        val coroutines = """
+            package kotlinx.coroutines
+
+            import kotlin.coroutines.CoroutineContext
+
+            interface CoroutineScope {
+                val coroutineContext: CoroutineContext
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
 
         assertEquals(0, findings.size)
     }

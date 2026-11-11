@@ -2,10 +2,12 @@ package by.overpas.detekt.intellij.kotlin.coroutines.suspiciousimplicitcoroutine
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -21,6 +23,9 @@ class SuspiciousImplicitCoroutineScopeReceiverAccess(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration("Also report the implicit receivers whose type is a subtype of `CoroutineScope`.")
+    private val areCoroutineScopeSubtypesReported: Boolean by config(false)
+
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         expression.reportIfSuspicious(expression.calleeExpression ?: expression)
@@ -35,7 +40,10 @@ class SuspiciousImplicitCoroutineScopeReceiverAccess(config: Config) :
         if (getQualifiedExpressionForSelector() != null) return
         val access = this
         val isSuspicious = analyze(access) {
-            SuspiciousImplicitCoroutineScopeReceiverAccessCall(this, access).isSuspicious()
+            SuspiciousImplicitCoroutineScopeReceiverAccessCall(
+                this,
+                access,
+            ).isSuspicious(areCoroutineScopeSubtypesReported)
         }
         if (isSuspicious) {
             report(

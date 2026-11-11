@@ -2,8 +2,10 @@ intellij-kotlin-coroutines:
   active: true
   CoroutineContextWithJob:
     active: true
+    additionalBuilders: []
   DeferredResultUnused:
     active: true
+    isStandardOnly: false
   ForEachJoinOnCollectionOfJob:
     active: true
   MapAwaitOnCollectionOfDeferred:
@@ -20,6 +22,7 @@ intellij-kotlin-coroutines:
     active: true
   SuspiciousImplicitCoroutineScopeReceiverAccess:
     active: true
+    areCoroutineScopeSubtypesReported: false
   SuspiciousMutableCollectionInStateFlow:
     active: true
   UnusedFlow:

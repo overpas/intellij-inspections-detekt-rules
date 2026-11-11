@@ -2,6 +2,7 @@ intellij-kotlin-code-migration:
   active: true
   CanConvertToMultiDollarString:
     active: true
+    allowedEscapedDollarCount: 1
   ConvertFromMultiDollarToRegularString:
     active: false
   ConvertLongToDuration:

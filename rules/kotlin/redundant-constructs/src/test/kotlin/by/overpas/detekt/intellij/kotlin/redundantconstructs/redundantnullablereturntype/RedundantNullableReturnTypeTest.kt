@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs.redundantnullablereturntype
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -216,5 +217,71 @@ class RedundantNullableReturnTypeTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a public function passes when the public API is ignored`() {
+        val sut = RedundantNullableReturnType(TestConfig("isPublicApiIgnored" to true))
+        val code = """
+            fun foo(xs: List<Int>): Int? = xs.first()
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a public property of a public class passes when the public API is ignored`() {
+        val sut = RedundantNullableReturnType(TestConfig("isPublicApiIgnored" to true))
+        val code = """
+            class Foo {
+                val bar: Int? = 1
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an internal function is reported when the public API is ignored`() {
+        val sut = RedundantNullableReturnType(TestConfig("isPublicApiIgnored" to true))
+        val code = """
+            internal fun foo(xs: List<Int>): Int? = xs.first()
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a public function of a private class is reported when the public API is ignored`() {
+        val sut = RedundantNullableReturnType(TestConfig("isPublicApiIgnored" to true))
+        val code = """
+            private class Foo {
+                fun bar(xs: List<Int>): Int? = xs.first()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a local function is reported when the public API is ignored`() {
+        val sut = RedundantNullableReturnType(TestConfig("isPublicApiIgnored" to true))
+        val code = """
+            fun outer() {
+                fun inner(xs: List<Int>): Int? = xs.first()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }

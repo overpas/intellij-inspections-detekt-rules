@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.liftreturnorassignment
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -629,5 +630,51 @@ class LiftReturnOrAssignmentTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `returns after other statements are reported when not only single statements are reported`() {
+        val sut = LiftReturnOrAssignment(TestConfig("isReportedOnlyIfSingleStatement" to false))
+        val code = """
+            fun doSomething() {}
+
+            fun test(n: Int): String {
+                if (n == 1) {
+                    doSomething()
+                    return "one"
+                } else {
+                    doSomething()
+                    return "two"
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `assignments after other statements are reported when not only single statements are reported`() {
+        val sut = LiftReturnOrAssignment(TestConfig("isReportedOnlyIfSingleStatement" to false))
+        val code = """
+            fun doSomething() {}
+
+            fun test(n: Int): String {
+                val result: String
+                if (n == 1) {
+                    doSomething()
+                    result = "one"
+                } else {
+                    doSomething()
+                    result = "two"
+                }
+                return result
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }
