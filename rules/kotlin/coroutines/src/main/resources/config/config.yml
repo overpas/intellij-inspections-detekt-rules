@@ -24,5 +24,15 @@ intellij-kotlin-coroutines:
     active: true
   UnusedFlow:
     active: true
+    ignoredLambdaFunctions:
+      - 'io.mockk.verify'
+      - 'io.mockk.coVerify'
+      - 'io.mockk.verifyAll'
+      - 'io.mockk.coVerifyAll'
+      - 'io.mockk.verifyOrder'
+      - 'io.mockk.coVerifyOrder'
+      - 'io.mockk.verifySequence'
+      - 'io.mockk.coVerifySequence'
+      - 'io.mockk.excludeRecords'
   UselessCallOnFlow:
     active: true
