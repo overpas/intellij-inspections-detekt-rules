@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.4.0
+
+### Changed options and defaults
+
+- `intellij-jvm-general`: `BlockingMethodInNonBlockingContext`: new option `blockingMethods` (default empty). The rule reports the calls of the listed methods and of their overrides, given as fully qualified names, for example `okhttp3.Call.execute`. The default keeps the old behavior.
+- `intellij-jvm-general`: `BlockingMethodInNonBlockingContext`: the options `blockingAnnotations` and `nonBlockingAnnotations` now replace the default annotations. Before, the rule added the configured annotations to the defaults. To keep the old behavior, add the default annotations of JetBrains, Micronaut and SmallRye (`org.jetbrains.annotations.Blocking`, `io.micronaut.core.annotation.Blocking`, `io.smallrye.common.annotation.Blocking`, and the `NonBlocking` annotations of the same packages) to the configured lists.
+- `intellij-kotlin-code-migration`: `CanConvertToMultiDollarString`: new option `allowedEscapedDollarCount` (default `1`). A string that escapes this number of dollar characters or fewer with a backslash is not reported. Set `0` to report every escaped dollar, as IntelliJ IDEA does. The default keeps the old behavior.
+- `intellij-kotlin-code-migration`: `InfixCallToOrdinary`: new option `ignoredFunctions` (default empty). The rule does not report the infix calls of the listed functions, given as fully qualified names, for example `kotlin.to`. The default keeps the old behavior.
+- `intellij-kotlin-coroutines`: `CoroutineContextWithJob`: new option `additionalBuilders` (default empty). The rule checks the listed coroutine builders, given as fully qualified names, as it checks `launch`. The default keeps the old behavior.
+- `intellij-kotlin-coroutines`: `DeferredResultUnused`: new option `isStandardOnly` (default `false`). When `true`, the rule reports only the calls of `kotlinx.coroutines.async`, not every call that returns a `Deferred`. The default keeps the old behavior.
+- `intellij-kotlin-coroutines`: `SuspiciousImplicitCoroutineScopeReceiverAccess`: new option `areCoroutineScopeSubtypesReported` (default `false`). When `true`, the rule also reports the implicit receivers whose type is a subtype of `CoroutineScope`. The default keeps the old behavior.
+- `intellij-kotlin-coroutines`: `UnusedFlow`: new option `ignoredLambdaFunctions`. The rule does not check the lambda arguments of the listed functions, given as fully qualified names. The default lists the MockK recording functions, for example `io.mockk.verify`, that the rule skipped before. The default keeps the old behavior.
+- `intellij-kotlin-java-interop`: `JavaCollectionWithNullableTypeArgument`: new option `additionalCollections` (default empty). The rule also reports the listed collections that do not support `null`, given as fully qualified names, for example `com.google.common.collect.ImmutableList`. The default keeps the old behavior.
+- `intellij-kotlin-logging`: `KotlinLoggerInitializedWithForeignClass`: new option `loggerFactories`. The rule checks the listed methods that create a logger, given as fully qualified names. The default lists the factory methods of `java.util.logging`, SLF4J, Apache Commons Logging, Log4j and Log4j 2 that the rule checked before. The default keeps the old behavior.
+- `intellij-kotlin-naming-conventions`: `LocalVariableName`: new option `namePattern` (default `[a-z][A-Za-z\d]*`). The names of local variables and parameters must match this regular expression. The default keeps the old behavior.
+- `intellij-kotlin-redundant-constructs`: `RedundantModalityModifier`: new option `allOpenAnnotations` (default empty). The rule does not report a `final` modifier in a class with a listed annotation of the all-open compiler plugin, given as a fully qualified name, for example `org.springframework.stereotype.Component`, or with an annotation that has a listed annotation. The default keeps the old behavior.
+- `intellij-kotlin-redundant-constructs`: `RedundantNullableReturnType`: new option `isPublicApiIgnored` (default `false`). When `true`, the rule does not report the public and protected declarations that are visible outside the module. The default keeps the old behavior.
+- `intellij-kotlin-redundant-constructs`: `UnusedReceiverParameter`: new option `allowedReceiverTypes` (default empty). The rule does not report a receiver of a listed type, given as a fully qualified name, for example `androidx.compose.foundation.layout.RowScope`. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `CascadeIf`: new option `minBranchCount` (default `3`). The rule reports a chain with this number of branches or more, including the last `else`. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `CollectionConcatenationToBuildCollection`: new option `minimalOperationCount` (default `2`). The rule reports a chain with this number of `+` or `-` operations or more. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `IfThenToElvis`: new option `areStatementsReported` (default `false`). When `true`, the rule also reports the `if` statements whose value is not used. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `LiftReturnOrAssignment`: new option `isReportedOnlyIfSingleStatement` (default `true`). When `false`, the rule also reports the branches that have more statements before the return or the assignment. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `MoveVariableDeclarationIntoWhen`: new option `maxLineLength` (default `120`). The rule does not report a declaration when the line with the `when` subject after the move is longer. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `UnclearPrecedenceOfBinaryExpression`: new option `areObviousCasesReported` (default `false`). When `true`, the rule also reports the operators of different kinds without parentheses whose precedence is well known. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `UsePropertyAccessSyntax`: new option `ignoredFunctions`. The rule does not report the calls of the listed Java methods, given as fully qualified names. The default lists the methods of `java.net.Socket`, `java.net.URLConnection`, the atomic numbers and `java.nio.ByteBuffer` that the rule skipped before. The default keeps the old behavior.
+- `intellij-kotlin-style-issues`: `UsePropertyAccessSyntax`: new option `areNonTrivialAccessorsReported` (default `false`). When `true`, the rule also reports the accessors whose body has more than one statement. The default keeps the old behavior.
+
+### Changed detection
+
+- `intellij-kotlin-style-issues`: `CollectionConcatenationToBuildCollection`: also reports a chain that is an operand of a binary expression with another operator, for example `==`, `in` or an assignment, and a chain that is the receiver of a qualified expression, as IntelliJ IDEA does. No option keeps the old findings. To report fewer chains, increase `minimalOperationCount`.
+
+### Changed messages
+
+- `intellij-kotlin-code-migration`: `CanConvertToMultiDollarString`: the rule description does not say that a single escaped dollar is not reported, because the option `allowedEscapedDollarCount` now sets this.
+- `intellij-kotlin-naming-conventions`: `LocalVariableName`: with a custom `namePattern`, the finding message says that the name does not match the regular expression.
+
 ## 0.3.0
 
 ### Changed options and defaults
