@@ -45,6 +45,7 @@ intellij-kotlin-style-issues:
     active: true
   IfThenToElvis:
     active: true
+    areStatementsReported: false
   IfThenToSafeAccess:
     active: true
   ImplicitThis:
@@ -64,6 +65,7 @@ intellij-kotlin-style-issues:
     active: true
   MoveVariableDeclarationIntoWhen:
     active: true
+    maxLineLength: 120
   NullableHashCode:
     active: true
   RedundantAsSequence:
@@ -157,6 +159,7 @@ intellij-kotlin-style-issues:
     active: true
   UnclearPrecedenceOfBinaryExpression:
     active: true
+    areObviousCasesReported: false
   UnlabeledReturnInsideLambda:
     active: false
   UnsafeCastWithReturn:
@@ -165,5 +168,27 @@ intellij-kotlin-style-issues:
     active: true
   UsePropertyAccessSyntax:
     active: true
+    ignoredFunctions:
+      - 'java.net.Socket.getInputStream'
+      - 'java.net.Socket.getOutputStream'
+      - 'java.net.URLConnection.getInputStream'
+      - 'java.net.URLConnection.getOutputStream'
+      - 'java.util.concurrent.atomic.AtomicInteger.getAndIncrement'
+      - 'java.util.concurrent.atomic.AtomicInteger.getAndDecrement'
+      - 'java.util.concurrent.atomic.AtomicInteger.getAcquire'
+      - 'java.util.concurrent.atomic.AtomicInteger.getOpaque'
+      - 'java.util.concurrent.atomic.AtomicInteger.getPlain'
+      - 'java.util.concurrent.atomic.AtomicLong.getAndIncrement'
+      - 'java.util.concurrent.atomic.AtomicLong.getAndDecrement'
+      - 'java.util.concurrent.atomic.AtomicLong.getAcquire'
+      - 'java.util.concurrent.atomic.AtomicLong.getOpaque'
+      - 'java.util.concurrent.atomic.AtomicLong.getPlain'
+      - 'java.nio.ByteBuffer.getChar'
+      - 'java.nio.ByteBuffer.getDouble'
+      - 'java.nio.ByteBuffer.getFloat'
+      - 'java.nio.ByteBuffer.getInt'
+      - 'java.nio.ByteBuffer.getLong'
+      - 'java.nio.ByteBuffer.getShort'
+    areNonTrivialAccessorsReported: false
   VerboseNullabilityAndEmptiness:
     active: true

@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.ifthentoelvis
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -250,5 +251,23 @@ class IfThenToElvisTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a null check used as a statement is reported when statements are reported`() {
+        val sut = IfThenToElvis(TestConfig("areStatementsReported" to true))
+        val code = """
+            fun maybeFoo(): String? = "foo"
+
+            fun main() {
+                val foo = maybeFoo()
+                val bar = "bar"
+                if (foo != null) foo else bar
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }
