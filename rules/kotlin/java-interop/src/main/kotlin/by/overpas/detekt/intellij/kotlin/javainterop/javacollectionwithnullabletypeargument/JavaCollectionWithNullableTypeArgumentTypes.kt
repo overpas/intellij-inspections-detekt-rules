@@ -12,7 +12,9 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
 
 context(session: KaSession)
-internal fun KtCallExpression.nullableJavaCollectionCall(): JavaCollectionWithNullableTypeArgumentUsage? =
+internal fun KtCallExpression.nullableJavaCollectionCall(
+    collections: Set<String>,
+): JavaCollectionWithNullableTypeArgumentUsage? =
     with(session) {
         val call = resolveToCall()?.successfulFunctionCallOrNull()
         val classId = (call?.symbol as? KaConstructorSymbol)?.containingClassId
@@ -21,16 +23,18 @@ internal fun KtCallExpression.nullableJavaCollectionCall(): JavaCollectionWithNu
             call?.run { typeArgumentsMapping.values.any { it.isMarkedNullable } } == true
         classId
             ?.takeIf { nullableCount > 0 || hasInferredNullableTypes }
-            ?.toNullableJavaCollectionUsage(nullableCount)
+            ?.toNullableJavaCollectionUsage(nullableCount, collections)
     }
 
 context(session: KaSession)
-internal fun KtTypeReference.nullableJavaCollectionType(): JavaCollectionWithNullableTypeArgumentUsage? =
+internal fun KtTypeReference.nullableJavaCollectionType(
+    collections: Set<String>,
+): JavaCollectionWithNullableTypeArgumentUsage? =
     with(session) {
         val userType = typeElement?.unwrapNullability() as? KtUserType
         val nullableCount = userType?.typeArguments.orEmpty().nullableTypeArgumentCount()
         val classId = type.symbol?.classId
-        classId?.takeIf { nullableCount > 0 }?.toNullableJavaCollectionUsage(nullableCount)
+        classId?.takeIf { nullableCount > 0 }?.toNullableJavaCollectionUsage(nullableCount, collections)
     }
 
 private fun KtTypeElement.unwrapNullability(): KtTypeElement? =

@@ -21,6 +21,7 @@ intellij-jvm-general:
       - 'io.mockk.coVerify'
       - 'dev.mokkery.everySuspend'
       - 'dev.mokkery.verifySuspend'
+    blockingMethods: []
   MissingDeprecatedAnnotationOnScheduledForRemovalApi:
     active: true
   MustAlreadyBeRemovedApi:

@@ -2,10 +2,12 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.unusedreceiverpara
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
@@ -22,6 +24,12 @@ class UnusedReceiverParameter(config: Config) :
         "The receiver of an extension is never used. Remove the receiver or use a plain function or property.",
     ),
     RequiresAnalysisApi {
+
+    @Configuration(
+        "Receiver types that are not reported, given as fully qualified names, " +
+            "e.g. `androidx.compose.foundation.layout.RowScope`.",
+    )
+    private val allowedReceiverTypes: Set<String> by config(emptyList<String>()) { it.toSet() }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -40,6 +48,7 @@ class UnusedReceiverParameter(config: Config) :
             val usage = UnusedReceiverParameterUsage(this, declaration, receiver)
             !usage.hasExcludedModifier() &&
                 !usage.isExempt() &&
+                !usage.isAllowedType(allowedReceiverTypes) &&
                 if (usage.usesClassLabels()) !usage.hasReceiverLabel() else !usage.isReceiverUsed()
         }
         if (isUnused) report(Finding(Entity.from(receiver), "Receiver parameter is never used"))

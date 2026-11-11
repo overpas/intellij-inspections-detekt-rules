@@ -36,8 +36,10 @@ intellij-kotlin-redundant-constructs:
     active: true
   RedundantModalityModifier:
     active: true
+    allOpenAnnotations: []
   RedundantNullableReturnType:
     active: true
+    isPublicApiIgnored: false
   RedundantReturnKeyword:
     active: true
   RedundantReturnLabel:
@@ -76,6 +78,7 @@ intellij-kotlin-redundant-constructs:
     active: true
   UnusedReceiverParameter:
     active: true
+    allowedReceiverTypes: []
   VariableInitializerIsRedundant:
     active: true
   WhenWithOnlyElse:

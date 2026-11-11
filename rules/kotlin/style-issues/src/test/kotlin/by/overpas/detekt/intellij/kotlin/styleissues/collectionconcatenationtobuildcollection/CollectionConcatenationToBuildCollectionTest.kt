@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.collectionconcatenationtobuildcollection
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -130,6 +131,53 @@ class CollectionConcatenationToBuildCollectionTest {
     }
 
     @Test
+    fun `a concatenation compared with equality is reported`() {
+        val code = """
+            fun test(a: Set<Int>, b: Set<Int>, c: Set<Int>, expected: Set<Int>): Boolean = a + b + c == expected
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a concatenation as the operand of in is reported`() {
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>): Boolean = 5 in a + b + c
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a concatenation in an assignment is reported`() {
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>) {
+                var x: List<Int> = emptyList()
+                x = a + b + c
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a concatenation as the receiver of an operand of an Int sum is reported`() {
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>): Int = 1 + (a + b + c).size
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `a single concatenation passes`() {
         val code = """
             fun test(set1: Set<String>, set2: Set<String>) {
@@ -205,6 +253,48 @@ class CollectionConcatenationToBuildCollectionTest {
         val code = """
             fun test() {
                 val result = sequenceOf(1) + 2 + sequenceOf(3)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a single concatenation is reported when the minimal operation count is one`() {
+        val sut = CollectionConcatenationToBuildCollection(TestConfig("minimalOperationCount" to 1))
+        val code = """
+            fun test(set1: Set<String>, set2: Set<String>) {
+                val result = set1 + set2
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a chain of three operations is reported when the minimal operation count is three`() {
+        val sut = CollectionConcatenationToBuildCollection(TestConfig("minimalOperationCount" to 3))
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>, d: List<Int>) {
+                val result = a + b + c + d
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a chain of two operations passes when the minimal operation count is three`() {
+        val sut = CollectionConcatenationToBuildCollection(TestConfig("minimalOperationCount" to 3))
+        val code = """
+            fun test(a: List<Int>, b: List<Int>, c: List<Int>) {
+                val result = a + b + c
             }
         """.trimIndent()
 

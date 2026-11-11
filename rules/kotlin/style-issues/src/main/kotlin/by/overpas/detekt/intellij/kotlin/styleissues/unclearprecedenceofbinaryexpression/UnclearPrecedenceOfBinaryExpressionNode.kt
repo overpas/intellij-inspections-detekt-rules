@@ -17,24 +17,30 @@ internal class UnclearPrecedenceOfBinaryExpressionNode(
     private val operands: List<PsiElement?>,
 ) {
 
-    private val precedence = BinaryOperationPrecedence.entries
-        .firstOrNull { operation.getReferencedNameElementType() in it.tokens }
+    private val token = operation.getReferencedNameElementType()
+
+    private val precedence = BinaryOperationPrecedence.entries.firstOrNull { token in it.tokens }
 
     fun isRoot(): Boolean =
         expression.parents.firstOrNull { it !is KtParenthesizedExpression }?.unclearPrecedenceNode() == null
 
-    fun isUnclear(): Boolean {
+    fun isUnclear(areObviousCasesReported: Boolean): Boolean {
         val isOrInWhenGuard = expression is KtBinaryExpression &&
             expression.parent is KtWhenEntryGuard &&
             expression.operationToken == KtTokens.OROR
         return isOrInWhenGuard ||
-            hasUnclearParent() ||
-            operands.any { KtPsiUtil.deparenthesize(it as? KtExpression)?.unclearPrecedenceNode()?.isUnclear() == true }
+            hasUnclearParent(areObviousCasesReported) ||
+            operands.any { operand ->
+                KtPsiUtil.deparenthesize(operand as? KtExpression)
+                    ?.unclearPrecedenceNode()
+                    ?.isUnclear(areObviousCasesReported) == true
+            }
     }
 
-    private fun hasUnclearParent(): Boolean {
-        val parentPrecedence = expression.parent?.unclearPrecedenceNode()?.precedence
-        return parentPrecedence != null && parentPrecedence in unclearParents[precedence].orEmpty()
+    private fun hasUnclearParent(areObviousCasesReported: Boolean): Boolean {
+        val parent = expression.parent?.unclearPrecedenceNode() ?: return false
+        return parent.precedence in unclearParents[precedence].orEmpty() ||
+            (areObviousCasesReported && parent.token != token)
     }
 
     private companion object {

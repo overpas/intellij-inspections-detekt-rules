@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.coroutines.unusedflow
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -706,6 +707,80 @@ class UnusedFlowTest {
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a flow call in a lambda of a configured function passes`() {
+        val sut = UnusedFlow(TestConfig("ignoredLambdaFunctions" to listOf("test.record")))
+        val code = """
+            package test
+
+            import kotlinx.coroutines.flow.Flow
+
+            interface Repo {
+                fun observe(): Flow<Int>
+            }
+
+            fun record(block: () -> Unit) {}
+
+            fun test(repo: Repo) {
+                record { repo.observe() }
+            }
+        """.trimIndent()
+        val coroutines = """
+            package kotlinx.coroutines.flow
+
+            interface FlowCollector<in T> {
+                suspend fun emit(value: T)
+            }
+
+            interface Flow<out T> {
+                suspend fun collect(collector: FlowCollector<T>)
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a flow call in a MockK verify block is reported when the ignored functions are replaced`() {
+        val sut = UnusedFlow(TestConfig("ignoredLambdaFunctions" to listOf("test.record")))
+        val code = """
+            import io.mockk.verify
+            import kotlinx.coroutines.flow.Flow
+
+            interface Repo {
+                fun observe(): Flow<Int>
+            }
+
+            fun test(repo: Repo) {
+                verify { repo.observe() }
+            }
+        """.trimIndent()
+        val coroutines = """
+            package kotlinx.coroutines.flow
+
+            interface FlowCollector<in T> {
+                suspend fun emit(value: T)
+            }
+
+            interface Flow<out T> {
+                suspend fun collect(collector: FlowCollector<T>)
+            }
+        """.trimIndent()
+        val mockk = """
+            package io.mockk
+
+            fun verify(exactly: Int = -1, verifyBlock: MockKVerificationScope.() -> Unit): Unit = TODO()
+
+            class MockKVerificationScope
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines, mockk)
 
         assertEquals(1, findings.size)
     }

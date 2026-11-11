@@ -2,8 +2,10 @@ intellij-kotlin-coroutines:
   active: true
   CoroutineContextWithJob:
     active: true
+    additionalBuilders: []
   DeferredResultUnused:
     active: true
+    isStandardOnly: false
   ForEachJoinOnCollectionOfJob:
     active: true
   MapAwaitOnCollectionOfDeferred:
@@ -20,9 +22,20 @@ intellij-kotlin-coroutines:
     active: true
   SuspiciousImplicitCoroutineScopeReceiverAccess:
     active: true
+    areCoroutineScopeSubtypesReported: false
   SuspiciousMutableCollectionInStateFlow:
     active: true
   UnusedFlow:
     active: true
+    ignoredLambdaFunctions:
+      - 'io.mockk.verify'
+      - 'io.mockk.coVerify'
+      - 'io.mockk.verifyAll'
+      - 'io.mockk.coVerifyAll'
+      - 'io.mockk.verifyOrder'
+      - 'io.mockk.coVerifyOrder'
+      - 'io.mockk.verifySequence'
+      - 'io.mockk.coVerifySequence'
+      - 'io.mockk.excludeRecords'
   UselessCallOnFlow:
     active: true

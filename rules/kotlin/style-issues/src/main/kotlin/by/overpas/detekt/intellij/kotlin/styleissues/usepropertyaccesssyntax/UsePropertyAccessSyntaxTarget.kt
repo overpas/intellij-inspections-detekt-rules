@@ -18,6 +18,7 @@ internal class UsePropertyAccessSyntaxTarget(
     private val accessor: UsePropertyAccessSyntaxAccessor,
     private val symbol: KaFunctionSymbol,
     private val receiverType: KaType,
+    private val options: UsePropertyAccessSyntaxOptions,
 ) {
 
     @OptIn(KaExperimentalApi::class)
@@ -32,16 +33,18 @@ internal class UsePropertyAccessSyntaxTarget(
                     ?.takeIf { it.javaGetterSymbol.visibility != KaSymbolVisibility.PRIVATE }
             }
             val overridden = (symbol.allOverriddenSymbols + symbol).toList()
-            val isFromJava = overridden.none { it.callableId?.run { asSingleFqName().asString() } in notProperties } &&
-                overridden.any { overriddenSymbol ->
-                    overriddenSymbol.origin in javaOrigins && overriddenSymbol.directlyOverriddenSymbols.none()
-                }
+            val ignoredFunctions = options.ignoredFunctions
+            val isFromJava =
+                overridden.none { it.callableId?.run { asSingleFqName().asString() } in ignoredFunctions } &&
+                    overridden.any { overriddenSymbol ->
+                        overriddenSymbol.origin in javaOrigins && overriddenSymbol.directlyOverriddenSymbols.none()
+                    }
             val typeScope = receiverType.scope
             val hasVisibleField = property != null &&
                 typeScope != null &&
                 typeScope.declarationScope.callables(property.name)
                     .any { it is KaJavaFieldSymbol && it.visibility != KaSymbolVisibility.PRIVATE }
-            val isTrivial = symbol.psi?.isTrivialAccessor() == true
+            val isTrivial = options.areNonTrivialAccessorsReported || symbol.psi?.isTrivialAccessor() == true
             property?.takeIf { isFromJava && !hasVisibleField && isTrivial && accessor.matches(it, symbol) }
         }
 
@@ -50,17 +53,6 @@ internal class UsePropertyAccessSyntaxTarget(
         val keywords = KtTokens.KEYWORDS.types.map { it.toString() }.toSet()
 
         val javaOrigins = setOf(KaSymbolOrigin.JAVA_SOURCE, KaSymbolOrigin.JAVA_LIBRARY)
-
-        val notProperties = buildList {
-            listOf("java.net.Socket", "java.net.URLConnection")
-                .flatMapTo(this) { owner -> listOf("getInputStream", "getOutputStream").map { "$owner.$it" } }
-            listOf("AtomicInteger", "AtomicLong").flatMapTo(this) { owner ->
-                listOf("getAndIncrement", "getAndDecrement", "getAcquire", "getOpaque", "getPlain")
-                    .map { method -> "java.util.concurrent.atomic.$owner.$method" }
-            }
-            listOf("getChar", "getDouble", "getFloat", "getInt", "getLong", "getShort")
-                .mapTo(this) { "java.nio.ByteBuffer.$it" }
-        }
 
         fun PsiElement.isTrivialAccessor(): Boolean =
             when (this) {

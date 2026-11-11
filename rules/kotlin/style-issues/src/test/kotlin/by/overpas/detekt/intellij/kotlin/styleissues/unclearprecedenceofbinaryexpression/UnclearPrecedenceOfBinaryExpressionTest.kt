@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.unclearprecedenceofbinaryexpression
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -233,6 +234,54 @@ class UnclearPrecedenceOfBinaryExpressionTest {
                     else -> println("bar")
                 }
             }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a multiplication inside an addition is reported when obvious cases are reported`() {
+        val sut = UnclearPrecedenceOfBinaryExpression(TestConfig("areObviousCasesReported" to true))
+        val code = """
+            fun foo(a: Int, b: Int, c: Int) = a + b * c
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a conjunction inside a disjunction is reported when obvious cases are reported`() {
+        val sut = UnclearPrecedenceOfBinaryExpression(TestConfig("areObviousCasesReported" to true))
+        val code = """
+            fun foo(a: Boolean, b: Boolean, c: Boolean) = a && b || c
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a chain of one operator passes when obvious cases are reported`() {
+        val sut = UnclearPrecedenceOfBinaryExpression(TestConfig("areObviousCasesReported" to true))
+        val code = """
+            fun foo(a: Int, b: Int, c: Int) = a + b + c
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a parenthesized multiplication inside an addition passes when obvious cases are reported`() {
+        val sut = UnclearPrecedenceOfBinaryExpression(TestConfig("areObviousCasesReported" to true))
+        val code = """
+            fun foo(a: Int, b: Int, c: Int) = a + (b * c)
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)

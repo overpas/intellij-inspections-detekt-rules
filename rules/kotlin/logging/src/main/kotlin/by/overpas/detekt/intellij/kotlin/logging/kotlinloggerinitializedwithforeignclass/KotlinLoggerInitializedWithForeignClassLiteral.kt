@@ -18,10 +18,10 @@ private val JAVA_CLASS_NAME_SELECTORS = setOf(
     "getCanonicalName",
 )
 
-internal fun KtCallExpression.foreignLoggerClassLiteral(): KtClassLiteralExpression? {
+internal fun KtCallExpression.foreignLoggerClassLiteral(factoryNames: Set<String>): KtClassLiteralExpression? {
     val ownerNames = loggerOwnerNames()
     val classLiteral = calleeExpression
-        ?.takeIf { it.text in KOTLIN_LOGGER_INITIALIZED_WITH_FOREIGN_CLASS_METHOD_NAMES }
+        ?.takeIf { it.text in factoryNames }
         ?.let { valueArguments.singleOrNull()?.getArgumentExpression().loggerClassLiteral() }
     return classLiteral?.takeIf { ownerNames.isNotEmpty() && it.receiverExpression?.text !in ownerNames }
 }

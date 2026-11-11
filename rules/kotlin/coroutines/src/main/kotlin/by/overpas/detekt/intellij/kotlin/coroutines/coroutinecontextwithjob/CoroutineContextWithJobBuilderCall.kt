@@ -26,12 +26,18 @@ private val BUILDERS_ALLOWING_NON_CANCELLABLE: Map<CallableId, Boolean> = mapOf(
 internal class CoroutineContextWithJobBuilderCall(
     private val session: KaSession,
     private val expression: KtCallExpression,
+    private val additionalBuilders: Set<String>,
 ) {
 
     fun problem(): CoroutineContextWithJobProblem? =
         with(session) {
             val call = expression.resolveToCall()?.successfulFunctionCallOrNull()
-            val builder = call?.symbol?.callableId?.takeIf { it in BUILDERS_ALLOWING_NON_CANCELLABLE }
+            val callableId = call?.run { symbol.callableId }
+            val isNonCancellableAllowed = callableId?.let { id ->
+                BUILDERS_ALLOWING_NON_CANCELLABLE[id]
+                    ?: false.takeIf { id.asSingleFqName().asString() in additionalBuilders }
+            }
+            val builder = callableId?.takeIf { isNonCancellableAllowed != null }
             val job = call?.valueArgumentMapping?.entries
                 ?.takeIf { builder != null }
                 ?.firstOrNull { (_, parameter) -> parameter.returnType.isSubtypeOf(COROUTINE_CONTEXT_CLASS_ID) }
@@ -39,7 +45,7 @@ internal class CoroutineContextWithJobBuilderCall(
                 as? CoroutineContextWithJobStatus.WithJob
             val builderName = builder?.run { callableName.asString() }.orEmpty()
             job
-                ?.takeIf { it.isCancellable || BUILDERS_ALLOWING_NON_CANCELLABLE[builder] == false }
+                ?.takeIf { it.isCancellable || isNonCancellableAllowed == false }
                 ?.let { CoroutineContextWithJobProblem(it.source, it.messageFor(builderName)) }
         }
 }

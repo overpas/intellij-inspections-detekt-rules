@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.codemigration.canconverttomultidollarstring
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -192,5 +193,41 @@ class CanConvertToMultiDollarStringTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a single escaped dollar is reported when no escaped dollar is allowed`() {
+        val sut = CanConvertToMultiDollarString(TestConfig("allowedEscapedDollarCount" to 0))
+        val code = $$"""
+            fun test() = "%1\$s"
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `two escaped dollars pass when two escaped dollars are allowed`() {
+        val sut = CanConvertToMultiDollarString(TestConfig("allowedEscapedDollarCount" to 2))
+        val code = $$"""
+            fun test() = "\$a \$b"
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a dollar char block entry is reported when two escaped dollars are allowed`() {
+        val sut = CanConvertToMultiDollarString(TestConfig("allowedEscapedDollarCount" to 2))
+        val code = $$"""
+            fun test() = "${'$'}b"
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }

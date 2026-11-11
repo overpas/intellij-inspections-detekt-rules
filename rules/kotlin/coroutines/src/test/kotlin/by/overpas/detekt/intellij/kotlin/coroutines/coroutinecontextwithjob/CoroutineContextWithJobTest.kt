@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.coroutines.coroutinecontextwithjob
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -322,6 +323,71 @@ class CoroutineContextWithJobTest {
                 launch(EmptyCoroutineContext + EmptyCoroutineContext) {}
                 launch(Dispatchers.IO) {}
                 launch(context) {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a job factory call passed to an additional builder is reported`() {
+        val sut = CoroutineContextWithJob(TestConfig("additionalBuilders" to listOf("app.launchSafely")))
+        val code = """
+            package app
+
+            import kotlin.coroutines.CoroutineContext
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Job
+
+            fun CoroutineScope.launchSafely(context: CoroutineContext, block: suspend () -> Unit) {}
+
+            fun CoroutineScope.test() {
+                launchSafely(Job()) {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `NonCancellable passed to an additional builder is reported`() {
+        val sut = CoroutineContextWithJob(TestConfig("additionalBuilders" to listOf("app.launchSafely")))
+        val code = """
+            package app
+
+            import kotlin.coroutines.CoroutineContext
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.NonCancellable
+
+            fun CoroutineScope.launchSafely(context: CoroutineContext, block: suspend () -> Unit) {}
+
+            fun CoroutineScope.test() {
+                launchSafely(NonCancellable) {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a job factory call passed to a builder that is not configured passes`() {
+        val code = """
+            package app
+
+            import kotlin.coroutines.CoroutineContext
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.Job
+
+            fun CoroutineScope.launchSafely(context: CoroutineContext, block: suspend () -> Unit) {}
+
+            fun CoroutineScope.test() {
+                launchSafely(Job()) {}
             }
         """.trimIndent()
 

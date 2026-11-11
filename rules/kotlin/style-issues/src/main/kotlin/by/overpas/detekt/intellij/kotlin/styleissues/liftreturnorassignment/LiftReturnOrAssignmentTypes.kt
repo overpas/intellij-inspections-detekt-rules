@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isNull
 
 context(session: KaSession)
-internal fun KtExpression.liftReturnOrAssignmentType(): String? {
+internal fun KtExpression.liftReturnOrAssignmentType(isReportedOnlyIfSingleStatement: Boolean): String? {
     val returns = LiftReturnOrAssignmentFolding(session, isReturnExit = false) { it.liftableReturn() }
         .collect(this)
         .orEmpty()
@@ -23,10 +23,10 @@ internal fun KtExpression.liftReturnOrAssignmentType(): String? {
         .toSet()
     val isUsed = parent !is KtBlockExpression && with(session) { isUsedAsExpression }
     val isLiftableReturn = returns.size > 1 &&
-        returns.all(KtExpression::isLiftSingleStatement) &&
+        (!isReportedOnlyIfSingleStatement || returns.all(KtExpression::isLiftSingleStatement)) &&
         !anyDescendantOfType<KtReturnExpression> { it !in returns }
     val isLiftableAssignment = assignments.size > 1 &&
-        assignments.all(KtExpression::isLiftSingleStatement) &&
+        (!isReportedOnlyIfSingleStatement || assignments.all(KtExpression::isLiftSingleStatement)) &&
         hasLiftableAssignments(assignments)
     return when {
         isUsed -> null

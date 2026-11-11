@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.analysis.api.resolution.successfulVariableAccessCall
 import org.jetbrains.kotlin.analysis.api.symbols.KaClassLikeSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.KaReceiverParameterSymbol
 import org.jetbrains.kotlin.analysis.api.symbols.receiverType
+import org.jetbrains.kotlin.analysis.api.types.KaType
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.name.Name
@@ -45,7 +46,7 @@ internal class SuspiciousImplicitCoroutineScopeReceiverAccessCall(
         else -> false
     }
 
-    fun isSuspicious(): Boolean =
+    fun isSuspicious(areCoroutineScopeSubtypesReported: Boolean): Boolean =
         with(session) {
             val scopeType = findClass(COROUTINE_SCOPE)?.defaultType
             val symbol = call?.run { signature.symbol }
@@ -55,10 +56,16 @@ internal class SuspiciousImplicitCoroutineScopeReceiverAccessCall(
             scopeType != null &&
                 accessOwner != null &&
                 hasLabel &&
-                receiver?.run { type.semanticallyEquals(scopeType) } == true &&
+                receiver?.run { type.isCoroutineScope(scopeType, areCoroutineScopeSubtypesReported) } == true &&
                 declaredReceiverType?.isSubtypeOf(scopeType) == true &&
                 SuspiciousImplicitCoroutineScopeReceiverAccessPath(session, accessOwner).isSuspendingFrom(expression)
         }
+
+    private fun KaType.isCoroutineScope(
+        scopeType: KaType,
+        areSubtypesAccepted: Boolean,
+    ): Boolean =
+        with(session) { semanticallyEquals(scopeType) || (areSubtypesAccepted && isSubtypeOf(scopeType)) }
 
     private companion object {
         val COROUTINE_SCOPE = ClassId(FqName("kotlinx.coroutines"), Name.identifier("CoroutineScope"))

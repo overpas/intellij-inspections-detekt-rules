@@ -4,3 +4,4 @@ intellij-kotlin-naming-conventions:
     active: true
   LocalVariableName:
     active: true
+    namePattern: '[a-z][A-Za-z\d]*'

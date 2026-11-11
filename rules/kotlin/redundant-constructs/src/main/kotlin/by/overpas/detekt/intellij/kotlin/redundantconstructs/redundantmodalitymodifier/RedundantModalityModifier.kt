@@ -2,10 +2,12 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.redundantmodalitym
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.analysis.api.analyze
 import org.jetbrains.kotlin.analysis.api.components.KaDiagnosticCheckerFilter
 import org.jetbrains.kotlin.analysis.api.fir.diagnostics.KaFirDiagnostic
@@ -24,12 +26,21 @@ class RedundantModalityModifier(config: Config) :
     ),
     RequiresAnalysisApi {
 
+    @Configuration(
+        "The annotations of the all-open compiler plugin, given as fully qualified names, " +
+            "e.g. `org.springframework.stereotype.Component`. A `final` modifier in a class with one of them " +
+            "or with an annotation that is annotated with one of them is not reported.",
+    )
+    private val allOpenAnnotations: List<String> by config(emptyList())
+
+    private val allOpen by lazy { RedundantModalityModifierAllOpen(allOpenAnnotations.toSet()) }
+
     override fun visitKtFile(file: KtFile) {
         super.visitKtFile(file)
         val owners = analyze(file) {
             file.collectDiagnostics(KaDiagnosticCheckerFilter.ONLY_EXTENDED_CHECKERS)
                 .filterIsInstance<KaFirDiagnostic.RedundantModalityModifier>()
-                .map { it.psi }
+                .mapNotNull { diagnostic -> diagnostic.psi.takeUnless { allOpen.isFinalModifierKept(it) } }
         }
         owners.filterNot { it.hasModifier(KtTokens.ABSTRACT_KEYWORD) && it.isInInterface() }
             .mapNotNull { it.modifierList?.getModifier(KtTokens.MODALITY_MODIFIERS) }

@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.usepropertyaccesssyntax
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.io.path.Path
@@ -402,5 +403,61 @@ class UsePropertyAccessSyntaxTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a call of a Java method that is ignored by default passes`() {
+        val code = """
+            fun test(socket: java.net.Socket) {
+                socket.getInputStream()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a call of a configured ignored Java method passes`() {
+        val sut = UsePropertyAccessSyntax(TestConfig("ignoredFunctions" to listOf("J.getX")))
+        val code = """
+            fun main() {
+                val j = J()
+                j.getX()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a call of a Java method that is ignored by default is reported when the ignored functions are replaced`() {
+        val sut = UsePropertyAccessSyntax(TestConfig("ignoredFunctions" to listOf("J.getX")))
+        val code = """
+            fun test(socket: java.net.Socket) {
+                socket.getInputStream()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a non-trivial Java getter is reported when non-trivial accessors are reported`() {
+        val sut = UsePropertyAccessSyntax(TestConfig("areNonTrivialAccessorsReported" to true))
+        val code = """
+            fun test() {
+                Computed().getX()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }

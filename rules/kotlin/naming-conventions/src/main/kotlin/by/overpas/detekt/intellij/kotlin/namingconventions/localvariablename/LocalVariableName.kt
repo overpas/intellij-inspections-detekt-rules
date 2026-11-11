@@ -2,10 +2,12 @@ package by.overpas.detekt.intellij.kotlin.namingconventions.localvariablename
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
@@ -19,6 +21,9 @@ class LocalVariableName(config: Config) :
             "Rename it to lowerCamelCase with only letters and digits.",
     ),
     RequiresAnalysisApi {
+
+    @Configuration("The regular expression that the names of local variables and parameters must match.")
+    private val namePattern: Regex by config(DEFAULT_LOCAL_VARIABLE_NAME_PATTERN) { it.toRegex() }
 
     override fun visitProperty(property: KtProperty) {
         super.visitProperty(property)
@@ -37,7 +42,7 @@ class LocalVariableName(config: Config) :
 
     private fun KtNamedDeclaration.reportNameMismatch() {
         val identifier = nameIdentifier ?: return
-        name?.localVariableNameMismatch()?.let { mismatch ->
+        name?.localVariableNameMismatch(namePattern)?.let { mismatch ->
             report(Finding(Entity.from(identifier), "Local variable name ${identifier.text} $mismatch"))
         }
     }

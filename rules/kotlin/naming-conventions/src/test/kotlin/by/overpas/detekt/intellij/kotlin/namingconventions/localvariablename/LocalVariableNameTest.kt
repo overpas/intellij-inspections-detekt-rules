@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.namingconventions.localvariablename
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -172,5 +173,33 @@ class LocalVariableNameTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a local variable that matches a custom pattern passes`() {
+        val sut = LocalVariableName(TestConfig("namePattern" to "[a-z][A-Za-z\\d_]*"))
+        val code = """
+            fun foo() {
+                val snake_case = 1
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a local variable that does not match a custom pattern is reported`() {
+        val sut = LocalVariableName(TestConfig("namePattern" to "[a-z]+"))
+        val code = """
+            fun foo() {
+                val camelCase = 1
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }
