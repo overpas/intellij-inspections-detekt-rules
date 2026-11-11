@@ -12,8 +12,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 
-private const val MIN_OPERATORS = 2
-
 private val OPERATOR_TOKENS = setOf(KtTokens.PLUS, KtTokens.MINUS)
 
 private val RESULT_TYPES = setOf(StandardClassIds.List, StandardClassIds.Set)
@@ -25,8 +23,8 @@ internal class CollectionConcatenationToBuildCollectionChain(private val root: K
     val highlight: KtExpression =
         generateSequence<KtExpression>(root) { it.parent as? KtParenthesizedExpression }.last()
 
-    fun isCandidate(): Boolean =
-        operators.size >= MIN_OPERATORS &&
+    fun isCandidate(minimalOperationCount: Int): Boolean =
+        operators.size >= minimalOperationCount &&
             isTopmost() &&
             operators.all { it.operationToken in OPERATOR_TOKENS && it.right != null }
 

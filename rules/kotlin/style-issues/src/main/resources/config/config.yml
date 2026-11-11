@@ -12,6 +12,7 @@ intellij-kotlin-style-issues:
     active: true
   CollectionConcatenationToBuildCollection:
     active: false
+    minimalOperationCount: 2
   ConvertPairConstructorToToFunction:
     active: false
   ConvertRangeCheckToTwoComparisons:
