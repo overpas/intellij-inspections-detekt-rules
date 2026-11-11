@@ -18,15 +18,23 @@ private val IGNORED_FQ_NAMES = setOf(
     FqName("kotlin.checkNotNull"),
 )
 
-internal class DeferredResultUnusedCall(private val expression: KtCallExpression) {
+private val STANDARD_FQ_NAMES = setOf(
+    FqName("kotlinx.coroutines.async"),
+    FqName("kotlinx.coroutines.experimental.async"),
+)
+
+internal class DeferredResultUnusedCall(
+    private val expression: KtCallExpression,
+    private val isStandardOnly: Boolean,
+) {
 
     fun isDiscarded(): Boolean =
         analyze(expression) {
             val call = expression.resolveToCall()?.successfulFunctionCallOrNull()
             val returnType = call?.takeUnless { it.symbol.returnType is KaTypeParameterType }
                 ?.run { signature.returnType.expandedSymbol?.classId?.asSingleFqName() }
-            !expression.isUsedAsExpression &&
-                call?.run { symbol.callableId?.asSingleFqName() } !in IGNORED_FQ_NAMES &&
-                returnType in DEFERRED_FQ_NAMES
+            val fqName = call?.run { symbol.callableId?.asSingleFqName() }
+            val isDeferredCall = if (isStandardOnly) fqName in STANDARD_FQ_NAMES else returnType in DEFERRED_FQ_NAMES
+            !expression.isUsedAsExpression && fqName !in IGNORED_FQ_NAMES && isDeferredCall
         }
 }

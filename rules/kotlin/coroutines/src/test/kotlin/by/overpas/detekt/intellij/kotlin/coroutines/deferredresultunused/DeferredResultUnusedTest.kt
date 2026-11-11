@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.coroutines.deferredresultunused
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -231,6 +232,45 @@ class DeferredResultUnusedTest {
 
             fun test() {
                 produce()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an unused async call is reported when only standard calls are reported`() {
+        val sut = DeferredResultUnused(TestConfig("isStandardOnly" to true))
+        val code = """
+            import kotlinx.coroutines.CoroutineScope
+            import kotlinx.coroutines.async
+
+            fun CoroutineScope.test() {
+                async { 42 }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code, coroutines)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `an unused deferred from a method passes when only standard calls are reported`() {
+        val sut = DeferredResultUnused(TestConfig("isStandardOnly" to true))
+        val code = """
+            import kotlinx.coroutines.Deferred
+
+            class User
+
+            interface DbHandler {
+                fun getUser(id: Long): Deferred<User>
+            }
+
+            fun DbHandler.test() {
+                getUser(42L)
             }
         """.trimIndent()
 
