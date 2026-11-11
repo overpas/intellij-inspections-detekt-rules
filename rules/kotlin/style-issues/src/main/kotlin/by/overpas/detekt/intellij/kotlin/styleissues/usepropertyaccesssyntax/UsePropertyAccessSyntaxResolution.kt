@@ -6,14 +6,21 @@ import org.jetbrains.kotlin.analysis.api.resolution.symbol
 import org.jetbrains.kotlin.analysis.api.types.KaClassType
 
 context(session: KaSession)
-internal fun UsePropertyAccessSyntaxAccessor.syntheticProperty(): UsePropertyAccessSyntaxProperty? =
+internal fun UsePropertyAccessSyntaxAccessor.syntheticProperty(
+    options: UsePropertyAccessSyntaxOptions,
+): UsePropertyAccessSyntaxProperty? =
     with(session) {
         val resolved = call.resolveToCall()?.successfulFunctionCallOrNull()
         val receiverType = resolved?.dispatchReceiver?.run { type.lowerBoundIfFlexible() }
         val target = if (resolved == null || receiverType == null) {
             null
         } else {
-            UsePropertyAccessSyntaxTarget(this@syntheticProperty, resolved.symbol, receiverType)
+            UsePropertyAccessSyntaxTarget(
+                accessor = this@syntheticProperty,
+                symbol = resolved.symbol,
+                receiverType = receiverType,
+                options = options,
+            )
         }
         val receiver = (receiverType as? KaClassType)?.classId
         target?.convertibleProperty()?.let { property ->

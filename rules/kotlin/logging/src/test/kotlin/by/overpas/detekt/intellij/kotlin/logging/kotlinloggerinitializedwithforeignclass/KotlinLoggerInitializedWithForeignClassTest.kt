@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.logging.kotlinloggerinitializedwithforeignclass
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -299,6 +300,50 @@ class KotlinLoggerInitializedWithForeignClassTest {
             class Bar
 
             fun getLogger(clazz: Class<*>): Any = clazz
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a custom logger factory with a foreign class is reported`() {
+        val sut = KotlinLoggerInitializedWithForeignClass(
+            TestConfig("loggerFactories" to listOf("logs.Loggers.of")),
+        )
+        val code = """
+            package logs
+
+            object Loggers {
+                fun of(name: String?): Any = Any()
+            }
+
+            class Foo {
+                private val logger = Loggers.of(Bar::class.qualifiedName)
+            }
+
+            class Bar
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a default logger factory passes when the logger factories are replaced`() {
+        val sut = KotlinLoggerInitializedWithForeignClass(
+            TestConfig("loggerFactories" to listOf("logs.Loggers.of")),
+        )
+        val code = """
+            import java.util.logging.Logger
+
+            class Foo {
+                private val logger = Logger.getLogger(Bar::class.qualifiedName)
+            }
+
+            class Bar
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)

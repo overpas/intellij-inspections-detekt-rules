@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.styleissues.movevariabledeclarationintowhen
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -274,6 +275,42 @@ class MoveVariableDeclarationIntoWhenTest {
                 return null ?: when (a) {
                     true -> if (a) 42 else 0
                     else -> 5
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a moved declaration over 120 characters is reported with a longer max line length`() {
+        val sut = MoveVariableDeclarationIntoWhen(TestConfig("maxLineLength" to 140))
+        val code = """
+            fun test() {
+                val foo = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+                when (foo) {
+                    1 -> foo
+                    else -> 24
+                }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a moved declaration under 120 characters passes with a shorter max line length`() {
+        val sut = MoveVariableDeclarationIntoWhen(TestConfig("maxLineLength" to 100))
+        val code = """
+            fun test() {
+                val foo = 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+                when (foo) {
+                    1 -> foo
+                    else -> 24
                 }
             }
         """.trimIndent()

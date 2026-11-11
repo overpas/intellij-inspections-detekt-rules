@@ -5,9 +5,10 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
-private const val MOVE_INTO_WHEN_RIGHT_MARGIN = 120
-
-internal fun KtProperty.isMovableIntoWhen(whenExpression: KtWhenExpression): Boolean {
+internal fun KtProperty.isMovableIntoWhen(
+    whenExpression: KtWhenExpression,
+    maxLineLength: Int,
+): Boolean {
     val name = nameIdentifier?.text.orEmpty()
     val usages = whenExpression.moveIntoWhenUsages(name)
     val usagesAfter = (parent as? KtBlockExpression)?.statements.orEmpty()
@@ -19,7 +20,7 @@ internal fun KtProperty.isMovableIntoWhen(whenExpression: KtWhenExpression): Boo
     val column = start - containingFile.text.lastIndexOf('\n', start - 1) - 1
     val isFitting = !textContains(
         '\n',
-    ) && column + "when (".length + textLength + ") {".length <= MOVE_INTO_WHEN_RIGHT_MARGIN
+    ) && column + "when (".length + textLength + ") {".length <= maxLineLength
     val hasSimpleInitializer = initializer?.isMoveIntoWhenInitializer() == true
     return !isVar && hasSimpleInitializer && usages > 1 && usages == usagesAfter && isFitting
 }

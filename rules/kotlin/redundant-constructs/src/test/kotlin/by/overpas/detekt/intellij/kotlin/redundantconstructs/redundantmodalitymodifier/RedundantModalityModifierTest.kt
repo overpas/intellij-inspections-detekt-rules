@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.redundantconstructs.redundantmodalitymodifier
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -230,5 +231,61 @@ class RedundantModalityModifierTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a final class with an all-open annotation passes`() {
+        val sut = RedundantModalityModifier(TestConfig("allOpenAnnotations" to listOf("spring.Component")))
+        val code = """
+            package spring
+
+            annotation class Component
+
+            @Component
+            final class Repository
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a final function in a class with an all-open meta-annotation passes`() {
+        val sut = RedundantModalityModifier(TestConfig("allOpenAnnotations" to listOf("spring.Component")))
+        val code = """
+            package spring
+
+            annotation class Component
+
+            @Component
+            annotation class Service
+
+            @Service
+            class Repository {
+                final fun find() {}
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a final class without an all-open annotation is reported`() {
+        val sut = RedundantModalityModifier(TestConfig("allOpenAnnotations" to listOf("spring.Component")))
+        val code = """
+            package spring
+
+            annotation class Entity
+
+            @Entity
+            final class Repository
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }

@@ -62,6 +62,12 @@ class BlockingMethodInNonBlockingContext(config: Config) :
     )
     private val blockingLambdaFunctions: List<String> by config(DEFAULT_BLOCKING_LAMBDA_FUNCTIONS)
 
+    @Configuration(
+        "Blocking methods of libraries that the rule cannot detect, given as fully qualified names, " +
+            "e.g. `okhttp3.Call.execute`.",
+    )
+    private val blockingMethods: Set<String> by config(emptyList<String>()) { it.toSet() }
+
     private val annotations by lazy {
         BlockingMethodInNonBlockingContextAnnotations(
             (blockingAnnotations + DEFAULT_BLOCKING_ANNOTATIONS).toSet(),
@@ -81,7 +87,10 @@ class BlockingMethodInNonBlockingContext(config: Config) :
             ).type()
             val isReportedContext = context == BlockingMethodInNonBlockingContextType.NON_BLOCKING ||
                 (context == BlockingMethodInNonBlockingContextType.UNSURE && !isUnknownContextBlocking)
-            isReportedContext && BlockingMethodInNonBlockingContextMethod(annotations).isBlocking(expression)
+            isReportedContext && BlockingMethodInNonBlockingContextMethod(
+                annotations,
+                blockingMethods,
+            ).isBlocking(expression)
         }
         if (isReported) {
             report(

@@ -734,4 +734,69 @@ class BlockingMethodInNonBlockingContextTest {
 
         assertEquals(0, findings.size)
     }
+
+    @Test
+    fun `a configured blocking method in a suspend function is reported`() {
+        val sut = BlockingMethodInNonBlockingContext(TestConfig("blockingMethods" to listOf("http.Call.execute")))
+        val code = """
+            package http
+
+            interface Call {
+                fun execute(): String
+            }
+
+            suspend fun example(call: Call) {
+                call.execute()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `an override of a configured blocking method in a suspend function is reported`() {
+        val sut = BlockingMethodInNonBlockingContext(TestConfig("blockingMethods" to listOf("http.Call.execute")))
+        val code = """
+            package http
+
+            interface Call {
+                fun execute(): String
+            }
+
+            class RealCall : Call {
+                override fun execute(): String = ""
+            }
+
+            suspend fun example(call: RealCall) {
+                call.execute()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a method that is not configured as blocking in a suspend function passes`() {
+        val sut = BlockingMethodInNonBlockingContext(TestConfig("blockingMethods" to listOf("http.Call.execute")))
+        val code = """
+            package http
+
+            interface Call {
+                fun execute(): String
+                fun cancel()
+            }
+
+            suspend fun example(call: Call) {
+                call.cancel()
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
 }

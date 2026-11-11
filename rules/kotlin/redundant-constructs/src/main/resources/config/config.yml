@@ -36,6 +36,7 @@ intellij-kotlin-redundant-constructs:
     active: true
   RedundantModalityModifier:
     active: true
+    allOpenAnnotations: []
   RedundantNullableReturnType:
     active: true
   RedundantReturnKeyword:
