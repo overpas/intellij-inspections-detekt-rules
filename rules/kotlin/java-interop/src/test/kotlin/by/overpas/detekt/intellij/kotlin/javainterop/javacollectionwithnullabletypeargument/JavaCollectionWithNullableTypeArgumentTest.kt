@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.javainterop.javacollectionwithnullabletypeargument
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -208,6 +209,55 @@ class JavaCollectionWithNullableTypeArgumentTest {
                     super<I>.foo()
                 }
             }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `a type of an additional collection with a nullable type is reported`() {
+        val sut = JavaCollectionWithNullableTypeArgument(
+            TestConfig("additionalCollections" to listOf("collect.ImmutableList")),
+        )
+        val code = """
+            package collect
+
+            class ImmutableList<E>
+
+            fun names(list: ImmutableList<String?>) = list
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a JDK collection is still reported with additional collections`() {
+        val sut = JavaCollectionWithNullableTypeArgument(
+            TestConfig("additionalCollections" to listOf("collect.ImmutableList")),
+        )
+        val code = """
+            import java.util.concurrent.ConcurrentHashMap
+
+            val map = ConcurrentHashMap<String, String?>()
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `a type of a collection that is not configured with a nullable type passes`() {
+        val code = """
+            package collect
+
+            class ImmutableList<E>
+
+            fun names(list: ImmutableList<String?>) = list
         """.trimIndent()
 
         val findings = sut.lintWithContext(environment, code)

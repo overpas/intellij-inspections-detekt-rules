@@ -2,6 +2,7 @@ intellij-kotlin-java-interop:
   active: true
   JavaCollectionWithNullableTypeArgument:
     active: true
+    additionalCollections: []
   JavaCollectionsStaticMethodOnImmutableList:
     active: true
   JavaDefaultMethodsNotOverriddenByDelegation:
