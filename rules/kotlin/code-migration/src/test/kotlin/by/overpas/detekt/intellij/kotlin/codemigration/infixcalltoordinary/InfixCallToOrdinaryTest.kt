@@ -1,6 +1,7 @@
 package by.overpas.detekt.intellij.kotlin.codemigration.infixcalltoordinary
 
 import dev.detekt.api.Config
+import dev.detekt.test.TestConfig
 import dev.detekt.test.lintWithContext
 import dev.detekt.test.utils.createEnvironment
 import kotlin.test.Test
@@ -110,5 +111,41 @@ class InfixCallToOrdinaryTest {
         val findings = sut.lintWithContext(environment, code)
 
         assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an infix call of an ignored standard library function passes`() {
+        val sut = InfixCallToOrdinary(TestConfig("ignoredFunctions" to listOf("kotlin.to")))
+        val code = """
+            fun foo(x: Int) = x to 1
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an infix call of an ignored member function passes`() {
+        val sut = InfixCallToOrdinary(TestConfig("ignoredFunctions" to listOf("kotlin.Int.shl")))
+        val code = """
+            fun foo(x: Int) = x shl 1
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(0, findings.size)
+    }
+
+    @Test
+    fun `an infix call of a function that is not ignored is reported`() {
+        val sut = InfixCallToOrdinary(TestConfig("ignoredFunctions" to listOf("kotlin.to")))
+        val code = """
+            fun foo(x: Int) = x shl 1
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
     }
 }
