@@ -421,7 +421,7 @@ the script, because detekt does not have the Gradle model.
 | `AddVarianceModifier` | INFORMATION | A class type parameter that is used only in input or only in output positions and can be `in` or `out`. Inactive by default. | |
 | `BooleanLiteralArgument` | WEAK WARNING | Adjacent `true` or `false` arguments without parameter names. | `ignoredFunctions` (default empty): do not report the arguments of these functions, given as fully qualified names, e.g. `androidx.compose.ui.graphics.vector.PathBuilder.arcTo`. |
 | `CascadeIf` | WEAK WARNING | An `if`-`else if` chain on one subject that `when` can replace. | |
-| `CollectionConcatenationToBuildCollection` | WEAK WARNING | A chain of two or more `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. Inactive by default. | |
+| `CollectionConcatenationToBuildCollection` | WEAK WARNING | A chain of `+` or `-` operations on a list or set that `buildList` or `buildSet` can replace. Inactive by default. | `minimalOperationCount` (default `2`): the number of operations in a chain needed to report. |
 | `ConvertPairConstructorToToFunction` | INFORMATION | An explicit `Pair(a, b)` constructor call without named arguments that can be the infix `a to b`. Opposite of `InfixCallToOrdinary`. Inactive by default. | |
 | `ConvertRangeCheckToTwoComparisons` | INFORMATION | An `in` or `!in` check of simple values against a standard range that can be two comparisons. Opposite of `ConvertTwoComparisonsToRangeCheck`, which is active by default. Inactive by default. | |
 | `ConvertReferenceToLambda` | INFORMATION | A callable reference that a lambda can replace. Inactive by default. | |

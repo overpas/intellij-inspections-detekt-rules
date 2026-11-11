@@ -14,6 +14,7 @@ ConvertCollectionLiteralToTypeOfExpression,not-portable,needs the experimental l
 ConvertDataClassToValueClass,not-portable,needs the experimental language feature FullValueClasses,
 ConvertExplicitContextArgumentToImplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
 ConvertImplicitContextArgumentToExplicit,not-portable,needs the experimental language feature ExplicitContextArguments,
+ConvertNameBasedDestructuringFullFormToShort,not-portable,needs the experimental language feature NameBasedDestructuring,
 ConvertNameBasedDestructuringShortFormToFull,not-portable,needs the experimental language feature NameBasedDestructuring,
 ConvertToCollectionLiterals,not-portable,needs the experimental language feature CollectionLiterals,
 ConvertTypeOfToCollectionLiteral,not-portable,needs the experimental language feature CollectionLiterals,
