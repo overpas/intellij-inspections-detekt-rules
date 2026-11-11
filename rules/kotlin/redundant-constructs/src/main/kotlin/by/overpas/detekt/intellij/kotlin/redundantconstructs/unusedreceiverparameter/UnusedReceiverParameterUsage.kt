@@ -45,6 +45,9 @@ internal class UnusedReceiverParameterUsage(
                 receiverSymbol?.classKind == KaClassKind.COMPANION_OBJECT
         }
 
+    fun isAllowedType(allowedTypes: Set<String>): Boolean =
+        receiverSymbol?.classId?.run { asSingleFqName().asString() } in allowedTypes
+
     fun usesClassLabels(): Boolean =
         with(session) {
             receiverSymbol != null && symbol?.containingDeclaration == receiverSymbol && labels.isNotEmpty()

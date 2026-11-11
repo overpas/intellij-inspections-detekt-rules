@@ -2,10 +2,12 @@ package by.overpas.detekt.intellij.kotlin.redundantconstructs.redundantnullabler
 
 import by.overpas.detekt.intellij.IntellijInspection
 import dev.detekt.api.Config
+import dev.detekt.api.Configuration
 import dev.detekt.api.Entity
 import dev.detekt.api.Finding
 import dev.detekt.api.RequiresAnalysisApi
 import dev.detekt.api.Rule
+import dev.detekt.api.config
 import org.jetbrains.kotlin.psi.KtCallableDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
@@ -17,6 +19,9 @@ class RedundantNullableReturnType(config: Config) :
         "A nullable return type of a declaration that never returns null is redundant. Make the type non-nullable.",
     ),
     RequiresAnalysisApi {
+
+    @Configuration("Do not report the public and protected declarations that are visible outside the module.")
+    private val isPublicApiIgnored: Boolean by config(false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -30,7 +35,8 @@ class RedundantNullableReturnType(config: Config) :
 
     private fun KtCallableDeclaration.reportIfRedundant(message: String) {
         val questionMark = nullableReturnTypeQuestionMark() ?: return
-        if (!isOverridableCallable() && !hasTransientBackingField() && hasOnlyNonNullReturnTypes()) {
+        val isIgnored = isOverridableCallable() || (isPublicApiIgnored && isPublicApi())
+        if (!isIgnored && !hasTransientBackingField() && hasOnlyNonNullReturnTypes()) {
             report(Finding(Entity.from(questionMark), message))
         }
     }
