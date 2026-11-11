@@ -70,8 +70,8 @@ class BlockingMethodInNonBlockingContext(config: Config) :
 
     private val annotations by lazy {
         BlockingMethodInNonBlockingContextAnnotations(
-            (blockingAnnotations + DEFAULT_BLOCKING_ANNOTATIONS).toSet(),
-            (nonBlockingAnnotations + DEFAULT_NON_BLOCKING_ANNOTATIONS).toSet(),
+            blockingAnnotations.toSet(),
+            nonBlockingAnnotations.toSet(),
         )
     }
 
