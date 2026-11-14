@@ -19,7 +19,7 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
       - run: python3 scripts/inspection-sync.py "$RUNNER_TEMP/intellij-community" --ref "$REF" --output "$RUNNER_TEMP/report.md"
         env:
           REF: ${{ inputs.ref || 'master' }}
