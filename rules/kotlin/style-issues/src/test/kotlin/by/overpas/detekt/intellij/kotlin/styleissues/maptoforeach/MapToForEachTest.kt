@@ -138,6 +138,22 @@ class MapToForEachTest {
     }
 
     @Test
+    fun `an unused map call through the second of two import aliases is reported`() {
+        val code = """
+            import kotlin.collections.map as foo
+            import kotlin.collections.map as bar
+
+            fun test(nums: List<Int>) {
+                nums.bar { it }
+            }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `unused mapIndexed and mapNotNull calls are reported`() {
         val code = $$"""
             fun test(list: List<String>) {
