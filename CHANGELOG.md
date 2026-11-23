@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.1
+
+### Distribution
+
+- The README setup is now one "Use in a project" section. It shows the Maven Central dependencies of all bundles and of the single rule sets, `buildUponDefaultConfig = true`, and the detekt tasks with type resolution. It also tells that the rules require detekt 2 (Gradle plugin `dev.detekt`). The local jars of the GitHub release are now an alternative for special cases, for example no access to Maven Central.
+
 ## 0.4.0
 
 ### Changed options and defaults
