@@ -125,6 +125,40 @@ class UselessCallOnCollectionTest {
     }
 
     @Test
+    fun `filter with a true constant on an array is reported`() {
+        val code = """
+            val x: List<Int> = arrayOf(1, 2).filter { true }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `filter with a true constant on a set is reported`() {
+        val code = """
+            val x: List<Int> = setOf(1, 2).filter { true }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
+    fun `filter with a true constant on a list variable is reported`() {
+        val code = """
+            val x = listOf(1, 2)
+            val y = x.filter { true }
+        """.trimIndent()
+
+        val findings = sut.lintWithContext(environment, code)
+
+        assertEquals(1, findings.size)
+    }
+
+    @Test
     fun `filter with a labeled return of a true constant is reported`() {
         val code = """
             val someList = sequenceOf("alpha", "beta").filter { return@filter true }
